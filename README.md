@@ -2,7 +2,7 @@
 
 A series of scripts that automate password cracking wifi handshakes collected from a [pwnagotchi.](https://pwnagotchi.ai/)
 
-<img src="https://media.giphy.com/media/f9GsXyfgEQbY65fnhu/source.gif" width="500">
+<img src="images/pwnagotchi.gif" width="500">
 
 ## Table of Contents
 * [What can this project do?](#What-can-this-project-do?)
