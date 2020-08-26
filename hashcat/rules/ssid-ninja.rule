@@ -1,0 +1,94 @@
+# do nothing
+:
+# all uppercase characters
+u
+# all lowercase characters
+l
+# toggle the case of char in position 0
+T0
+
+####################
+## append numbers ##
+####################
+# append 0 to the end of each combination
+$0
+# append 1 to the end of each combination
+$1
+# append 2 to the end of each combination
+$2
+# append 3 to the end of each combination
+$3
+# append 4 to the end of each combination
+$4
+# append 5 to the end of each combination
+$5
+# append 6 to the end of each combination
+$6
+# append 7 to the end of each combination
+$7
+# append 8 to the end of each combination
+$8
+# append 9 to the end of each combination
+$9
+ 
+########################################
+## append various number combinations ##
+########################################
+# append 11 to the end of each combination
+$1 $1
+# append 12 to the end of each combination
+$1 $2
+# append 21 to the end of each combination
+$2 $1
+# append 22 to the end of each combination
+$2 $2
+# append 23 to the end of each combination
+$2 $3
+# append 69 to the end of each combination
+$6 $9
+# append 77 to the end of each combination
+$7 $7
+# append 88 to the end of each combination
+$8 $8
+# append 99 to the end of each combination
+$9 $9
+# append 123 to the end of each combination
+$1 $2 $3
+
+# append s to the end of each combination
+$s
+
+# essid
+$w $i $f $i
+$W $i $F $i
+$W $i $f $i
+$w $i $- $f $i
+$W $i $- $F $i
+$W $I $F $I
+$' $s $w $i $f $i
+$s $w $i $f $i
+$@ $w $i $f $i
+$@ $h $o $m $e
+$@ $1 $2 $3
+$@
+$1 $2 $3 $4 $!
+$1 $2 $3 $!
+
+
+# add the to the beginning of each combination
+^e ^h ^t 
+
+# replace all instances of o with 0
+so0
+# replace all instances of i with 1
+si1
+# replace all instance of e with 3
+se3
+# replace all instance of s with $
+ss$
+# first 2
+so0 si1
+# all 3
+so0 si1 se3
+# all 3 with wifi
+so0 si1 se3 $w $i $f $i
