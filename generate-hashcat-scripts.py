@@ -61,36 +61,36 @@ def generateHashcatScript(filename):
     session = "--session " + fileId
 
     attacks = [
-        ["-a 0", "known-wpa-passwords.txt", "quick-ssid.rule"], # quick run of known passwords
-        ["-a 0", "known-wpa-passwords.txt", "unix-ninja-leetspeak.rule"], # run over 3k leet rules
-        ["-a 0", "known-wpa-passwords.txt", "rockyou-30000.rule"], # run of the best 30k rules for rockyou
-        ["-a 0", "known-wpa-passwords.txt", "d3ad0ne.rule"], # over 34k rules
+        ["-a 0", "known-wpa-passwords.txt", "quick-ssid.rule", "-S"], # quick run of known passwords, the -S makes hashcat work better with small wordlists
+        ["-a 0", "known-wpa-passwords.txt", "unix-ninja-leetspeak.rule", "-S"], # run over 3k leet rules
+        ["-a 0", "known-wpa-passwords.txt", "rockyou-30000.rule", "-S"], # run of the best 30k rules for rockyou
+        ["-a 0", "known-wpa-passwords.txt", "d3ad0ne.rule", "-S"], # over 34k rules
         ["-a 0", "bssid.rule"], # all variations of the BSSID of the network
         ["-a 0", "ssid-ninja.rule"], # uses wordNinjaGenerator.py to generate a wordlist from the ssid Ex: LuckyCoffeeWifi --> Lucky123!
         ["-a 3", "MYWIFI?d?d?d?d"], # all default passwords for MYWIFI (EE) routers
         ["-a 3", "wifi?d?d?d?d"], # for passwords like wifi1970
-        ["-a 3", "-1 !@$?#~%&*^ wifi?d?d?d?1"], # for passwords like wifi123!
+        ["-a 3", "-1 !@$??#~%^&*^^ wifi?d?d?d?1"], # for passwords like wifi123!, the charset looks weird because windows cmd chars must be escaped
         ["-a 3", "wifi?d?d?d?d?d"], # for passwords like wifi12345
         ["-a 3", "?d?d?d?dwifi"], # for passwords like 1989wifi
         ["-a 3", "?d?d?d?d?dwifi"], # for passwords like 12345wifi
         ["-a 3", "WIFI?d?d?d?d"], # for passwords like WIFI2008
-        ["-a 3", "-1 !@$?#~%&*^ WIFI?d?d?d?1"], # for passwords like WIFI343@
+        ["-a 3", "-1 !@$??#~%^&*^^ WIFI?d?d?d?1"], # for passwords like WIFI343@
         ["-a 3", "WIFI?d?d?d?d?d"], # for passwords like WIFI12345
         ["-a 3", "?d?d?d?dWIFI"], # for passwords like 2006WIFI
         ["-a 3", "?d?d?d?d?dWIFI"], # for passwords like 12345WIFI
         ["-a 3", "?l?l?l?lwifi"], # for passwords like bookwifi
-        ["-a 3", "-1 !@$?#~%&*^ ?l?l?l?lwifi?1"], # for passwords like pinkwifi!
+        ["-a 3", "-1 !@$??#~%^&*^^ ?l?l?l?lwifi?1"], # for passwords like pinkwifi!
         ["-a 3", "?l?l?l?l?lwifi"], # for passwords like trackwifi
         ["-a 3", "wifi?l?l?l?l"], # for passwords like wificook
-        ["-a 3", "-1 !@$?#~%&*^ wifi?l?l?l?l?1"], # for passwords like wificafe$
+        ["-a 3", "-1 !@$??#~%^&*^^ wifi?l?l?l?l?1"], # for passwords like wificafe$
         ["-a 3", "wifi?l?l?l?l?l"], # for passwords like wififrogs
         ["-a 3", "?u?l?l?lWifi"], # for passwords like CafeWifi
         ["-a 3", "?u?l?l?l?lWifi"], # for passwords like MarioWifi
         ["-a 3", "?u?u?u?uWIFI"], # for passwords like CAFEWIFI
-        ["-a 3", "-1 !@$?#~%&*^ ?u?u?u?uWIFI?1"], # for passwords like MECHWIFI* 
+        ["-a 3", "-1 !@$??#~%^&*^^ ?u?u?u?uWIFI?1"], # for passwords like MECHWIFI* 
         ["-a 3", "?u?u?u?u?uWIFI"], # for passwords like BULLSWIFI
         ["-a 3", "WIFI?u?u?u?u"], # for passwords like WIFISHOE
-        ["-a 3", "-1 !@$?#~%&*^ WIFI?u?u?u?u?1"], # for passwords like WIFIBOAT!
+        ["-a 3", "-1 !@$??#~%^&*^^ WIFI?u?u?u?u?1"], # for passwords like WIFIBOAT!
         ["-a 3", "WIFI?u?u?u?u?u"], # for passwords like WIFICOACH
         ["-a 6", "netgear-spectrum.txt", "?d?d?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits, if I could only run 1 attack this is the one I would run
         ["-a 6", "netgear-spectrum.txt", "?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits
@@ -102,11 +102,11 @@ def generateHashcatScript(filename):
         ["-a 0", "openwall.net-all.txt", "quick-ssid.rule"], # openwall is a popular wordlist
         ["-a 0", "netgear-spectrum.txt", "quick-ssid.rule"], # for passwords like breezyapplewifi
         ["-a 6", "words_alpha.txt", "?d"], # for passwords like seashell1
-        ["-a 6", "words_alpha.txt", "-1 !@$?#~%&*^ ?1"], # for passwords like seashell$
-        ["-a 6", "words_alpha.txt", "-1 !@$?#~%&*^ ?d?1"], # for passwords like seashell1!
-        ["-a 6", "words_alpha.txt", "-1 !@$?#~%&*^ ?1?d"], # for passwords like seashell!0
+        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?1"], # for passwords like seashell$
+        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?d?1"], # for passwords like seashell1!
+        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?1?d"], # for passwords like seashell!0
         ["-a 6", "words_alpha.txt", "?d?d"], # for passwords like seashell69
-        ["-a 6", "words_alpha.txt", "-1 !@$?#~%&*^ ?d?d?1"], # for passwords like seashell92@
+        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?d?d?1"], # for passwords like seashell92@
         ["-a 6", "words_alpha.txt", "?d?d?d"], # for passwords like seashell123
         ["-a 3", "?d?d?d?d?d?d?d?d?d"], # all 9 digit number combos
         ["-a 0", "hashesorg2019"], # hashesorg2019 is a popular wordlist
@@ -144,6 +144,8 @@ def generateHashcatScript(filename):
                 hashcatCommand = 'python "' + wordNinjaPath + '\wordNinjaGenerator.py" ' + ssid + ' | ' + hashcatCommand
                 hashcatCommand += '-r "' + rulePath + attack[1] + '"'
             else:
+                if(len(attack) > 3 and "-S" in attack[3]):
+                    hashcatCommand += "-S "
                 hashcatCommand += '"' + fullWordListPath + attack[1] + '"'
                 if(len(attack) > 2):
                     hashcatCommand += ' -r "' + rulePath + attack[2] + '"'

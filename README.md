@@ -102,28 +102,28 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | ssid-ninja.rule | ~5300 | Uses `wordNinjaGenerator.py` to generate a wordlist from the ssid Ex: LuckyCoffeeWifi --> Lucky123! Keyspace is generated assuming a wordlist generated from the SSID with 100 words. |
 | MYWIFI?d?d?d?d | 10000 | all default passwords for MYWIFI (EE) routers |
 | wifi?d?d?d?d | 10000 | Ex: wifi1970 |
-| -1 !@$?#~%&*^ wifi?d?d?d?1 | 10000 | Ex: wifi123! |
+| -1 !@$??#~%^&*^^ wifi?d?d?d?1 | 10000 | Ex: wifi123! The charset looks weird because windows cmd chars must be escaped |
 | wifi?d?d?d?d?d | 100000 | Ex: wifi12345 |
 | ?d?d?d?dwifi | 10000 | Ex: 1989wifi |
 | ?d?d?d?d?dwifi | 100000 | Ex: 12345wifi |
 | WIFI?d?d?d?d | 10000 | Ex: WIFI2008 |
-| -1 !@$?#~%&*^ WIFI?d?d?d?1 | 10000 | Ex: WIFI343@ |
+| -1 !@$??#~%^&*^^ WIFI?d?d?d?1 | 10000 | Ex: WIFI343@ |
 | WIFI?d?d?d?d?d | 100000 | Ex: WIFI12345 |
 | ?d?d?d?dWIFI | 10000 | Ex: 2006WIFI |
 | ?d?d?d?d?dWIFI | 100000 | Ex: 12345WIFI |
 | ?l?l?l?lwifi | 456976 | Ex: bookwifi |
-| -1 !@$?#~%&*^ ?l?l?l?lwifi?1 | 4569760 | Ex: pinkwifi! |
+| -1 !@$??#~%^&*^^ ?l?l?l?lwifi?1 | 4569760 | Ex: pinkwifi! |
 | ?l?l?l?l?lwifi | 11881376 | Ex: trackwifi |
 | wifi?l?l?l?l | 456976 | Ex: wificook |
-| -1 !@$?#~%&*^ wifi?l?l?l?l?1 | 4569760 | Ex: wificafe$ |
+| -1 !@$??#~%^&*^^ wifi?l?l?l?l?1 | 4569760 | Ex: wificafe$ |
 | wifi?l?l?l?l?l | 11881376 | Ex: wififrogs |
 | ?u?l?l?lWifi | 456976 | Ex: CafeWifi |
 | ?u?l?l?l?lWifi | 11881376 | Ex: MarioWifi |
 | ?u?u?u?uWIFI | 456976 | Ex: CAFEWIFI |
-| -1 !@$?#~%&*^ ?u?u?u?uWIFI?1 | 4569760 | Ex: MECHWIFI# |
+| -1 !@$??#~%^&*^^ ?u?u?u?uWIFI?1 | 4569760 | Ex: MECHWIFI# |
 | ?u?u?u?u?uWIFI | 11881376 | Ex: BULLSWIFI |
 | WIFI?u?u?u?u | 456976 | Ex: WIFISHOE |
-| -1 !@$?#~%&*^ WIFI?u?u?u?u?1 | 4569760 | Ex: WIFIBOAT! |
+| -1 !@$??#~%^&*^^ WIFI?u?u?u?u?1 | 4569760 | Ex: WIFIBOAT! |
 | WIFI?u?u?u?u?u | 11881376 | Ex: WIFICOACH |
 | netgear-spectrum.txt ?d?d?d | 158802000 | MANY netgear and other routers have a default password that is a word + word + 1-3 digits. If I could only run 1 attack this is the one I would run. |
 | netgear-spectrum.txt ?d | 1588020 | |
@@ -135,11 +135,11 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | openwall.net-all.txt quick-ssid.rule | 66436740 | simple wordlist |
 | netgear-spectrum.txt quick-ssid.rule | 9528120 | Ex: breezyapplewifi |
 | words_alpha.txt ?d | 3701040 | Ex: seashell1 |
-| words_alpha.txt -1 !@$?#~%&*^ ?1 | 3701040 | Ex: seashell$ |
-| words_alpha.txt -1 !@$?#~%&*^ ?d?1 | 37010400 | Ex: seashell1! |
-| words_alpha.txt -1 !@$?#~%&*^ ?1?d | 37010400 | Ex: seashell!0 |
+| words_alpha.txt -1 !@$??#~%^&*^^ ?1 | 3701040 | Ex: seashell$ |
+| words_alpha.txt -1 !@$??#~%^&*^^ ?d?1 | 37010400 | Ex: seashell1! |
+| words_alpha.txt -1 !@$??#~%^&*^^ ?1?d | 37010400 | Ex: seashell!0 |
 | words_alpha.txt ?d?d | 37010400 | Ex: seashell69 |
-| words_alpha.txt -1 !@$?#~%&*^ ?d?d?1 | 370104000 | Ex: seashell92@ |
+| words_alpha.txt -1 !@$??#~%^&*^^ ?d?d?1 | 370104000 | Ex: seashell92@ |
 | words_alpha.txt ?d?d?d | 370104000 | Ex: seashell123 |
 | ?d?d?d?d?d?d?d?d?d | 1000000000 | all 9 digit number combos |
 | hashesorg2019 | 1279729139 | a modern wordlist with a great hit ratio |
