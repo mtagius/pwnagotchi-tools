@@ -1,22 +1,21 @@
-# By default your ssh keys, pcap files, pmkid files
-# hccapx files, and your cracked results would be added 
-# to git unless you uncomment those here. This is
-# probably not what you want to do unless you plan to
-# use a VERY private repo.
 
 # the .vagrant file should never be added to git
 vagrant/.vagrant
 # node_modules should never be added to git
 handshakes/pwnagetty/node_modules
 
-#handshakes/pcap
-#handshakes/pmkid
-#handshakes/hccapx
-#handshakes/pwnagetty/bssids.json
+handshakes/pcap
+handshakes/pmkid
+handshakes/hccapx
+handshakes/pwnagetty/bssids.json
+handshakes/pwnagetty/package-lock.json
 
-#hashcat/hashcat-output.txt
-#hashcat/hashcat-potfile.txt
+hashcat/hashcat-output.txt
+hashcat/hashcat-potfile.txt
+hashcat/scripts
 
-#ssh
+ssh
 
-#network-cracked-status.json
+network-cracked-status.json
+generate-hashcat-scripts.py
+get-files-from-pwnagotchi.bat
