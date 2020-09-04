@@ -1,4 +1,4 @@
-ssh -i ./ssh/id_rsa pi@pwnagotchi.local "sudo cp -r /root/handshakes/ /home/pi/handshakes"
+ssh -o IdentitiesOnly=yes -i ./ssh/id_rsa pi@pwnagotchi.local "sudo cp -r /root/handshakes/ /home/pi/handshakes"
 mkdir handshakes\pcap
-scp -r -i ./ssh/id_rsa pi@pwnagotchi.local:/home/pi/handshakes/.  ./handshakes/pcap
-ssh -i ./ssh/id_rsa pi@pwnagotchi.local "sudo rm -rf /home/pi/handshakes"
+scp -o IdentitiesOnly=yes -r -i ./ssh/id_rsa pi@pwnagotchi.local:/home/pi/handshakes/.  ./handshakes/pcap
+ssh -o IdentitiesOnly=yes -i ./ssh/id_rsa pi@pwnagotchi.local "sudo rm -rf /home/pi/handshakes"
