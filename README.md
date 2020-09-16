@@ -24,7 +24,7 @@ The [pwnagotchi](https://pwnagotchi.ai/) automates the process of capturing 4-wa
 
 In short, these scripts will help you crack WPA/WPA2 passwords in the most automated way possible.
 
-#### These tools were custom made to serve my purposes and as a result these scripts are written for Windows and contain dependencies on Python, Vagrant, Virtual Box, and of course, Hashcat. To convert pcap files into pmkid/hccapx Vagrant creates a headless Kali Linux VM, which is overkill for someone already running Linux. To run this project on Linux the bat scripts and Vagrant script will need to be converted to bash scripts.
+#### These tools were custom made to serve my purposes and as a result these scripts are written for Windows and contain dependencies on Python, Vagrant, Virtual Box, and of course, Hashcat. For example, to convert pcap files into pmkid/hccapx files Vagrant creates a headless Kali Linux VM, which is total overkill for someone already running Linux. To run this project on Linux the bat scripts, Vagrant script, and generate-hashcat-scripts.py would need to be converted.
 
 #### This project is ONLY to be used for wifi security education in conjunction with a pwnagotchi. Hacking wifi networks you don't own is ILLEGAL and is not endorsed by this project.
 
