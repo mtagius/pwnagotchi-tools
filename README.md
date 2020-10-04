@@ -211,6 +211,7 @@ The real advantage of using pwnagotchi is that it can automatically collect data
 
 ## Credit
 
+* Thank you Danie Conradie for writing a nice article on [hackaday](https://hackaday.com/2020/09/30/automated-tools-for-wifi-cracking/) about this project!
 * Thanks to CyrisXD for writing [Pwnagetty](https://github.com/CyrisXD/Pwnagetty). I use Pwnagetty to convert pcap files to pmkid/hccapx files. I modified the script so much it hardly looks like the original, but still, thank you CyrisXD.
 * I made liberal use of the WPA/WPA2 password cracking techniques from [PSKracker](https://github.com/soxrok2212/PSKracker) by soxrok2212. To discover wordlist words for default passwords soxrok2212 searches for wifi routers on ebay and then looks at the photos to find default passwords written on the serial number sticker. That's brilliant!
 * I totally got the idea to use [word ninja](https://github.com/keredson/wordninja) on the ssid from dizcza's [repo.](https://github.com/dizcza/hashcat-wpa-server)
