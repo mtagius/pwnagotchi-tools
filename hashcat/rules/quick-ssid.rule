@@ -55,6 +55,10 @@ $9 $9
 # append 123 to the end of each combination
 $1 $2 $3
 
+# append common numeric endings to passwords
+$4 $2 $0
+$6 $9 $6 $9
+
 # append s to the end of each combination
 $s
 

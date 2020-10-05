@@ -94,7 +94,7 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 
 | Attack | Keyspace | Notes |
 |---|--:|---|
-| known-wpa-passwords.txt quick-ssid.rule | ~1200 | known-wpa-passwords.txt is your list of cracked wifi passwords. Keyspace is calculated assuming a list of 20 passwords | 
+| known-wpa-passwords.txt quick-ssid.rule | ~1240 | known-wpa-passwords.txt is your list of cracked wifi passwords. Keyspace is calculated assuming a list of 20 passwords | 
 | known-wpa-passwords.txt unix-ninja-leetspeak.rule | ~61420 | |
 | known-wpa-passwords.txt rockyou-30000.rule | ~600000 | |
 | known-wpa-passwords.txt d3ad0ne.rule | ~681980 | |
@@ -132,8 +132,8 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | words_alpha.txt names.rule | 34789776 | Ex: pizzawifi |
 | 4-digit-append.rule | ~1111000 | Uses `wordNinjaGenerator.py` to append all 1-4 digit number combinations to ssid words Ex: MyCafeWifi --> CafeWifi2020 Keyspace is generated assuming a wordlist generated from the SSID with 100 words. |
 | ?d?d?d?d?d?d?d?d | 100000000 | all 8 digit number combos |
-| openwall.net-all.txt quick-ssid.rule | 66436740 | simple wordlist |
-| netgear-spectrum.txt quick-ssid.rule | 9528120 | Ex: breezyapplewifi |
+| openwall.net-all.txt quick-ssid.rule | 68651298 | simple wordlist |
+| netgear-spectrum.txt quick-ssid.rule | 9845724 | Ex: breezyapplewifi |
 | words_alpha.txt ?d | 3701040 | Ex: seashell1 |
 | words_alpha.txt -1 !@$??#~%^&*^^ ?1 | 3701040 | Ex: seashell$ |
 | words_alpha.txt -1 !@$??#~%^&*^^ ?d?1 | 37010400 | Ex: seashell1! |
@@ -143,19 +143,19 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | words_alpha.txt ?d?d?d | 370104000 | Ex: seashell123 |
 | ?d?d?d?d?d?d?d?d?d | 1000000000 | all 9 digit number combos |
 | hashesorg2019 | 1279729139 | a modern wordlist with a great hit ratio |
-| rockyou.txt quick-ssid.rule | 860663460 | rockyou is a classic wordlist. quick-ssid.rule has rules made for wifi cracking. It's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords. |
+| rockyou.txt quick-ssid.rule | 889352242 | rockyou is a classic wordlist. quick-ssid.rule has rules made for wifi cracking. It's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords. |
 | NAMES.DIC rockyou-30000.rule | 828210000 | Ex: j0sh2009 |
 | netgear-spectrum.txt unix-ninja-leetspeak.rule | 487680942 | Ex: br33zyappl3 |
 | netgear-spectrum.txt ?d?d?d?d | 1588020000 | Ex: breezyapple2020 |
 | Top1pt8Billion-WPA-probable-v2.txt | 1800000000 | Top1pt8Billion-WPA-probable-v2.txt is a popular wordlist. It claims to be 'WPA probable' but really they just cut out all passwords less then 8 chars. That doesn't make it wifi probable. |
-| Top24Million-WPA-probable-v2.txt quick-ssid.rule | 1439564880 | |
+| Top24Million-WPA-probable-v2.txt quick-ssid.rule | 1487550376 | |
 | passphrases.txt passphrases.rule | 1441673030 | This is from the [passphrases repo](https://github.com/initstring/passphrase-wordlist). This SHOULD help with passwords like 'youshallnotpass' and 'maytheforcebewithyou' |
 | Custom-WPA | 185866729 | This is a large wordlist. Ex: au7h0rized |
 | Super-WPA | 982963903 | This is a large wordlist. Ex: au7h0rized |
 | ?h?h?h?h?h?h?h?h | 4294967296 | MANY router default passwords are 8 hex chars (0-9,a-f) |
 | ?H?H?H?H?H?H?H?H | 4294967296 | MANY router default passwords are 8 hex chars (0-9,A-F) |
 | ?d?d?d?d?d?d?d?d?d?d | 10000000000 | This is, by far, the longest attack, but is covers ALL 10 digit number combos, which includes ALL US phone numbers and area codes. |
-| Total: | 31,815,469,794 | At 290 kH/s (GTX 1070 FE) it would take 30.5 hours to run all attacks. At 390 kH/s (GTX 1080 FE) it would take 22.7 hours to run all attacks. |
+| Total: | 31,894,676,274 | At 290 kH/s (GTX 1070 FE) it would take 30.6 hours to run all attacks. At 390 kH/s (GTX 1080 FE) it would take 22.7 hours to run all attacks. |
 
 ## Some thoughts on wifi cracking and pwnagotchi
 
