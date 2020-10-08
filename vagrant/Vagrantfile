@@ -38,22 +38,12 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script,
   config.vm.provision "shell", privileged: true, inline: <<-SHELL
   apt-get -y --allow-unauthenticated update
-  apt-get -y --allow-unauthenticated install build-essential
 	apt-get -y install curl
-  apt-get -y --allow-unauthenticated install python g++ make checkinstall fakeroot
+  apt-get -y install hcxtools
 	curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 	apt-get -y install nodejs
-	apt-get -y install git
   cd /handshakes/pwnagetty
   npm install
-  cd ~
-  git clone https://github.com/ZerBea/hcxtools.git
-  chmod -R 777 hcxtools/
-  cd hcxtools/
-  apt-get -y --allow-unauthenticated install libcurl4-openssl-dev libssl-dev zlib1g-dev
-  make
-  make install
-  cd /handshakes/pwnagetty
   node pwnagetty.js
   SHELL
 end
