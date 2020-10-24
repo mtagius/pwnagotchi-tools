@@ -65,6 +65,10 @@ def generateHashcatScript(filename):
         ["-a 0", "known-wpa-passwords.txt", "unix-ninja-leetspeak.rule", "-S"], # run over 3k leet rules
         ["-a 0", "known-wpa-passwords.txt", "rockyou-30000.rule", "-S"], # run of the best 30k rules for rockyou
         ["-a 0", "known-wpa-passwords.txt", "d3ad0ne.rule", "-S"], # over 34k rules
+        ["-a 0", "nerdlist.txt", "quick-ssid.rule", "-S"], # nerdlist.txt is a small (< 500) list of "nerdy" passwords and references like "hacktheplanet"
+        ["-a 0", "nerdlist.txt", "unix-ninja-leetspeak.rule", "-S"], # run over 3k leet rules
+        ["-a 0", "nerdlist.txt", "rockyou-30000.rule", "-S"], # run of the best 30k rules for rockyou
+        ["-a 0", "nerdlist.txt", "d3ad0ne.rule", "-S"], # over 34k rules
         ["-a 0", "bssid.rule"], # all variations of the BSSID of the network
         ["-a 0", "ssid-ninja.rule"], # uses wordNinjaGenerator.py to generate a wordlist from the ssid Ex: LuckyCoffeeWifi --> Lucky123!
         ["-a 3", "MYWIFI?d?d?d?d"], # all default passwords for MYWIFI (EE) routers

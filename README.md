@@ -64,7 +64,7 @@ In this repo is the `aws` folder which contains scripts to help run hashcat on a
 
 ### Wordlists
 
-This project comes with no wordlists, so you will need download them yourself. If you do not do this any wordlist attacks set up for hashcat will fail. All of these wordlists should be placed in the same folder.
+This project comes with no wordlists, so you will need download them yourself. If you do not download these lists then any wordlist attacks set up for hashcat will fail. All of these wordlists should be placed in the same folder of your choosing. The wordlist folder is configured in the `generate-hashcat-scripts.py` file.
 
 * known-wpa-passwords.txt - This is your own personal list of your cracked wifi passwords.
 * [netgear-spectrum.txt](https://raw.githubusercontent.com/soxrok2212/PSKracker/master/dicts/netgear-spectrum/netgear-spectrum.txt) - The repo for this list is [here](https://github.com/soxrok2212/PSKracker)
@@ -78,6 +78,7 @@ This project comes with no wordlists, so you will need download them yourself. I
 * [passphrases.txt](https://initstring.keybase.pub/passphrase-wordlist/passphrases.txt?dl=1) - The repo for this list is [here](https://github.com/initstring/passphrase-wordlist).
 * [Custom-WPA](https://weakpass.com/wordlist/490)
 * [Super-WPA](https://weakpass.com/wordlist/500)
+* [nerdlist.txt](https://github.com/tarahmarie/nerdlist/blob/master/nerdlist.txt)
 
 ### Configs
 
@@ -98,6 +99,10 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | known-wpa-passwords.txt unix-ninja-leetspeak.rule | ~61420 | |
 | known-wpa-passwords.txt rockyou-30000.rule | ~600000 | |
 | known-wpa-passwords.txt d3ad0ne.rule | ~681980 | |
+| nerdlist.txt quick-ssid.rule | 19220 | nerdlist.txt is a small (< 500) list of "nerdy" passwords and references like "hacktheplanet" |
+| nerdlist.txt unix-ninja-leetspeak.rule | 9300000 | |
+| nerdlist.txt rockyou-30000.rule | 9300000 | |
+| nerdlist.txt d3ad0ne.rule | 10570690 | |
 | bssid.rule | 225 | The BSSID (MAC Address) of the AP (router) with all combinations of uppercase/lowercase, with/without colons, and with all lengths of chars chopped off the end.  |
 | ssid-ninja.rule | ~5300 | Uses `wordNinjaGenerator.py` to generate a wordlist from the ssid Ex: LuckyCoffeeWifi --> Lucky123! Keyspace is generated assuming a wordlist generated from the SSID with 100 words. |
 | MYWIFI?d?d?d?d | 10000 | all default passwords for MYWIFI (EE) routers |
@@ -155,7 +160,7 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | ?h?h?h?h?h?h?h?h | 4294967296 | MANY router default passwords are 8 hex chars (0-9,a-f) |
 | ?H?H?H?H?H?H?H?H | 4294967296 | MANY router default passwords are 8 hex chars (0-9,A-F) |
 | ?d?d?d?d?d?d?d?d?d?d | 10000000000 | This is, by far, the longest attack, but is covers ALL 10 digit number combos, which includes ALL US phone numbers and area codes. |
-| Total: | 31,894,676,274 | At 290 kH/s (GTX 1070 FE) it would take 30.6 hours to run all attacks. At 390 kH/s (GTX 1080 FE) it would take 22.7 hours to run all attacks. |
+| Total: | 31,923,866,184 | At 290 kH/s (GTX 1070 FE) it would take 30.6 hours to run all attacks. At 390 kH/s (GTX 1080 FE) it would take 22.7 hours to run all attacks. |
 
 ## Some thoughts on wifi cracking and pwnagotchi
 
