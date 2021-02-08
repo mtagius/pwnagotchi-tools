@@ -33,7 +33,7 @@ In short, these scripts will help you crack WPA/WPA2 passwords in the most autom
 1. Use your pwnagotchi to collect wifi handshakes.
 1. Plug your pwnagotchi into your computer and place the device in manual mode. You will see the "MANU" icon on the bottom right of its screen.
 1. Run `get-files-from-pwnagotchi.bat`  This will copy the pcap files off of your device and place them in the `handshakes/pcap` folder.
-1. Run `cd vagrant` to change into the vagrant folder. Then run `vagrant up`. This will create a headless kali VM that will install and run the tools needed to convert pcap files into crackable pmkid/hccapx files.
+1. Run `cd vagrant` to change into the vagrant folder. Ensure VirtualBox is running and then, run `vagrant up`. This will create a headless kali VM that will install and run the tools needed to convert pcap files into crackable pmkid/hccapx files. If this command gets stuck and shows the error `Timed out while waiting for the machine to boot` then ensure VirtualBox is running and the VM was not paused. Run `vagrant destroy -f` and then `vagrant up` to try again.
 1. Once that has finished run `vagrant destroy -f` to delete the VM and run `cd ..` to get back to the root folder.
 1. Run `python generate-hashcat-scripts.py` to generate the bat scripts you will use to run the [custom WPA/WPA2 hashcat attacks](#Password-cracking-techniques) included in this repo.
 1. Run any of the newly created bat scripts found in the `hashcat/scripts` folder. There will be one script for each wifi network the pwnagotchi collected crackable data for. Depending on your graphics card, the full attack could take about a day to run per wifi network.
