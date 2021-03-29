@@ -147,6 +147,9 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | words_alpha.txt ?d?d | 37010400 | Ex: seashell69 |
 | words_alpha.txt -1 !@$??#~%^&*^^ ?d?d?1 | 370104000 | Ex: seashell92@ |
 | words_alpha.txt ?d?d?d | 370104000 | Ex: seashell123 |
+| ?l?l?l?l?l?l1! | 308915776 | Ex: slyfox1! |
+| ?u?l?l?l?l?l1! | 308915776 | Ex: Slyfox1! |
+| ?u?u?u?u?u?u1! | 308915776 | Ex: SLYFOX1! |
 | ?d?d?d?d?d?d?d?d?d | 1000000000 | all 9 digit number combos |
 | hashesorg2019 | 1279729139 | a modern wordlist with a great hit ratio |
 | rockyou.txt quick-ssid.rule | 889352242 | rockyou is a classic wordlist. quick-ssid.rule has rules made for wifi cracking. It's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords. |
@@ -161,7 +164,7 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | ?h?h?h?h?h?h?h?h | 4294967296 | MANY router default passwords are 8 hex chars (0-9,a-f) |
 | ?H?H?H?H?H?H?H?H | 4294967296 | MANY router default passwords are 8 hex chars (0-9,A-F) |
 | ?d?d?d?d?d?d?d?d?d?d | 10000000000 | This is, by far, the longest attack, but is covers ALL 10 digit number combos, which includes ALL US phone numbers and area codes. |
-| Total: | 31,923,866,184 | At 290 kH/s (GTX 1070 FE) it would take 30.6 hours to run all attacks. At 390 kH/s (GTX 1080 FE) it would take 22.7 hours to run all attacks. |
+| Total: | 32,850,613,512 | At 375 kH/s (GTX 1080) it would take about 24.3 hours to run all attacks. |
 
 ## Some thoughts on wifi cracking and pwnagotchi
 

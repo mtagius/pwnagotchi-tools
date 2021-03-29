@@ -112,6 +112,9 @@ def generateHashcatScript(filename):
         ["-a 6", "words_alpha.txt", "?d?d"], # for passwords like seashell69
         ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?d?d?1"], # for passwords like seashell92@
         ["-a 6", "words_alpha.txt", "?d?d?d"], # for passwords like seashell123
+        ["-a 3", "?l?l?l?l?l?l1!"], # Ex: slyfox1!
+        ["-a 3", "?u?l?l?l?l?l1!"], # Ex: Slyfox1!
+        ["-a 3", "?u?u?u?u?u?u1!"], # Ex: SLYFOX1!
         ["-a 3", "?d?d?d?d?d?d?d?d?d"], # all 9 digit number combos
         ["-a 0", "hashesorg2019"], # hashesorg2019 is a popular wordlist
         ["-a 0", "rockyou.txt", "quick-ssid.rule"], # rockyou is a classic wordlist, quick-ssid.rule has rules made for wifi cracking, it's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords
