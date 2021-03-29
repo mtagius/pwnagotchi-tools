@@ -55,12 +55,13 @@ In this repo is the `aws` folder which contains scripts to help run hashcat on a
 
 ### Dependencies
 
-* Windows (This is because bat files are used, but they can be converted to bash scripts to get this running on Linux)
+* Windows - This is because bat files are used, but they can be converted to bash scripts to get this running on Linux
 * Python 3.x
-* [Vagrant](https://www.vagrantup.com/) Vagrant and Virtual Box are only used to convert pcap files to hccapx/pmkid files
+* [Vagrant](https://www.vagrantup.com/) - Vagrant and Virtual Box are only used to convert pcap files to hccapx/pmkid files
 * [Virtual Box](https://www.virtualbox.org/)
-* [Hashcat v6.0.0](https://hashcat.net/hashcat/) You don't really need version 6.0.0, but at the time of this release version 6.0.0 introduced 13.35% speed improvements on WPA/WPA2 cracking, so for this project it's a waste not to use at least version 6.0.0
-* [Word Ninja](https://github.com/keredson/wordninja)
+* [Hashcat v6.0.0](https://hashcat.net/hashcat/) - You don't really need version 6.0.0, but at the time of this release version 6.0.0 introduced 13.35% speed improvements on WPA/WPA2 cracking, so for this project it's a waste not to use at least version 6.0.0
+* [Word Ninja](https://github.com/keredson/wordninja) - pip install wordninja
+* [Tabulate](https://github.com/gregbanks/python-tabulate) - pip install tabulate
 
 ### Wordlists
 
