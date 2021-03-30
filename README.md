@@ -131,13 +131,13 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | WIFI?u?u?u?u | 456976 | Ex: WIFISHOE |
 | -1 !@$??#~%^&*^^ WIFI?u?u?u?u?1 | 4569760 | Ex: WIFIBOAT! |
 | WIFI?u?u?u?u?u | 11881376 | Ex: WIFICOACH |
-| netgear-spectrum.txt ?d?d?d | 158802000 | MANY netgear and other routers have a default password that is a word + word + 1-3 digits. If I could only run 1 attack this is the one I would run. |
-| netgear-spectrum.txt ?d | 1588020 | |
-| netgear-spectrum.txt ?d?d | 15880200 | |
 | NAMES.DIC names.rule | 2595058 | Ex: lukewifi2020 |
 | words_alpha.txt names.rule | 34789776 | Ex: pizzawifi |
 | 4-digit-append.rule | ~1111000 | Uses `wordNinjaGenerator.py` to append all 1-4 digit number combinations to ssid words Ex: MyCafeWifi --> CafeWifi2020 Keyspace is generated assuming a wordlist generated from the SSID with 100 words. |
 | ?d?d?d?d?d?d?d?d | 100000000 | all 8 digit number combos |
+| netgear-spectrum.txt ?d?d?d | 573348000 | MANY netgear and other routers have a default password that is a word + word + 1-3 digits. If I could only run 1 attack this is the one I would run. |
+| netgear-spectrum.txt ?d | 5733480 | |
+| netgear-spectrum.txt ?d?d | 57334800 | |
 | openwall.net-all.txt quick-ssid.rule | 68651298 | simple wordlist |
 | netgear-spectrum.txt quick-ssid.rule | 9845724 | Ex: breezyapplewifi |
 | words_alpha.txt ?d | 3701040 | Ex: seashell1 |
@@ -154,8 +154,7 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | hashesorg2019 | 1279729139 | a modern wordlist with a great hit ratio |
 | rockyou.txt quick-ssid.rule | 889352242 | rockyou is a classic wordlist. quick-ssid.rule has rules made for wifi cracking. It's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords. |
 | NAMES.DIC rockyou-30000.rule | 828210000 | Ex: j0sh2009 |
-| netgear-spectrum.txt unix-ninja-leetspeak.rule | 487680942 | Ex: br33zyappl3 |
-| netgear-spectrum.txt ?d?d?d?d | 1588020000 | Ex: breezyapple2020 |
+| netgear-spectrum.txt unix-ninja-leetspeak.rule | 1760751708 | Ex: br33zyappl3 |
 | Top1pt8Billion-WPA-probable-v2.txt | 1800000000 | Top1pt8Billion-WPA-probable-v2.txt is a popular wordlist. It claims to be 'WPA probable' but really they just cut out all passwords less then 8 chars. That doesn't make it wifi probable. |
 | Top24Million-WPA-probable-v2.txt quick-ssid.rule | 1487550376 | |
 | passphrases.txt passphrases.rule | 1441673030 | This is from the [passphrases repo](https://github.com/initstring/passphrase-wordlist). This SHOULD help with passwords like 'youshallnotpass' and 'maytheforcebewithyou' |
@@ -164,7 +163,7 @@ I have compiled a comprehensive list of attacks that includes many wordlist atta
 | ?h?h?h?h?h?h?h?h | 4294967296 | MANY router default passwords are 8 hex chars (0-9,a-f) |
 | ?H?H?H?H?H?H?H?H | 4294967296 | MANY router default passwords are 8 hex chars (0-9,A-F) |
 | ?d?d?d?d?d?d?d?d?d?d | 10000000000 | This is, by far, the longest attack, but is covers ALL 10 digit number combos, which includes ALL US phone numbers and area codes. |
-| Total: | 32,850,613,512 | At 375 kH/s (GTX 1080) it would take about 24.3 hours to run all attacks. |
+| Total: | 33,021,512,190 | At 375 kH/s (GTX 1080) it would take about 24.4 hours to run all attacks. |
 
 ## Some thoughts on wifi cracking and pwnagotchi
 

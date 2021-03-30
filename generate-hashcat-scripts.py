@@ -96,13 +96,13 @@ def generateHashcatScript(filename):
         ["-a 3", "WIFI?u?u?u?u"], # for passwords like WIFISHOE
         ["-a 3", "-1 !@$??#~%^&*^^ WIFI?u?u?u?u?1"], # for passwords like WIFIBOAT!
         ["-a 3", "WIFI?u?u?u?u?u"], # for passwords like WIFICOACH
-        ["-a 6", "netgear-spectrum.txt", "?d?d?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits, if I could only run 1 attack this is the one I would run
-        ["-a 6", "netgear-spectrum.txt", "?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits
-        ["-a 6", "netgear-spectrum.txt", "?d?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits
         ["-a 0", "NAMES.DIC", "names.rule"], # for passwords like lukeswifi
         ["-a 0", "words_alpha.txt", "names.rule"], # for passwords like pizzawifi
         ["-a 0", "4-digit-append.rule"], # uses wordNinjaGenerator.py to append all 1-4 digit combinations to ssid words Ex: MyCafeWifi --> CafeWifi2020
         ["-a 3", "?d?d?d?d?d?d?d?d"], # all 8 digit number combos
+        ["-a 6", "netgear-spectrum.txt", "?d?d?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits, if I could only run 1 attack this is the one I would run
+        ["-a 6", "netgear-spectrum.txt", "?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits
+        ["-a 6", "netgear-spectrum.txt", "?d?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits
         ["-a 0", "openwall.net-all.txt", "quick-ssid.rule"], # openwall is a popular wordlist
         ["-a 0", "netgear-spectrum.txt", "quick-ssid.rule"], # for passwords like breezyapplewifi
         ["-a 6", "words_alpha.txt", "?d"], # for passwords like seashell1
@@ -120,7 +120,6 @@ def generateHashcatScript(filename):
         ["-a 0", "rockyou.txt", "quick-ssid.rule"], # rockyou is a classic wordlist, quick-ssid.rule has rules made for wifi cracking, it's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords
         ["-a 0", "NAMES.DIC", "rockyou-30000.rule"], # for passwords like j0sh2009
         ["-a 0", "netgear-spectrum.txt", "unix-ninja-leetspeak.rule"], # for passwords like br33zyappl3
-        ["-a 6", "netgear-spectrum.txt", "?d?d?d?d"], # for passwords like breezyapple2020
         ["-a 0", "Top1pt8Billion-WPA-probable-v2.txt"], # Top1pt8Billion-WPA-probable-v2.txt is a popular wordlist, it claims to be 'WPA probable' but really they just cut out all passwords less then 8 chars, that doesn't make it wifi probable
         ["-a 0", "Top24Million-WPA-probable-v2.txt", "quick-ssid.rule"], # Top24Million-WPA-probable-v2.txt is a popular wordlist, it claims to be 'WPA probable' but really they just cut out all passwords less then 8 chars, that doesn't make it wifi probable
         ["-a 0", "passphrases.txt", "passphrases.rule"], # from the passphrases repo, this SHOULD help with passwords like 'youshallnotpass'
