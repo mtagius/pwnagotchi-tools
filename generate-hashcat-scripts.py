@@ -132,7 +132,11 @@ def generateHashcatScript(filename):
 
     f = open("./hashcat/scripts/" + fileId + ".bat", "w")
     script = ":: " + hashcatScriptVersion + "\n"
-    script += 'cd "' + fullHashcatPath + '"\n'
+    script += 'cd '
+    if fullProjectPath[0] != fullHashcatPath[0]:
+        # if the cd command needs the /d argument to change drives
+        script += '/d '
+    script += '"' + fullHashcatPath + '"\n'
     for attack in attacks:
         hashcatCommand = "hashcat "
         hashcatCommand += attack[0] + " "
@@ -166,7 +170,11 @@ def generateHashcatScript(filename):
         hashcatCommand += "\n"
         script += hashcatCommand
 
-    script += 'cd "' + fullProjectPath + '"\n'
+    script += 'cd '
+    if fullProjectPath[0] != fullHashcatPath[0]:
+        # if the cd command needs the /d argument to change drives
+        script += '/d '
+    script += '"' + fullProjectPath + '"\n'
     script += 'python "' + fullProjectPath + 'update-network-status.py" ' + filename
     f.write(script)
     f.close()
