@@ -182,10 +182,9 @@ def generateHashcatScript(filename):
     sessionScripts.append(fileId + ".bat")
 
 def getBSSID(filename):
-    global networkBSSIDData
-    pcapFileName = filename.replace(".pmkid", ".pcap")
-    pcapFileName = pcapFileName.replace(".hccapx", ".pcap")
-    return networkBSSIDData[pcapFileName]["bssid"]
+    fileSplitName = filename.split("_")[1]
+    gotBSSID = fileSplitName.split(".")[0]
+    return gotBSSID
 
 def generateScriptForBatch():
     global sessionScripts
