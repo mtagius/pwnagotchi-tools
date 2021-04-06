@@ -182,9 +182,10 @@ def generateHashcatScript(filename):
     sessionScripts.append(fileId + ".bat")
 
 def getBSSID(filename):
-    fileSplitName = filename.split("_")[1]
-    gotBSSID = fileSplitName.split(".")[0]
-    return gotBSSID
+    rawMAC = re.findall(r'(?:[0-9A-Fa-f]{2}){6}', filename)[0].upper() # finds MAC address pattern in filename
+    ':'.join(format(s, '02x') for s in bytes.fromhex(rawMAC))
+    formattedMAC = ':'.join([rawMAC[i : i + 2] for i in range(0, len(rawMAC), 2)])
+    return formattedMAC
 
 def generateScriptForBatch():
     global sessionScripts
