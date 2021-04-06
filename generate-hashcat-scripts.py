@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from random import randint
 
 # The FULL path to the 'pwnagotchi-tools' folder in this repo
