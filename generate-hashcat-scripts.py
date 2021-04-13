@@ -1,5 +1,6 @@
 import os
 import json
+import re
 from random import randint
 
 # The FULL path to the 'pwnagotchi-tools' folder in this repo
@@ -185,7 +186,15 @@ def getBSSID(filename):
     global networkBSSIDData
     pcapFileName = filename.replace(".pmkid", ".pcap")
     pcapFileName = pcapFileName.replace(".hccapx", ".pcap")
-    return networkBSSIDData[pcapFileName]["bssid"]
+
+    try:
+        bssid = networkBSSIDData[pcapFileName]["bssid"]
+    except KeyError:
+        # finds bssid from filename
+        rawMAC = re.findall(r'(?:[0-9A-Fa-f]{2}){6}', filename.split("_")[-1])[0].upper()
+        bssid = ':'.join([rawMAC[i : i + 2] for i in range(0, len(rawMAC), 2)])
+
+    return bssid
 
 def generateScriptForBatch():
     global sessionScripts
