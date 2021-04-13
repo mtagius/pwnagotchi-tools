@@ -4,15 +4,15 @@ import re
 from random import randint
 
 # The FULL path to the 'pwnagotchi-tools' folder in this repo
-fullProjectPath = r"C:\Users\pwnagotchi-tools\\"
+fullProjectPath = "C:\Users\pwnagotchi-tools\\"
 
 # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
 # there are problems saving and accessing the session files when running hashcat
 # commands while not in the hashcat folder, so the full path is needed
-fullHashcatPath = r"C:\Users\hashcat-6.0.0\\"
+fullHashcatPath = "C:\Users\hashcat-6.0.0\\"
 
 # the FULL path to where your wordlists are saved
-fullWordListPath = r"C:\Users\wordlists\\"
+fullWordListPath = "C:\Users\wordlists\\"
 
 # This is the 'version' of the hashcat attacks in this file. This is
 # used to track the scripts used on the pmkid/hccapx files. If the
@@ -42,8 +42,8 @@ def generateHashcatScript(filename):
     # 4 - nightmare, only recommended for headless machines
     workloadProfile = "-w 2"
 
-    outputPath = '--potfile-path "' + fullProjectPath + r'hashcat\hashcat-potfile.txt" -o "' + fullProjectPath + r'hashcat\hashcat-output.txt"'
-    rulePath = fullProjectPath + r"hashcat\\rules\\"
+    outputPath = '--potfile-path "' + fullProjectPath + 'hashcat\hashcat-potfile.txt" -o "' + fullProjectPath + 'hashcat\hashcat-output.txt"'
+    rulePath = fullProjectPath + "hashcat\\rules\\"
     wordNinjaPath = fullProjectPath + "hashcat"
     bssid = getBSSID(filename)
     ssid = filename.split("_")[0]
@@ -54,11 +54,11 @@ def generateHashcatScript(filename):
     if(".hccapx" in filename):
         hashType = "-m 2500"
         fileId = filename.split(".hccapx")[0]
-        hashPath = '"' + fullProjectPath + r'\handshakes\hccapx\\' + filename + '"'
+        hashPath = '"' + fullProjectPath + '\handshakes\hccapx\\' + filename + '"'
     else:
         hashType = "-m 16800"
         fileId = filename.split(".pmkid")[0]
-        hashPath = '"' + fullProjectPath + r'\handshakes\pmkid\\' + filename + '"'
+        hashPath = '"' + fullProjectPath + '\handshakes\pmkid\\' + filename + '"'
     session = "--session " + fileId
 
     attacks = [
@@ -152,7 +152,7 @@ def generateHashcatScript(filename):
                 hashcatCommand = "echo " + bssid + " | " + hashcatCommand
                 hashcatCommand += '-r "' + rulePath + attack[1] + '"'
             elif(("ssid-ninja.rule" in attack[1]) or ("4-digit-append.rule" in attack[1])):
-                hashcatCommand = 'python "' + wordNinjaPath + r'\wordNinjaGenerator.py" ' + ssid + ' | ' + hashcatCommand
+                hashcatCommand = 'python "' + wordNinjaPath + '\wordNinjaGenerator.py" ' + ssid + ' | ' + hashcatCommand
                 hashcatCommand += '-r "' + rulePath + attack[1] + '"'
             else:
                 if(len(attack) > 3 and "-S" in attack[3]):
@@ -183,10 +183,18 @@ def generateHashcatScript(filename):
     sessionScripts.append(fileId + ".bat")
 
 def getBSSID(filename):
-    rawMAC = re.findall(r'(?:[0-9A-Fa-f]{2}){6}', filename)[0].upper() # finds MAC address pattern in filename
-    ':'.join(format(s, '02x') for s in bytes.fromhex(rawMAC))
-    formattedMAC = ':'.join([rawMAC[i : i + 2] for i in range(0, len(rawMAC), 2)])
-    return formattedMAC
+    global networkBSSIDData
+    pcapFileName = filename.replace(".pmkid", ".pcap")
+    pcapFileName = pcapFileName.replace(".hccapx", ".pcap")
+
+    try:
+        bssid = networkBSSIDData[pcapFileName]["bssid"]
+    except KeyError:
+        # finds bssid from filename
+        rawMAC = re.findall(r'(?:[0-9A-Fa-f]{2}){6}', filename.split("_")[-1])[0].upper()
+        bssid = ':'.join([rawMAC[i : i + 2] for i in range(0, len(rawMAC), 2)])
+
+    return bssid
 
 def generateScriptForBatch():
     global sessionScripts
@@ -195,7 +203,7 @@ def generateScriptForBatch():
         f = open("./hashcat/scripts/batches/batch-" + str(randint(1000, 9999)) + ".bat", "w")
         batchScript = ""
         for script in sessionScripts:
-            batchScript += 'call "' + fullProjectPath + r'hashcat\scripts\\' + script + '"\n'
+            batchScript += 'call "' + fullProjectPath + 'hashcat\scripts\\' + script + '"\n'
         f.write(batchScript)
         f.close()
         print("\nBatch script created for " + str(len(sessionScripts)) + " scripts")
