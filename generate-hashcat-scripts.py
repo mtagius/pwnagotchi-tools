@@ -54,11 +54,11 @@ def generateHashcatScript(filename):
     if(".hccapx" in filename):
         hashType = "-m 2500"
         fileId = filename.split(".hccapx")[0]
-        hashPath = '"' + fullProjectPath + '\handshakes\hccapx\\' + filename + '"'
+        hashPath = '"' + fullProjectPath + 'handshakes\hccapx\\' + filename + '"'
     else:
         hashType = "-m 16800"
         fileId = filename.split(".pmkid")[0]
-        hashPath = '"' + fullProjectPath + '\handshakes\pmkid\\' + filename + '"'
+        hashPath = '"' + fullProjectPath + 'handshakes\pmkid\\' + filename + '"'
     session = "--session " + fileId
 
     attacks = [
@@ -186,7 +186,7 @@ def getBSSID(filename):
     global networkBSSIDData
     pcapFileName = filename.replace(".pmkid", ".pcap")
     pcapFileName = pcapFileName.replace(".hccapx", ".pcap")
-
+    
     try:
         bssid = networkBSSIDData[pcapFileName]["bssid"]
     except KeyError:
