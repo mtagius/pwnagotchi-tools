@@ -37,7 +37,7 @@ In short, these scripts will help you crack WPA/WPA2 passwords in the most autom
 1. Once that has finished run `vagrant destroy -f` to delete the VM and run `cd ..` to get back to the root folder.
 1. Run `python generate-hashcat-scripts.py` to generate the bat scripts you will use to run the [custom WPA/WPA2 hashcat attacks](#Password-cracking-techniques) included in this repo.
 1. Run any of the newly created bat scripts found in the `hashcat/scripts` folder. There will be one script for each wifi network the pwnagotchi collected crackable data for. Depending on your graphics card, the full attack could take about a day to run per wifi network.
-1. Run `python generate-final-results.py` to see a printed list of all the wifi networks that have been cracked so far with their SSIDs and passwords.
+1. Run `python print-final-results.py` to see a printed list of all the wifi networks that have been cracked so far with their SSIDs and passwords.
 
 * Optionally, at any point run `python get-next-hashcat-script.py` to print some stats of the wifi networks being tracked in `network-cracked-status.json`
 
