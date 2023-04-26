@@ -4,7 +4,7 @@ import re
 from random import randint
 
 # The FULL path to the 'pwnagotchi-tools' folder in this repo
-fullProjectPath = r"C:\Users\pwnagotchi-tools\\"
+fullProjectPath = "C:\Users\pwnagotchi-tools\\"
 
 # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
 # there are problems saving and accessing the session files when running hashcat
@@ -12,7 +12,7 @@ fullProjectPath = r"C:\Users\pwnagotchi-tools\\"
 fullHashcatPath = "C:\Users\hashcat-6.2.6\\"
 
 # the FULL path to where your wordlists are saved
-fullWordListPath = r"C:\Users\wordlists\\"
+fullWordListPath = "C:\Users\wordlists\\"
 
 # This is the 'version' of the hashcat attacks in this file. This is
 # used to track the scripts used on the pmkid/hccapx files. If the
