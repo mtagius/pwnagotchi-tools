@@ -9,7 +9,7 @@ fullProjectPath = "C:\Users\pwnagotchi-tools\\"
 # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
 # there are problems saving and accessing the session files when running hashcat
 # commands while not in the hashcat folder, so the full path is needed
-fullHashcatPath = "C:\Users\hashcat-6.0.0\\"
+fullHashcatPath = "C:\Users\hashcat-6.2.6\\"
 
 # the FULL path to where your wordlists are saved
 fullWordListPath = "C:\Users\wordlists\\"
@@ -51,12 +51,12 @@ def generateHashcatScript(filename):
     hashType = ""
     fileId = ""
     hashPath = ""
-    if(".hccapx" in filename):
-        hashType = "-m 2500"
-        fileId = filename.split(".hccapx")[0]
+    if(".hc22000" in filename):
+        hashType = "-m 22000"
+        fileId = filename.split(".hc22000")[0]
         hashPath = '"' + fullProjectPath + 'handshakes\hccapx\\' + filename + '"'
     else:
-        hashType = "-m 16800"
+        hashType = "-m 22000"
         fileId = filename.split(".pmkid")[0]
         hashPath = '"' + fullProjectPath + 'handshakes\pmkid\\' + filename + '"'
     session = "--session " + fileId
@@ -185,7 +185,7 @@ def generateHashcatScript(filename):
 def getBSSID(filename):
     global networkBSSIDData
     pcapFileName = filename.replace(".pmkid", ".pcap")
-    pcapFileName = pcapFileName.replace(".hccapx", ".pcap")
+    pcapFileName = pcapFileName.replace(".hc22000", ".pcap")
     
     try:
         bssid = networkBSSIDData[pcapFileName]["bssid"]

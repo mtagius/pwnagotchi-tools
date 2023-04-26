@@ -24,7 +24,7 @@ The [pwnagotchi](https://pwnagotchi.ai/) automates the process of capturing 4-wa
 
 In short, these scripts will help you crack WPA/WPA2 passwords in the most automated way possible.
 
-#### These tools were custom made to serve my purposes and as a result these scripts are written for Windows and contain dependencies on Python, Vagrant, Virtual Box, and of course, Hashcat. For example, to convert pcap files into pmkid/hccapx files Vagrant creates a headless Kali Linux VM, which is total overkill for someone already running Linux. To run this project on Linux the bat scripts, Vagrant script, and generate-hashcat-scripts.py would need to be converted.
+#### These tools were custom made to serve my purposes and as a result these scripts are written for Windows and contain dependencies on Python, Vagrant, Virtual Box, and of course, Hashcat. For example, to convert pcap files into pmkid/hccapx files Vagrant creates a headless Debian Linux VM, which is total overkill for someone already running Linux. To run this project on Linux the bat scripts, Vagrant script, and generate-hashcat-scripts.py would need to be converted.
 
 #### This project is ONLY to be used for wifi security education in conjunction with a pwnagotchi. Hacking wifi networks you don't own is ILLEGAL and is not endorsed by this project.
 
@@ -33,7 +33,7 @@ In short, these scripts will help you crack WPA/WPA2 passwords in the most autom
 1. Use your pwnagotchi to collect wifi handshakes.
 1. Plug your pwnagotchi into your computer and place the device in manual mode. You will see the "MANU" icon on the bottom right of its screen.
 1. Run `get-files-from-pwnagotchi.bat`  This will copy the pcap files off of your device and place them in the `handshakes/pcap` folder.
-1. Run `cd vagrant` to change into the vagrant folder. Ensure VirtualBox is running and then, run `vagrant up`. This will create a headless kali VM that will install and run the tools needed to convert pcap files into crackable pmkid/hccapx files. If this command gets stuck and shows the error `Timed out while waiting for the machine to boot` then ensure VirtualBox is running and the VM was not paused. Run `vagrant destroy -f` and then `vagrant up` to try again.
+1. Run `cd vagrant` to change into the vagrant folder. Ensure VirtualBox is running and then, run `vagrant up`. This will create a headless Debian VM that will install and run the tools needed to convert pcap files into crackable pmkid/hccapx files. If this command gets stuck and shows the error `Timed out while waiting for the machine to boot` then ensure VirtualBox is running and the VM was not paused. Run `vagrant destroy -f` and then `vagrant up` to try again.
 1. Once that has finished run `vagrant destroy -f` to delete the VM and run `cd ..` to get back to the root folder.
 1. Run `python generate-hashcat-scripts.py` to generate the bat scripts you will use to run the [custom WPA/WPA2 hashcat attacks](#Password-cracking-techniques) included in this repo.
 1. Run any of the newly created bat scripts found in the `hashcat/scripts` folder. There will be one script for each wifi network the pwnagotchi collected crackable data for. Depending on your graphics card, the full attack could take about a day to run per wifi network.
@@ -59,7 +59,7 @@ In this repo is the `aws` folder which contains scripts to help run hashcat on a
 * Python 3.x
 * [Vagrant](https://www.vagrantup.com/) - Vagrant and Virtual Box are only used to convert pcap files to hccapx/pmkid files
 * [Virtual Box](https://www.virtualbox.org/)
-* [Hashcat v6.0.0](https://hashcat.net/hashcat/) - You don't really need version 6.0.0, but at the time of this release version 6.0.0 introduced 13.35% speed improvements on WPA/WPA2 cracking, so for this project it's a waste not to use at least version 6.0.0
+* [Hashcat v6.2.6](https://hashcat.net/hashcat/)
 * [Word Ninja](https://github.com/keredson/wordninja) - pip install wordninja
 * [Tabulate](https://github.com/gregbanks/python-tabulate) - pip install tabulate
 

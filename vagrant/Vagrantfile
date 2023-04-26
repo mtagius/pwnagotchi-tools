@@ -15,7 +15,7 @@ Vagrant.configure("2") do |config|
   #config.vm.box = "j7k6/kali-linux"
   #config.vm.box_version = "2019.2.0"
 
-  config.vm.box = "kalilinux/rolling"
+  config.vm.box = "debian/bullseye64"
 
   config.vm.provider "virtualbox" do |vb|
     # Display the VirtualBox GUI when booting the machine
@@ -38,11 +38,10 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script,
   config.vm.provision "shell", privileged: true, inline: <<-SHELL
   export DEBIAN_FRONTEND=noninteractive
-  apt-get -y --allow-unauthenticated update
+  apt-get -y update
 	apt-get -y install curl
-  wget http://archive.ubuntu.com/ubuntu/pool/universe/h/hcxtools/hcxtools_6.0.2-1_amd64.deb
-  apt-get -y install ./hcxtools_6.0.2-1_amd64.deb
-	curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+  apt-get -y install hcxtools
+	curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 	apt-get -y install nodejs
   cd /handshakes/pwnagetty
   npm install

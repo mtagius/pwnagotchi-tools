@@ -104,7 +104,7 @@ function convertFile(file) {
                 successfulPMKIDs++;
                 resolve("pmkid")
             } else {
-                let convertHCCAPX = exec(`hcxpcaptool -o ../hccapx/${file.replace('.pcap', '')}.hccapx ${config.localDir + file}`, function (error, stdout) {
+                let convertHCCAPX = exec(`hcxpcapngtool -o ../hccapx/${file.replace('.pcap', '')}.hc22000 ${config.localDir + file}`, function (error, stdout) {
                     if (error) {
                         reject(error);
                         console.log(error);
