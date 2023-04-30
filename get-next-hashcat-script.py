@@ -12,7 +12,7 @@ with open('network-cracked-status.json') as f:
 for network in networkCrackedStatusData.keys():
     if(networkCrackedStatusData[network]["status"] == "waiting" and foundNextScript == False):
         print("\nNext script ready to run:")
-        print("\n" + network.replace(".pmkid", "").replace(".hccapx", "") + ".bat")
+        print("\n" + network.replace(".pmkid", "").replace(".hc22000", "") + ".bat")
         print("SSID: " + networkCrackedStatusData[network]["ssid"])
         print("BSSID: " + networkCrackedStatusData[network]["bssid"])
         print("Status: " + networkCrackedStatusData[network]["status"])
@@ -29,3 +29,4 @@ print("\nTotal Networks:  " + str(len(networkCrackedStatusData)) + "\n")
 print("Total Waiting:   " + str(totalWaiting))
 print("Total Exhausted: " + str(totalExhausted))
 print("Total Cracked:   " + str(totalCracked))
+print("Success Rate:    " + str(round(totalCracked * 100 / (totalCracked + totalExhausted), 1)) + "%")

@@ -16,10 +16,10 @@ def detectCrackedNetworks():
     with open("./hashcat/hashcat-output.txt") as hashcatOutput:
         results = hashcatOutput.readlines()
         for result in results:
-            resultHash = result.split(":")[0] + ":" + result.split(":")[1]
+            resultHash = result.split(":")[-4] + ":" + result.split(":")[-3]
             if(not hasNetworkalreadyBeenCracked(resultHash)):
-                ssid = result.split(":")[2]
-                password = result.split(":")[3].strip()
+                ssid = result.split(":")[-2]
+                password = result.split(":")[-1].strip()
                 networksCracked.append([ssid, password, resultHash])
 
 def printCrackedNetworks():

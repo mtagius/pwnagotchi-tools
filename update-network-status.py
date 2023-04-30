@@ -38,7 +38,7 @@ if(".pmkid" in filename):
     with open("./hashcat/hashcat-output.txt") as hashcatOutput:
         results = hashcatOutput.readlines()
         for result in results:
-            result = result.split(":")[0] + ":" + result.split(":")[1]
+            result = result.split(":")[-4] + ":" + result.split(":")[-3]
             with open("./handshakes/pmkid/" + filename) as pmkidFile:
                 pmkids = pmkidFile.readlines()
                 for pmkid in pmkids:
@@ -53,7 +53,7 @@ else:
     with open("./hashcat/hashcat-output.txt") as hashcatOutput:
         results = hashcatOutput.readlines()
         for result in results:
-            result = result.split(":")[2]
+            result = result.split(":")[-2]
             result = re.sub('\W+','', result)
             if(ssid == result):
                 status = "cracked"
