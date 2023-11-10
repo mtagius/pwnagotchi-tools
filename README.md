@@ -83,18 +83,18 @@ By default this repo does not contain any wordlists so you will need to download
 # Running
 1. Use your `Pwnagotchi` to collect WiFi handshakes.
 2. Plug your `Pwnagotchi` into your computer and ensure the device is in manual (`MANU`) mode.
-3. Run the `get-files-from-pwnagotchi.bat` file to copy the handshakes from your `Pwnagotchi`. This will place the handshakes in the `.\handshakes\pcap\` folder.
+3. Run the `get-files-from-pwnagotchi.bat` script to copy the handshakes from your `Pwnagotchi`. This will place the handshakes in the `.\handshakes\pcap\` folder.
 	1. `.\get-files-from-pwnagotchi.bat`
 4. Build the Vagrant image.
 	1. `cd .\vagrant`
 	2. `vagrant up`
 5. Move back to the root directory.
 	1. `cd ..`
-6. Run the `generate-hashcat-scripts.py` file to generate the necessary `.bat` scripts to run different `hashcat` attacks. There will be one `.bat` script for each of the WiFi handshake `.pcap` files for each of the different attack methods.
+6. Run the `generate-hashcat-scripts.py` script to generate the necessary `.bat` scripts to run different `hashcat` attacks. There will be one `.bat` script for each of the WiFi handshake `.pcap` files for each of the different attack methods.
 	1. `python .\generate-hashcat-scripts.py`
 7. Run one of the `XXXXXX.bat` scripts in the `.\hashcat\scripts\` folder for a particular WiFi network. Depending on your graphics card, the full set of attacks for a specific WiFi network could take about a day to run.
 	1. `.\hashcat\scripts\[XXXXXX].bat`
-8. Run the `` file to see a printed list of all of the WiFi networks that have been cracked so far with their `SSID`s and passwords.
+8. Run the `print-final-results.py` script to see a printed list of all of the WiFi networks that have been cracked so far with their `SSID`s and passwords.
 	1. `python .\print-final-results.py`
 
 ----
