@@ -24,5 +24,6 @@ ssh
 network-cracked-status.json
 generate-hashcat-scripts.py
 get-files-from-pwnagotchi.bat
+
 generate-hashcat-scripts.py
-wordlists/known-wpa-passwords.txt
+wordlists/*

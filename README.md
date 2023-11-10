@@ -52,15 +52,15 @@ With this repo you will be able to generate a series of `.bat` scripts that will
 2. Edit the `generate-hashcat-scripts.py` file setting the file paths for the following variables (Ensure the file pathes end in `\\` so that the generated file pathes are correct):
 	```Python
 	# The FULL path to the 'pwnagotchi-tools' folder in this repo
-	fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
+	fullProjectPath = r"C:\Users\[XXXXXX]\pwnagotchi-tools\\"
 
 	# The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
 	# there are problems saving and accessing the session files when running hashcat
 	# commands while not in the hashcat folder, so the full path is needed
-	fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
+	fullHashcatPath = r"C:\Users\[XXXXXX]\hashcat-6.2.6\\"
 
 	# the FULL path to where your wordlists are saved
-	fullWordListPath = "C:\Users\[PATH_TO_REPO]\wordlists\\"
+	fullWordListPath = r"C:\Users\[PATH_TO_REPO]\wordlists\\"
 	```
 3. `Pwnagotchi`
 	1. TBA
@@ -121,19 +121,70 @@ By default this repo does not contain any wordlists so you will need to download
 ----
 
 ## Troubleshooting
-* If you run into the following error, do the following:
-	* `ERROR`
+* If you run into the following `Vagrant` errors, do the following:
+	1. `ERROR`
 		```bash
 		Timed out while waiting for the machine to boot.
 		```
 
-	* `SOLUTION`
-		1. Ensure that Vagrant is running:
-			* `vagrant global-status`
-		2. Run:
-			* `vagrant destroy -f`
+		* `SOLUTION`
+			1. Ensure that Vagrant is running:
+				* `vagrant global-status`
+			2. Run:
+				* `vagrant destroy -f`
 
-* If you run into the foillowing error, do the following:
+	2. `ERROR`
+		```
+		default: Processing triggers for man-db (2.9.4-2) ...
+		default: 
+		default: ================================================================================
+		default: ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+		default: ================================================================================
+		default:
+		default:                            SCRIPT DEPRECATION WARNING
+		default:
+		default:
+		default:   This script, located at https://deb.nodesource.com/setup_X, used to
+		default:   install Node.js is deprecated now and will eventually be made inactive.
+		default:
+		default:   Please visit the NodeSource distributions Github and follow the
+		default:   instructions to migrate your repo.
+		default:   https://github.com/nodesource/distributions
+		default:
+		default:   The NodeSource Node.js Linux distributions GitHub repository contains
+		default:   information about which versions of Node.js and which Linux distributions
+		default:   are supported and how to install it.
+		default:   https://github.com/nodesource/distributions
+		default:
+		default: 
+		default:                           SCRIPT DEPRECATION WARNING
+		default:
+		default: ================================================================================
+		default: ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+		default: ================================================================================
+		default:
+		default: TO AVOID THIS WAIT MIGRATE THE SCRIPT
+		default: Continuing in 60 seconds (press Ctrl-C to abort) ...
+		default:
+		```
+
+		* `SOLUTION` - Ignore it for now.
+
+	3. `ERROR`
+		```bash
+		Bringing machine 'default' up with 'virtualbox' provider...
+		==> default: Machine already provisioned. Run `vagrant provision` or use the `--provision`
+		==> default: flag to force provisioning. Provisioners marked to run always will still run.
+
+		==> default: Machine 'default' has a post `vagrant up` message. This is a message
+		==> default: from the creator of the Vagrantfile, and not from Vagrant itself:
+		==> default:
+		==> default: Vanilla Debian box. See https://app.vagrantup.com/debian for help and bug reports
+		```
+
+		* `SOLUTION` - TBA.
+
+* If you run into the following error, do the following:
 	* `ERROR`
 		```bash
 		The error message "SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 2-3: truncated \UXXXXXXXX escape" means that Python is trying to decode a Unicode escape sequence that is incomplete or invalid. The \UXXXXXXXX escape sequence is used to represent a Unicode character with a hexadecimal code point greater than 0xFFFF.
@@ -163,15 +214,15 @@ By default this repo does not contain any wordlists so you will need to download
 		1. Ensure the file pathes in the `generate-hashcat-scripts.py` file end with `\\`:
 			```Python
 			# The FULL path to the 'pwnagotchi-tools' folder in this repo
-			fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
+			fullProjectPath = r"C:\Users\[XXXXXX]\pwnagotchi-tools\\"
 
 			# The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
 			# there are problems saving and accessing the session files when running hashcat
 			# commands while not in the hashcat folder, so the full path is needed
-			fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
+			fullHashcatPath = r"C:\Users\[XXXXXX]\hashcat-6.2.6\\"
 
 			# the FULL path to where your wordlists are saved
-			fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
+			fullWordListPath = r"C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
 			```
 		2. Rerun: `python .\generate-hashcat-scripts.py`
 
