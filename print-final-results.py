@@ -11,7 +11,6 @@ def hasNetworkalreadyBeenCracked(resultHash):
             break
     return cracked
 
-
 def detectCrackedNetworks():
     with open("./hashcat/hashcat-output.txt") as hashcatOutput:
         results = hashcatOutput.readlines()
