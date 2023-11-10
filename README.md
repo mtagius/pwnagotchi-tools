@@ -19,7 +19,7 @@ With this repo you will be able to generate a series of `.bat` scripts that will
 * [Windows Dependencies](#windows-dependencies)
 * [Setup](#setup)
 	* [Configuration](#configuration)
-	* [](#wordlists)
+	* [Wordlists](#wordlists)
 * [Running](#running)
 * [Troubleshooting](#troubleshooting)
 * [Clean-Up](#clean-up)
