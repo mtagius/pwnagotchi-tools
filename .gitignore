@@ -1,21 +1,27 @@
 
 # the .vagrant file should never be added to git
 vagrant/.vagrant
+
 # node_modules should never be added to git
 handshakes/pwnagetty/node_modules
 
+# handshakes
 handshakes/pcap
 handshakes/pmkid
 handshakes/hccapx
 handshakes/pwnagetty/bssids.json
 handshakes/pwnagetty/package-lock.json
 
+# hashcat
 hashcat/hashcat-output.txt
 hashcat/hashcat-potfile.txt
 hashcat/scripts
 
+#ssh
 ssh
 
+# misc
 network-cracked-status.json
 generate-hashcat-scripts.py
 get-files-from-pwnagotchi.bat
+generate-hashcat-scripts.py
