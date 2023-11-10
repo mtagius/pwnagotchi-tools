@@ -6,17 +6,23 @@ My goal is to create an updated version of the Windows setup and a new OS X vers
 
 ----
 
-Here is a series of scripts that will automate cracking WiFI handshake collected by a [Pwnagotchi](https://pwnagotchi.ai/).
-
 <img src="./images/pwnagotchi.gif" width="500">
+
+----
+
+# Purpose
+With this repo you will be able to generate a series of `.bat` scripts that will help you automate the cracking process for WiFI handshake collected by a [Pwnagotchi](https://pwnagotchi.ai/).
 
 ----
 
 # Table of Contents
 * [Windows Dependencies](#windows-dependencies)
 * [Setup](#setup)
+	* [Configuration](#configuration)
+	* [](#wordlists)
 * [Running](#running)
 * [Troubleshooting](#troubleshooting)
+* [Clean-Up](#clean-up)
 
 ----
 
@@ -79,10 +85,10 @@ By default this repo does not contain any wordlists so you will need to download
 2. Plug your `Pwnagotchi` into your computer and ensure the device is in manual (`MANU`) mode.
 3. Run the `get-files-from-pwnagotchi.bat` file to copy the handshakes from your `Pwnagotchi`. This will place the handshakes in the `.\handshakes\pcap\` folder.
 	1. `.\get-files-from-pwnagotchi.bat`
-4. Build the Vagrant image:
-	1. `cd vagrant`
+4. Build the Vagrant image.
+	1. `cd .\vagrant`
 	2. `vagrant up`
-5. Move back to the root directory:
+5. Move back to the root directory.
 	1. `cd ..`
 6. Run the `generate-hashcat-scripts.py` file to generate the necessary `.bat` scripts to run different `hashcat` attacks. There will be one `.bat` script for each of the WiFi handshake `.pcap` files for each of the different attack methods.
 	1. `python .\generate-hashcat-scripts.py`
@@ -155,6 +161,15 @@ By default this repo does not contain any wordlists so you will need to download
 		```
 
 	* `SOLUTION` - Make sure you downloaded the `Hashcat v6.2.6 binaries` NOT the `Hashcat v6.2.6 sources`.
+
+----
+
+### Clean-Up
+* Delete the Vagrant image.
+	1. `vagrant destroy -f`
+
+* Delete the generated files.
+	1. TBA
 
 ----
 
