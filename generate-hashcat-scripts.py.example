@@ -2,274 +2,182 @@ import os
 import json
 import re
 from random import randint
+import argparse
 
-# The FULL path to the 'pwnagotchi-tools' folder in this repo
-fullProjectPath = r"C:\Users\pwnagotchi-tools\\"
+# Define constants for paths
+HASHCAT_PATH = "C:\\[PATH]]\\hashcat-6.2.6\\"
+PROJECT_PATH = "C:\\[PATH]]\\pwnagotchi-tooling\\"
+WORDLIST_PATH = "C:\\[PATH]\\wordlists\\"
 
-# The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-# there are problems saving and accessing the session files when running hashcat
-# commands while not in the hashcat folder, so the full path is needed
-fullHashcatPath = r"C:\Users\hashcat-6.2.6\\"
+# Define constants for hashcat script
+HASHCAT_SCRIPT_VERSION = "v1"
+TEMP_ABORT = "--hwmon-temp-abort=100"
+WORKLOAD_PROFILE = "-w 2"
 
-# the FULL path to where your wordlists are saved
-fullWordListPath = r"C:\Users\wordlists\\"
+# Define paths for hashcat related files
+HASHCAT_POTFILE_PATH = '"' + PROJECT_PATH + 'hashcat\\hashcat-potfile.txt"'
+HASHCAT_OUTPUT_PATH = '"' + PROJECT_PATH + 'hashcat\\hashcat-output.txt"'
+RULE_PATH = PROJECT_PATH + "hashcat\\rules\\"
+WORD_NINJA_PATH = PROJECT_PATH + "hashcat"
 
-# This is the 'version' of the hashcat attacks in this file. This is
-# used to track the scripts used on the pmkid/hccapx files. If the
-# 'attacks' list below is manually updated this version can be incremented, 
-# then if this script is run any pmkid/hccapx files with a 'waiting' status will 
-# get new scripts generated for them.
-hashcatScriptVersion = "v1"
+# Global data
+network_cracked_status_data = {}
+network_bssid_data = {}
+session_scripts = []
 
-networkCrackedStatusData = {}
-networkBSSIDData = {}
-sessionScripts = []
+def generate_hashcat_script(filename, override=False):
+	global HASHCAT_SCRIPT_VERSION
+	global session_scripts
+	global PROJECT_PATH
+	global HASHCAT_PATH
+	global WORDLIST_PATH
 
-def generateHashcatScript(filename):
-    global hashcatScriptVersion
-    global sessionScripts
-    global fullProjectPath
-    global fullHashcatPath
-    global fullWordListPath
+	bssid = get_bssid(filename)
+	ssid = filename.split("_")[0]
+	session = ""
+	hash_type = ""
+	file_id = ""
+	hash_path = ""
 
-    # if your GPU temp hits this temp hascat will stop
-    tempAbort = "--hwmon-temp-abort=100"
+	if ".hc22000" in filename:
+		hash_type = "-m 22000"
+		file_id = filename.split(".hc22000")[0]
+		hash_path = '"' + PROJECT_PATH + 'handshakes\\hccapx\\' + filename + '"'
+	else:
+		hash_type = "-m 22000"
+		file_id = filename.split(".pmkid")[0]
+		hash_path = '"' + PROJECT_PATH + 'handshakes\\pmkid\\' + filename + '"'
+	session = "--session " + file_id
 
-    # determines how fast hashcat will run.
-    # 1 - slow, your computer will still be very usable
-    # 2 - default speed, you might notice some problems using your computer
-    # 3 - fast, your computer will not be usable while hashcat is running
-    # 4 - nightmare, only recommended for headless machines
-    workloadProfile = "-w 2"
+	# Check if the file is already tracked and override is False
+	if not override and filename in network_cracked_status_data:
+		print(f"{filename} is already being tracked.")
+		return
 
-    outputPath = '--potfile-path "' + fullProjectPath + 'hashcat\\hashcat-potfile.txt\\" -o "' + fullProjectPath + 'hashcat\\hashcat-output.txt\\"'
-    rulePath = fullProjectPath + "hashcat\\rules\\"
-    wordNinjaPath = fullProjectPath + "hashcat"
-    bssid = getBSSID(filename)
-    ssid = filename.split("_")[0]
-    session = ""
-    hashType = ""
-    fileId = ""
-    hashPath = ""
-    if(".hc22000" in filename):
-        hashType = "-m 22000"
-        fileId = filename.split(".hc22000")[0]
-        hashPath = '"' + fullProjectPath + 'handshakes\\hccapx\\' + filename + '"'
-    else:
-        hashType = "-m 22000"
-        fileId = filename.split(".pmkid")[0]
-        hashPath = '"' + fullProjectPath + 'handshakes\\pmkid\\' + filename + '"'
-    session = "--session " + fileId
+	attacks = [
+		["-a 0", "known-wpa-passwords.txt", "quick-ssid.rule"],
+		["-a 0", "known-wpa-passwords.txt", "unix-ninja-leetspeak.rule"],
+		["-a 0", "known-wpa-passwords.txt", "rockyou-30000.rule"],
+		["-a 0", "known-wpa-passwords.txt", "d3ad0ne.rule"],
+		["-a 0", "known-wpa-passwords.txt", "4-digit-append.rule"]
+	]
 
-    attacks = [
-        ["-a 0", "known-wpa-passwords.txt", "quick-ssid.rule", "-S"], # quick run of known passwords, the -S makes hashcat work better with small wordlists
-        ["-a 0", "known-wpa-passwords.txt", "unix-ninja-leetspeak.rule", "-S"], # run over 3k leet rules
-        ["-a 0", "known-wpa-passwords.txt", "rockyou-30000.rule", "-S"], # run of the best 30k rules for rockyou
-        ["-a 0", "known-wpa-passwords.txt", "d3ad0ne.rule", "-S"], # over 34k rules
-        ["-a 0", "nerdlist.txt", "quick-ssid.rule", "-S"], # nerdlist.txt is a small (< 500) list of "nerdy" passwords and references like "hacktheplanet"
-        ["-a 0", "nerdlist.txt", "unix-ninja-leetspeak.rule", "-S"], # run over 3k leet rules
-        ["-a 0", "nerdlist.txt", "rockyou-30000.rule", "-S"], # run of the best 30k rules for rockyou
-        ["-a 0", "nerdlist.txt", "d3ad0ne.rule", "-S"], # over 34k rules
-        ["-a 0", "bssid.rule"], # all variations of the BSSID of the network
-        ["-a 0", "ssid-ninja.rule"], # uses wordNinjaGenerator.py to generate a wordlist from the ssid Ex: LuckyCoffeeWifi --> Lucky123!
-        ["-a 3", "MYWIFI?d?d?d?d"], # all default passwords for MYWIFI (EE) routers
-        ["-a 3", "wifi?d?d?d?d"], # for passwords like wifi1970
-        ["-a 3", "-1 !@$??#~%^&*^^ wifi?d?d?d?1"], # for passwords like wifi123!, the charset looks weird because windows cmd chars must be escaped
-        ["-a 3", "wifi?d?d?d?d?d"], # for passwords like wifi12345
-        ["-a 3", "?d?d?d?dwifi"], # for passwords like 1989wifi
-        ["-a 3", "?d?d?d?d?dwifi"], # for passwords like 12345wifi
-        ["-a 3", "WIFI?d?d?d?d"], # for passwords like WIFI2008
-        ["-a 3", "-1 !@$??#~%^&*^^ WIFI?d?d?d?1"], # for passwords like WIFI343@
-        ["-a 3", "WIFI?d?d?d?d?d"], # for passwords like WIFI12345
-        ["-a 3", "?d?d?d?dWIFI"], # for passwords like 2006WIFI
-        ["-a 3", "?d?d?d?d?dWIFI"], # for passwords like 12345WIFI
-        ["-a 3", "?l?l?l?lwifi"], # for passwords like bookwifi
-        ["-a 3", "-1 !@$??#~%^&*^^ ?l?l?l?lwifi?1"], # for passwords like pinkwifi!
-        ["-a 3", "?l?l?l?l?lwifi"], # for passwords like trackwifi
-        ["-a 3", "wifi?l?l?l?l"], # for passwords like wificook
-        ["-a 3", "-1 !@$??#~%^&*^^ wifi?l?l?l?l?1"], # for passwords like wificafe$
-        ["-a 3", "wifi?l?l?l?l?l"], # for passwords like wififrogs
-        ["-a 3", "?u?l?l?lWifi"], # for passwords like CafeWifi
-        ["-a 3", "?u?l?l?l?lWifi"], # for passwords like MarioWifi
-        ["-a 3", "?u?u?u?uWIFI"], # for passwords like CAFEWIFI
-        ["-a 3", "-1 !@$??#~%^&*^^ ?u?u?u?uWIFI?1"], # for passwords like MECHWIFI* 
-        ["-a 3", "?u?u?u?u?uWIFI"], # for passwords like BULLSWIFI
-        ["-a 3", "WIFI?u?u?u?u"], # for passwords like WIFISHOE
-        ["-a 3", "-1 !@$??#~%^&*^^ WIFI?u?u?u?u?1"], # for passwords like WIFIBOAT!
-        ["-a 3", "WIFI?u?u?u?u?u"], # for passwords like WIFICOACH
-        ["-a 0", "NAMES.DIC", "names.rule"], # for passwords like lukeswifi
-        ["-a 0", "words_alpha.txt", "names.rule"], # for passwords like pizzawifi
-        ["-a 0", "4-digit-append.rule"], # uses wordNinjaGenerator.py to append all 1-4 digit combinations to ssid words Ex: MyCafeWifi --> CafeWifi2020
-        ["-a 3", "?d?d?d?d?d?d?d?d"], # all 8 digit number combos
-        ["-a 6", "netgear-spectrum.txt", "?d?d?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits, if I could only run 1 attack this is the one I would run
-        ["-a 6", "netgear-spectrum.txt", "?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits
-        ["-a 6", "netgear-spectrum.txt", "?d?d"], # MANY netgear routers have a default password that is a word + word + 1-3 digits
-        ["-a 0", "openwall.net-all.txt", "quick-ssid.rule"], # openwall is a popular wordlist
-        ["-a 0", "netgear-spectrum.txt", "quick-ssid.rule"], # for passwords like breezyapplewifi
-        ["-a 6", "words_alpha.txt", "?d"], # for passwords like seashell1
-        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?1"], # for passwords like seashell$
-        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?d?1"], # for passwords like seashell1!
-        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?1?d"], # for passwords like seashell!0
-        ["-a 6", "words_alpha.txt", "?d?d"], # for passwords like seashell69
-        ["-a 6", "words_alpha.txt", "-1 !@$??#~%^&*^^ ?d?d?1"], # for passwords like seashell92@
-        ["-a 6", "words_alpha.txt", "?d?d?d"], # for passwords like seashell123
-        ["-a 3", "?l?l?l?l?l?l1!"], # Ex: slyfox1!
-        ["-a 3", "?u?l?l?l?l?l1!"], # Ex: Slyfox1!
-        ["-a 3", "?u?u?u?u?u?u1!"], # Ex: SLYFOX1!
-        ["-a 3", "?d?d?d?d?d?d?d?d?d"], # all 9 digit number combos
-        ["-a 0", "hashesorg2019"], # hashesorg2019 is a popular wordlist
-        ["-a 0", "rockyou.txt", "quick-ssid.rule"], # rockyou is a classic wordlist, quick-ssid.rule has rules made for wifi cracking, it's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords
-        ["-a 0", "NAMES.DIC", "rockyou-30000.rule"], # for passwords like j0sh2009
-        ["-a 0", "netgear-spectrum.txt", "unix-ninja-leetspeak.rule"], # for passwords like br33zyappl3
-        ["-a 0", "Top1pt8Billion-WPA-probable-v2.txt"], # Top1pt8Billion-WPA-probable-v2.txt is a popular wordlist, it claims to be 'WPA probable' but really they just cut out all passwords less then 8 chars, that doesn't make it wifi probable
-        ["-a 0", "Top24Million-WPA-probable-v2.txt", "quick-ssid.rule"], # Top24Million-WPA-probable-v2.txt is a popular wordlist, it claims to be 'WPA probable' but really they just cut out all passwords less then 8 chars, that doesn't make it wifi probable
-        ["-a 0", "passphrases.txt", "passphrases.rule"], # from the passphrases repo, this SHOULD help with passwords like 'youshallnotpass'
-        ["-a 0", "Custom-WPA"], # Custom-WPA is a popular wordlist
-        ["-a 0", "Super-WPA"], # Super-WPA is a popular wordlist
-        ["-a 3", "?h?h?h?h?h?h?h?h"], # MANY router default passwords are 8 hex chars (0-9,a-f)
-        ["-a 3", "?H?H?H?H?H?H?H?H"], # MANY router default passwords are 8 hex chars (0-9,A-F)
-        ["-a 3", "?d?d?d?d?d?d?d?d?d?d"] # this is, by far, the longest attack, but is covers ALL 10 digit combos which includes ALL US phone numbers
-    ]
+	# Build the hashcat command
+	hashcat_command_prefix = f'hashcat {hash_type} {session}_{randint(1000, 9999)} {TEMP_ABORT} {WORKLOAD_PROFILE}'
 
-    f = open("./hashcat/scripts/" + fileId + ".bat", "w")
-    script = ":: " + hashcatScriptVersion + "\n"
-    script += 'cd '
-    if fullProjectPath[0] != fullHashcatPath[0]:
-        # if the cd command needs the /d argument to change drives
-        script += '/d '
-    script += '"' + fullHashcatPath + '"\n'
-    for attack in attacks:
-        hashcatCommand = "hashcat "
-        hashcatCommand += attack[0] + " "
-        hashcatCommand += hashType + " "
-        hashcatCommand += session + "_" + str(randint(1000, 9999)) + " "
-        hashcatCommand += tempAbort + " "
-        hashcatCommand += workloadProfile + " "
-        hashcatCommand += outputPath + " "
-        hashcatCommand += hashPath + " "
-        if("0" in attack[0]):
-            if("bssid.rule" in attack[1]):
-                hashcatCommand = "echo " + bssid + " | " + hashcatCommand
-                hashcatCommand += '-r "' + rulePath + attack[1] + '"'
-            elif(("ssid-ninja.rule" in attack[1]) or ("4-digit-append.rule" in attack[1])):
-                hashcatCommand = 'python "' + wordNinjaPath + '\\wordNinjaGenerator.py" ' + ssid + ' | ' + hashcatCommand
-                hashcatCommand += '-r "' + rulePath + attack[1] + '"'
-            else:
-                if(len(attack) > 3 and "-S" in attack[3]):
-                    hashcatCommand += "-S "
-                hashcatCommand += '"' + fullWordListPath + attack[1] + '"'
-                if(len(attack) > 2):
-                    hashcatCommand += ' -r "' + rulePath + attack[2] + '"'
-        elif("1" in attack[0]):
-            hashcatCommand += '"' + fullWordListPath + attack[1] + '" '
-            hashcatCommand += '"' + fullWordListPath + attack[2] + '"'
-        elif("3" in attack[0]):
-            hashcatCommand += attack[1]
-        elif("6" in attack[0]):
-            hashcatCommand += '"' + fullWordListPath + attack[1] + '"'
-            hashcatCommand += " " + attack[2]
-        hashcatCommand += "\n"
-        script += hashcatCommand
+	f = open("./hashcat/scripts/" + file_id + ".bat", "w")
+	script = f":: {HASHCAT_SCRIPT_VERSION}\n"
+	script += f'cd {" /d " if PROJECT_PATH[0] != HASHCAT_PATH[0] else ""}"{HASHCAT_PATH}"\n'
 
-    script += 'cd '
-    if fullProjectPath[0] != fullHashcatPath[0]:
-        # if the cd command needs the /d argument to change drives
-        script += '/d '
-    script += '"' + fullProjectPath + '"\n'
-    script += 'python "' + fullProjectPath + 'update-network-status.py" ' + filename
-    f.write(script)
-    f.close()
+	for attack in attacks:
+		hashcat_command = hashcat_command_prefix
+		if "0" in attack[0]:
+			hashcat_command = process_attack_type_0(attack, hashcat_command, ssid)
+		elif "1" in attack[0]:
+			hashcat_command = process_attack_type_1(attack, hashcat_command)
+		elif "3" in attack[0]:
+			hashcat_command = process_attack_type_3(attack, hashcat_command)
+		elif "6" in attack[0]:
+			hashcat_command = process_attack_type_6(attack, hashcat_command)
 
-    sessionScripts.append(fileId + ".bat")
+		script += hashcat_command
 
-def getBSSID(filename):
-    global networkBSSIDData
-    pcapFileName = filename.replace(".pmkid", ".pcap")
-    pcapFileName = pcapFileName.replace(".hc22000", ".pcap")
-    
-    try:
-        bssid = networkBSSIDData[pcapFileName]["bssid"]
-    except KeyError:
-        # finds bssid from filename
-        rawMAC = re.findall(r'(?:[0-9A-Fa-f]{2}){6}', filename.split("_")[-1])[0].upper()
-        bssid = ':'.join([rawMAC[i : i + 2] for i in range(0, len(rawMAC), 2)])
+	script += f'cd {" /d " if PROJECT_PATH[0] != HASHCAT_PATH[0] else ""}"{PROJECT_PATH}"\n'
+	script += f'python "{PROJECT_PATH}update-network-status.py" {filename}'
+	f.write(script)
+	f.close()
 
-    return bssid
+	session_scripts.append(file_id + ".bat")
 
-def generateScriptForBatch():
-    global sessionScripts
-    global fullProjectPath
-    if(len(sessionScripts) > 1):
-        f = open("./hashcat/scripts/batches/batch-" + str(randint(1000, 9999)) + ".bat", "w")
-        batchScript = ""
-        for script in sessionScripts:
-            batchScript += 'call "' + fullProjectPath + 'hashcat\\scripts\\' + script + '"\n'
-        f.write(batchScript)
-        f.close()
-        print("\nBatch script created for " + str(len(sessionScripts)) + " scripts")
+def process_attack_type_0(attack, hashcat_command, ssid):
+	if "bssid.rule" in attack[1]:
+		return f'echo {get_bssid(filename)} | {hashcat_command} -r "{RULE_PATH}{attack[1]}"'
+	elif ("ssid-ninja.rule" in attack[1]) or ("4-digit-append.rule" in attack[1]):
+		return f'python "{WORD_NINJA_PATH}\\wordNinjaGenerator.py" {ssid} | {hashcat_command} -r "{RULE_PATH}{attack[1]}"'
+	else:
+		return process_wordlist_attack(attack, hashcat_command)
 
+def process_attack_type_1(attack, hashcat_command):
+	return f'{hashcat_command} "{WORDLIST_PATH}{attack[1]}" "{WORDLIST_PATH}{attack[2]}"'
 
-def generateScriptsForPMKIDsAndHCCAPXs():
-    global hashcatScriptVersion
-    for folder in ["pmkid", "hccapx"]:
-        for filename in os.listdir("./handshakes/" + folder):
-            if(filename not in networkCrackedStatusData):
-                addNetworkToNetworkCrackedStatusData(filename)
-                print("Generating hashcat script for " + filename)
-                generateHashcatScript(filename)
-            else:
-                if(networkCrackedStatusData[filename]["version"] != hashcatScriptVersion and networkCrackedStatusData[filename]["status"] == "waiting"):
-                    print("Generating hashcat script for " + filename)
-                    generateHashcatScript(filename)
-                    networkCrackedStatusData[filename]["version"] = hashcatScriptVersion
-                else:
-                    print(filename + " is already being tracked.")
+def process_attack_type_3(attack, hashcat_command):
+	return f'{hashcat_command} {attack[1]}'
 
-def loadNetworkCrackedStatusData():
-    global networkCrackedStatusData
-    f = open('network-cracked-status.json', 'r')
-    networkCrackedStatusData = json.load(f)
-    f.close()
+def process_attack_type_6(attack, hashcat_command):
+	return f'{hashcat_command} "{WORDLIST_PATH}{attack[1]}" {attack[2]}'
 
-def loadnetworkBSSIDData():
-    global networkBSSIDData
-    f = open('./handshakes/pwnagetty/bssids.json', 'r')
-    networkBSSIDData = json.load(f)
-    f.close()
+def process_wordlist_attack(attack, hashcat_command):
+	hashcat_command += f' "{WORDLIST_PATH}{attack[1]}"'
+	if len(attack) > 2:
+		hashcat_command += f' -r "{RULE_PATH}{attack[2]}"'
+	return hashcat_command + "\n"
 
-def saveNetworkCrackedStatusData():
-    global networkCrackedStatusData
-    with open('network-cracked-status.json','w') as f: 
-        json.dump(networkCrackedStatusData, f, indent=4)
+def get_bssid(filename):
+	global network_bssid_data
+	pcap_file_name = filename.replace(".pmkid", ".pcap")
+	pcap_file_name = pcap_file_name.replace(".hc22000", ".pcap")
 
-def addNetworkToNetworkCrackedStatusData(filename):
-    global networkCrackedStatusData
-    global hashcatScriptVersion
-    networkCrackedStatusData[filename] = {
-        "ssid":filename.split("_")[0],
-        "bssid":getBSSID(filename),
-        "status": "waiting",
-        "version":hashcatScriptVersion
-    }
-    
+	try:
+		bssid = network_bssid_data[pcap_file_name]["bssid"]
+	except KeyError:
+		raw_mac = re.findall(r'(?:[0-9A-Fa-f]{2}){6}', filename.split("_")[-1])[0].upper()
+		bssid = ':'.join([raw_mac[i: i + 2] for i in range(0, len(raw_mac), 2)])
 
-def printLogo():
-    print('''
- ▄ .▄ ▄▄▄· .▄▄ ·  ▄ .▄ ▄▄·  ▄▄▄· ▄▄▄▄▄    .▄▄ ·  ▄▄· ▄▄▄  ▪   ▄▄▄·▄▄▄▄▄
-██▪▐█▐█ ▀█ ▐█ ▀. ██▪▐█▐█ ▌▪▐█ ▀█ •██      ▐█ ▀. ▐█ ▌▪▀▄ █·██ ▐█ ▄█•██  
-██▀▐█▄█▀▀█ ▄▀▀▀█▄██▀▐███ ▄▄▄█▀▀█  ▐█.▪    ▄▀▀▀█▄██ ▄▄▐▀▀▄ ▐█· ██▀· ▐█.▪
-██▌▐▀▐█ ▪▐▌▐█▄▪▐███▌▐▀▐███▌▐█ ▪▐▌ ▐█▌·    ▐█▄▪▐█▐███▌▐█•█▌▐█▌▐█▪·• ▐█▌·
-▀▀▀ · ▀  ▀  ▀▀▀▀ ▀▀▀ ··▀▀▀  ▀  ▀  ▀▀▀      ▀▀▀▀ ·▀▀▀ .▀  ▀▀▀▀.▀    ▀▀▀ 
-           ▄▄ • ▄▄▄ . ▐ ▄ ▄▄▄ .▄▄▄   ▄▄▄· ▄▄▄▄▄      ▄▄▄  
-          ▐█ ▀ ▪▀▄.▀·•█▌▐█▀▄.▀·▀▄ █·▐█ ▀█ •██  ▪     ▀▄ █·
-          ▄█ ▀█▄▐▀▀▪▄▐█▐▐▌▐▀▀▪▄▐▀▀▄ ▄█▀▀█  ▐█.▪ ▄█▀▄ ▐▀▀▄ 
-          ▐█▄▪▐█▐█▄▄▌██▐█▌▐█▄▄▌▐█•█▌▐█ ▪▐▌ ▐█▌·▐█▌.▐▌▐█•█▌
-          ·▀▀▀▀  ▀▀▀ ▀▀ █▪ ▀▀▀ .▀  ▀ ▀  ▀  ▀▀▀  ▀█▄▀▪.▀  ▀
-    ''')
-    
-printLogo()
-loadNetworkCrackedStatusData()
-loadnetworkBSSIDData()
-generateScriptsForPMKIDsAndHCCAPXs()
-saveNetworkCrackedStatusData()
-generateScriptForBatch()
+	return bssid
+
+def generate_script_for_batch():
+	global session_scripts
+	global PROJECT_PATH
+	if len(session_scripts) > 1:
+		f = open("./hashcat/scripts/batches/batch-" + str(randint(1000, 9999)) + ".bat", "w")
+		batch_script = ""
+		for script in session_scripts:
+			batch_script += f'call "{PROJECT_PATH}hashcat\\scripts\\{script}"\n'
+		f.write(batch_script)
+		f.close()
+		print(f"\nBatch script created for {len(session_scripts)} scripts")
+
+def add_network_to_network_cracked_status_data(filename):
+	global network_cracked_status_data
+	global HASHCAT_SCRIPT_VERSION
+	network_cracked_status_data[filename] = {
+		"ssid": filename.split("_")[0],
+		"bssid": get_bssid(filename),
+		"status": "waiting",
+		"version": HASHCAT_SCRIPT_VERSION
+	}
+
+def generate_scripts_for_pmkids_and_hccapxs(force_override=False):
+	global HASHCAT_SCRIPT_VERSION
+	for folder in ["pmkid", "hccapx"]:
+		for filename in os.listdir(f"./handshakes/{folder}"):
+			if filename not in network_cracked_status_data or force_override:
+				add_network_to_network_cracked_status_data(filename)
+				print(f"Generating hashcat script for {filename}")
+				generate_hashcat_script(filename, force_override)
+			else:
+				if network_cracked_status_data[filename]["version"] != HASHCAT_SCRIPT_VERSION and \
+						network_cracked_status_data[filename]["status"] == "waiting":
+					print(f"Generating hashcat script for {filename}")
+					generate_hashcat_script(filename, force_override)
+
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser(description="Generate hashcat scripts.")
+	parser.add_argument("--override", action="store_true", help="Override existing tracking and regenerate scripts.")
+	args = parser.parse_args()
+
+	def print_logo():
+		print('''
+		 ▄ .▄ ▄▄▄· .▄▄ ·  ▄ .▄ ▄▄·  ▄▄▄· ▄▄▄▄▄    .▄▄ ·  ▄▄· ▄▄▄  ▪   ▄▄▄·▄▄▄▄▄
+		██▪▐█▐█ ▀█ ▐█ ▀. ██▪▐█▐█ ▌▪▐█ ▀█ •██      ▐█ ▀. ▐█ ▌▪▀▄ █·██ ▐█ ▄█•██  
+		██▀▐█▄█▀▀█ ▄▀▀▀█▄██▀▐███ ▄▄▄█▀▀█  ▐█.▪    ▄▀▀▀█▄██ ▄▄▐▀▀▄ ▐█· ██▀· ▐█.▪
+		██▌▐▀▐█ ▪▐▌▐█▄▪▐███▌▐▀▐███▌▐█ ▪▐▌ ▐█▌·    ▐█▄▪▐█▐███▌▐█•█▌▐█▌▐█▪·• ▐█▌·
+		▀▀▀ · ▀  ▀  ▀▀▀▀ ▀▀▀ ··▀▀▀  ▀  ▀  ▀▀▀      ▀▀▀▀ ·▀▀▀ .▀  ▀▀▀▀.▀    ▀▀▀ 
+				   ▄▄ • ▄▄▄ . ▐ ▄
+		'''
+	)
+
+	print_logo()
+
+	generate_scripts_for_pmkids_and_hccapxs(args.override)
+	generate_script_for_batch()

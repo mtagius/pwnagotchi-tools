@@ -120,7 +120,16 @@ By default this repo does not contain any wordlists so you will need to download
 
 ----
 
-## Troubleshooting
+### Clean-Up
+* Delete the Vagrant image.
+	1. `vagrant destroy -f`
+
+* Delete the generated files.
+	1. TBA
+
+----
+
+# Troubleshooting
 * If you run into the following `Vagrant` errors, do the following:
 	1. `ERROR`
 		```bash
@@ -234,11 +243,22 @@ By default this repo does not contain any wordlists so you will need to download
 
 	* `SOLUTION` - Make sure you downloaded the `Hashcat v6.2.6 binaries` NOT the `Hashcat v6.2.6 sources`.
 
-----
 
-### Clean-Up
-* Delete the Vagrant image.
-	1. `vagrant destroy -f`
+* If you run into the following error with your `NVIDIA GPU`, do the following:
+	* `ERROR`
+		```bash
+		Successfully initialized the NVIDIA main driver CUDA runtime library.
 
-* Delete the generated files.
-	1. TBA
+		Failed to initialize NVIDIA RTC library.
+
+		* Device #2: CUDA SDK Toolkit not installed or incorrectly installed.
+			CUDA SDK Toolkit required for proper device support and utilization.
+			Falling back to OpenCL runtime.
+
+		* Device #2: WARNING! Kernel exec timeout is not disabled.
+			This may cause "CL_OUT_OF_RESOURCES" or related errors.
+			To disable the timeout, see: https://hashcat.net/q/timeoutpatch
+		```
+
+	* `SOLUTION`:
+		1. Install the [NVIDIA CUDA Toolkit](https://developer.nvidia.com/cuda-downloads).
