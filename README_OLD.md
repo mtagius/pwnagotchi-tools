@@ -1,129 +1,8 @@
-# Pwnagotchi-Tooling Refactor
+# Pwnagotchi Tools
 
-In this repo I am refactoring the original [Pwnagotchi-Tooling](https://github.com/mtagius/pwnagotchi-tools) repo created by: [mtagius](https://github.com/mtagius)
+A series of scripts that automate password cracking wifi handshakes collected from a [pwnagotchi.](https://pwnagotchi.ai/)
 
-My goal is to create an updated version of the Windows setup and a new OS X version.
-
-----
-
-Here is a series of scripts that will automate cracking WiFI handshake collected by a [Pwnagotchi](https://pwnagotchi.ai/).
-
-<img src="./Windows/images/pwnagotchi.gif" width="500">
-
-----
-
-# Table of Contents
-TBA
-
-----
-
-# Windows Dependencies
-
-* [Python 3.x](https://www.python.org/downloads/windows/)
-* [Vagrant](https://developer.hashicorp.com/vagrant/install)
-* [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
-  * Vagrant and Virtual Box are only used to convert pcap files to `hccapx/pmkid` files.
-* [Hashcat v6.2.6](https://hashcat.net/hashcat/)
-  * Make note of the `PATH` to your `Hashcat` install.
-  * Ex: `C:\Users\XXXXXX\hashcat-6.2.6`
-* [Word Ninja](https://github.com/keredson/wordninja/)
-  * `pip install wordninja`
-* [Tabulate](https://github.com/gregbanks/python-tabulate/)
-  * `pip install tabulate`
-
-# Setup
-1. Edit the `generate-hashcat-scripts.py` file by updating the file paths for the following variables (Ensure the file pathes end in `\\` so that the generated file pathes are correct):
-    ```Python
-    # The FULL path to the 'pwnagotchi-tools' folder in this repo
-    fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
-
-    # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-    # there are problems saving and accessing the session files when running hashcat
-    # commands while not in the hashcat folder, so the full path is needed
-    fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
-
-    # the FULL path to where your wordlists are saved
-    fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
-    ```
-
-# Usage
-1. Use your `Pwnagotchi` to collect WiFi handshakes.
-2. Plug your `Pwnagotchi` into your computer and ensure the device is in manual (`MANU`) mode.
-3. Run the `get-files-from-pwnagotchi.bat` file to copy the handshakes from your `Pwnagotchi`. This will place the handshakes in the `.\handshakes\pcap\\` folder.
-   1. `.\get-files-from-pwnagotchi.bat`
-4. Build the Vagrant image:
-   1. `cd vagrant`
-   2. `vagrant up`
-5. `cd ..`
-6. Run the `generate-hashcat-scripts.py` file to generate the necessary `.bat` scripts to run different `hashcat` attacks.
-   1. `python .\generate-hashcat-scripts.py`
-7. Run the different `XXXXXX.bat` scripts in the `.\hashcat\scripts\` folder:
-   1. `.\hashcat\scripts\[XXXXXX].bat`
-8. 
-
-----
-
-# Troubleshooting
-* If you run into the foillowing error during Step #1 of the [Setup](#setup) section, do the following:
-  * `ERROR`:
-    ```Python
-    
-    ```
-  * `SOLUTION` - Add an `r` infront of the filepath `""`:
-    ```Python
-    # The FULL path to the 'pwnagotchi-tools' folder in this repo
-    fullProjectPath = r"C:\Users\[XXXXXX]\pwnagotchi-tools\\"
-
-    # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-    # there are problems saving and accessing the session files when running hashcat
-    # commands while not in the hashcat folder, so the full path is needed
-    fullHashcatPath = r"C:\Users\[XXXXXX]\hashcat-6.2.6\\"
-
-    # the FULL path to where your wordlists are saved
-    fullWordListPath = r"C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
-    ```
-
-* If you run into the following error during Step #3 of the [Usage](#usage) section, do the following:
-  * `ERROR`:
-    ```bash
-    C:\Users\[XXXXXXX]\Documents\GitHub\pwnagotchi-tools\wordlistsknown-wpa-passwords.txt: No such file or directory
-    ```
-
-  * `SOLUTION`
-    1. Ensure the file pathes in the `generate-hashcat-scripts.py` file end with `\\`:
-        ```Python
-        # The FULL path to the 'pwnagotchi-tools' folder in this repo
-        fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
-
-        # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-        # there are problems saving and accessing the session files when running hashcat
-        # commands while not in the hashcat folder, so the full path is needed
-        fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
-
-        # the FULL path to where your wordlists are saved
-        fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
-        ```
-    2. Rerun the `generate-hashcat-scripts.py` script.
-* If you run into the following error during Step #4 of the [Usage](#usage) section, do the following:
-  * `Error`:
-    ```bash
-    Timed out while waiting for the machine to boot.
-    ```
-
-  * `SOLUTION`
-    1. Ensure that Vagrant is running.
-    2. Run: `vagrant destroy -f`
-
-## Usage
-
-1. Run any of the newly created bat scripts found in the `hashcat/scripts` folder. There will be one script for each wifi network the pwnagotchi collected crackable data for. Depending on your graphics card, the full attack could take about a day to run per wifi network.
-1. Run `python print-final-results.py` to see a printed list of all the wifi networks that have been cracked so far with their SSIDs and passwords.
-
-* Optionally, at any point run `python get-next-hashcat-script.py` to print some stats of the wifi networks being tracked in `network-cracked-status.json`
-
-----
-
-# OLD
+<img src="images/pwnagotchi.gif" width="500">
 
 ## Table of Contents
 * [What can this project do?](#What-can-this-project-do?)
@@ -149,7 +28,18 @@ In short, these scripts will help you crack WPA/WPA2 passwords in the most autom
 
 #### This project is ONLY to be used for wifi security education in conjunction with a pwnagotchi. Hacking wifi networks you don't own is ILLEGAL and is not endorsed by this project.
 
+## Usage
 
+1. Use your pwnagotchi to collect wifi handshakes.
+1. Plug your pwnagotchi into your computer and place the device in manual mode. You will see the "MANU" icon on the bottom right of its screen.
+1. Run `get-files-from-pwnagotchi.bat`  This will copy the pcap files off of your device and place them in the `handshakes/pcap` folder.
+1. Run `cd vagrant` to change into the vagrant folder. Ensure VirtualBox is running and then, run `vagrant up`. This will create a headless Debian VM that will install and run the tools needed to convert pcap files into crackable pmkid/hccapx files. If this command gets stuck and shows the error `Timed out while waiting for the machine to boot` then ensure VirtualBox is running and the VM was not paused. Run `vagrant destroy -f` and then `vagrant up` to try again.
+1. Once that has finished run `vagrant destroy -f` to delete the VM and run `cd ..` to get back to the root folder.
+1. Run `python generate-hashcat-scripts.py` to generate the bat scripts you will use to run the [custom WPA/WPA2 hashcat attacks](#Password-cracking-techniques) included in this repo.
+1. Run any of the newly created bat scripts found in the `hashcat/scripts` folder. There will be one script for each wifi network the pwnagotchi collected crackable data for. Depending on your graphics card, the full attack could take about a day to run per wifi network.
+1. Run `python print-final-results.py` to see a printed list of all the wifi networks that have been cracked so far with their SSIDs and passwords.
+
+* Optionally, at any point run `python get-next-hashcat-script.py` to print some stats of the wifi networks being tracked in `network-cracked-status.json`
 
 ### Optionally running hashcat on an AWS EC2 P2 instance
 
@@ -160,6 +50,18 @@ In this repo is the `aws` folder which contains scripts to help run hashcat on a
 * `get-files-from-aws.bat` will download the hashcat output, potfile, and session files. It also needs a ssh key named `aws.pem` in the `ssh` folder and the AWS instance id must replace the id included in the file.
 * `aws-initial-provision.sh` is a bash script to provision an aws p2 instance and install hashcat.
 * `set-nvidia-settings.sh` is a bash script to set the nvidia settings after hashcat has been installed.
+
+## Installation
+
+### Dependencies
+
+* Windows - This is because bat files are used, but they can be converted to bash scripts to get this running on Linux
+* Python 3.x
+* [Vagrant](https://www.vagrantup.com/) - Vagrant and Virtual Box are only used to convert pcap files to hccapx/pmkid files
+* [Virtual Box](https://www.virtualbox.org/)
+* [Hashcat v6.2.6](https://hashcat.net/hashcat/)
+* [Word Ninja](https://github.com/keredson/wordninja) - pip install wordninja
+* [Tabulate](https://github.com/gregbanks/python-tabulate) - pip install tabulate
 
 ### Wordlists
 
@@ -183,6 +85,10 @@ This project comes with no wordlists, so you will need download them yourself. I
 
 * Create an SSH key for your pwnagotchi (and optionally your AWS SSH key) and place it in the `ssh` folder. The SSH key for the pwnagotchi should be named `id_rsa`. The optional AWS SSH key should be named `aws.pem`
 * If your pwnagotchi is not named `pwnagotchi` change the `pi@pwnagotchi.local` name in the `get-files-from-pwnagotchi.bat`
+* `generate-hashcat-scripts.py`
+  * Change the value for `fullProjectPath` to the FULL path to this `pwnagotchi-tools` folder
+  * Change the value for `fullHashcatPath` to the FULL path to your hashcat install folder
+  * Change the value for `fullWordListPath` to the FULL path to the folder where all of your wordlists are saved 
 
 ## Password cracking techniques
 
