@@ -6,37 +6,37 @@ import time
 filename = sys.argv[1]
 
 def update_network_cracked_status(status):
-	global filename
-	network_cracked_status_data = {}
+    global filename
+    network_cracked_status_data = {}
 
-	with open('network-cracked-status.json') as f:
-		network_cracked_status_data = json.load(f)
+    with open('network-cracked-status.json') as f:
+        network_cracked_status_data = json.load(f)
 
-	network_cracked_status_data[filename]['status'] = status
-
-	with open('network-cracked-status.json', 'w') as f:
-		json.dump(network_cracked_status_data, f, indent=4)
-
-	print("\n" + filename)
-
-	if status == "cracked":
-		print('''
-		▄▄· ▄▄▄   ▄▄▄·  ▄▄· ▄ •▄ ▄▄▄ .·▄▄▄▄  
-		▐█ ▌▪▀▄ █·▐█ ▀█ ▐█ ▌▪█▌▄▌▪▀▄.▀·██▪ ██ 
-		██ ▄▄▐▀▀▄ ▄█▀▀█ ██ ▄▄▐▀▀▄·▐▀▀▪▄▐█· ▐█▌
-		▐███▌▐█•█▌▐█ ▪▐▌▐███▌▐█.█▌▐█▄▄▌██. ██ 
-		·▀▀▀ .▀  ▀ ▀  ▀ ·▀▀▀ ·▀  ▀ ▀▀▀ ▀▀▀▀▀• 
-		''')
-	else:
-		print('''
-		▄▄▄ .▐▄• ▄  ▄ .▄ ▄▄▄· ▄• ▄▌.▄▄ · ▄▄▄▄▄▄▄▄ .·▄▄▄▄  
-		▀▄.▀· █▌█▌▪██▪▐█▐█ ▀█ █▪██▌▐█ ▀. •██  ▀▄.▀·██▪ ██ 
-		▐▀▀▪▄ ·██· ██▀▐█▄█▀▀█ █▌▐█▌▄▀▀▀█▄ ▐█.▪▐▀▀▪▄▐█· ▐█▌
-		▐█▄▄▌▪▐█·█▌██▌▐▀▐█ ▪▐▌▐█▄█▌▐█▄▪▐█ ▐█▌·▐█▄▄▌██. ██ 
-		▀▀▀ •▀▀ ▀▀▀▀▀ · ▀  ▀  ▀▀▀  ▀▀▀▀  ▀▀▀  ▀▀▀ ▀▀▀▀▀•
-		''')  
-
-	time.sleep(10)
+    # Check if the key exists before updating the status
+    if filename in network_cracked_status_data:
+        network_cracked_status_data[filename]['status'] = status
+        with open('network-cracked-status.json', 'w') as f:
+            json.dump(network_cracked_status_data, f, indent=4)
+        print("\n" + filename)
+        if status == "cracked":
+            print('''
+            ▄▄· ▄▄▄   ▄▄▄·  ▄▄· ▄ •▄ ▄▄▄ .·▄▄▄▄  
+            ▐█ ▌▪▀▄ █·▐█ ▀█ ▐█ ▌▪█▌▄▌▪▀▄.▀·██▪ ██ 
+            ██ ▄▄▐▀▀▄ ▄█▀▀█ ██ ▄▄▐▀▀▄·▐▀▀▪▄▐█· ▐█▌
+            ▐███▌▐█•█▌▐█ ▪▐▌▐███▌▐█.█▌▐█▄▄▌██. ██ 
+            ·▀▀▀ .▀  ▀ ▀  ▀ ·▀▀▀ ·▀  ▀ ▀▀▀ ▀▀▀▀▀• 
+            ''')
+        else:
+            print('''
+            ▄▄▄ .▐▄• ▄  ▄ .▄ ▄▄▄· ▄• ▄▌.▄▄ · ▄▄▄▄▄▄▄▄ .·▄▄▄▄  
+            ▀▄.▀· █▌█▌▪██▪▐█▐█ ▀█ █▪██▌▐█ ▀. •██  ▀▄.▀·██▪ ██ 
+            ▐▀▀▪▄ ·██· ██▀▐█▄█▀▀█ █▌▐█▌▄▀▀▀█▄ ▐█.▪▐▀▀▪▄▐█· ▐█▌
+            ▐█▄▄▌▪▐█·█▌██▌▐▀▐█ ▪▐▌▐█▄█▌▐█▄▪▐█ ▐█▌·▐█▄▄▌██. ██ 
+            ▀▀▀ •▀▀ ▀▀▀▀▀ · ▀  ▀  ▀▀▀  ▀▀▀▀  ▀▀▀  ▀▀▀ ▀▀▀▀▀• 
+            ''')  
+        time.sleep(15)
+    else:
+        print(f"{filename} not found in network-cracked-status.json")
 
 if ".pmkid" in filename:
 	status = "exhausted"

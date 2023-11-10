@@ -1,12 +1,11 @@
 import os
-import json
 import re
 from random import randint
 import argparse
 
 # Define constants for paths
-HASHCAT_PATH =  "C:\\[PATH]\\hashcat-6.2.6\\"
-PROJECT_PATH =  "C:\\[PATH]\\pwnagotchi-tooling\\"
+HASHCAT_PATH  = "C:\\[PATH]\\hashcat-6.2.6\\"
+PROJECT_PATH  = "C:\\[PATH]\\pwnagotchi-tooling\\"
 WORDLIST_PATH = "C:\\[PATH]\\wordlists\\"
 
 # Define constants for hashcat script
@@ -26,70 +25,78 @@ network_bssid_data = {}
 session_scripts = []
 
 def generate_hashcat_script(filename, override=False):
-	global HASHCAT_SCRIPT_VERSION
-	global session_scripts
-	global PROJECT_PATH
-	global HASHCAT_PATH
-	global WORDLIST_PATH
+    global HASHCAT_SCRIPT_VERSION
+    global session_scripts
+    global PROJECT_PATH
+    global HASHCAT_PATH
+    global WORDLIST_PATH
 
-	bssid = get_bssid(filename)
-	ssid = filename.split("_")[0]
-	session = ""
-	hash_type = ""
-	file_id = ""
-	hash_path = ""
+    ssid = filename.split("_")[0]
+    session = ""
+    hash_type = ""
+    file_id = ""
 
-	if ".hc22000" in filename:
-		hash_type = "-m 22000"
-		file_id = filename.split(".hc22000")[0]
-		hash_path = '"' + PROJECT_PATH + 'handshakes\\hccapx\\' + filename + '"'
-	else:
-		hash_type = "-m 22000"
-		file_id = filename.split(".pmkid")[0]
-		hash_path = '"' + PROJECT_PATH + 'handshakes\\pmkid\\' + filename + '"'
-	session = "--session " + file_id
+    if ".hc22000" in filename:
+        hash_type = "-m 22000"
+        file_id = filename.split(".hc22000")[0]
+    else:
+        hash_type = "-m 22000"
+        file_id = filename.split(".pmkid")[0]
+    session = "--session " + file_id
 
-	# Check if the file is already tracked and override is False
-	if not override and filename in network_cracked_status_data:
-		print(f"{filename} is already being tracked.")
-		return
+    # Check if the file is already tracked and override is False
+    if not override and filename in network_cracked_status_data:
+        print(f"{filename} is already being tracked.")
+        return
 
-	attacks = [
-		["-a 0", "known-wpa-passwords.txt", "quick-ssid.rule"],
-		["-a 0", "known-wpa-passwords.txt", "unix-ninja-leetspeak.rule"],
-		["-a 0", "known-wpa-passwords.txt", "rockyou-30000.rule"],
-		["-a 0", "known-wpa-passwords.txt", "d3ad0ne.rule"],
-		["-a 0", "known-wpa-passwords.txt", "4-digit-append.rule"]
-	]
+    attacks = [
+        ["-a 0", "known-wpa-passwords.txt", "quick-ssid.rule"],
+        ["-a 3", "-1 !@$??#~%^&*^^ wifi?d?d?d?1"],
+        ["-a 6", "known-wpa-passwords.txt", "-1 !@$??#~%^&*^^ ?d?d?1"]
+    ]
 
-	# Build the hashcat command
-	hashcat_command_prefix = f'hashcat {hash_type} {session}_{randint(1000, 9999)} {TEMP_ABORT} {WORKLOAD_PROFILE}'
+    f = open("./hashcat/scripts/" + file_id + ".bat", "w")
+    script = f":: {HASHCAT_SCRIPT_VERSION}\n"
+    script += f'cd {" /d " if PROJECT_PATH[0] != HASHCAT_PATH[0] else ""}"{HASHCAT_PATH}"\n'
 
-	f = open("./hashcat/scripts/" + file_id + ".bat", "w")
-	script = f":: {HASHCAT_SCRIPT_VERSION}\n"
-	script += f'cd {" /d " if PROJECT_PATH[0] != HASHCAT_PATH[0] else ""}"{HASHCAT_PATH}"\n'
+    for attack in attacks:
+        hashcat_command = f'hashcat {attack[0]} {hash_type} {session}_{randint(1000, 9999)} {TEMP_ABORT} {WORKLOAD_PROFILE}'
 
-	for attack in attacks:
-		hashcat_command = hashcat_command_prefix
-		if "0" in attack[0]:
-			hashcat_command = process_attack_type_0(attack, hashcat_command, ssid)
-		elif "1" in attack[0]:
-			hashcat_command = process_attack_type_1(attack, hashcat_command)
-		elif "3" in attack[0]:
-			hashcat_command = process_attack_type_3(attack, hashcat_command)
-		elif "6" in attack[0]:
-			hashcat_command = process_attack_type_6(attack, hashcat_command)
+        if "0" in attack[0]:
+            if "bssid.rule" in attack[2]:
+                hashcat_command += f'echo {get_bssid(filename)} |'
+            elif "ssid-ninja.rule" in attack[2] or "4-digit-append.rule" in attack[2]:
+                hashcat_command += f'python "{WORD_NINJA_PATH}\\wordNinjaGenerator.py" {ssid} |'
 
-		script += hashcat_command
+        hashcat_command += f' {hash_type} {session}_{randint(1000, 9999)} {TEMP_ABORT} {WORKLOAD_PROFILE} {HASHCAT_OUTPUT_PATH} {HASHCAT_POTFILE_PATH}'
 
-	script += f'cd {" /d " if PROJECT_PATH[0] != HASHCAT_PATH[0] else ""}"{PROJECT_PATH}"\n'
-	script += f'python "{PROJECT_PATH}update-network-status.py" {filename}'
-	f.write(script)
-	f.close()
+        if "0" in attack[0]:
+            if "bssid.rule" in attack[2]:
+                hashcat_command += f' -r "{RULE_PATH}{attack[2]}"'
+            elif "ssid-ninja.rule" in attack[2] or "4-digit-append.rule" in attack[2]:
+                hashcat_command += f' -r "{RULE_PATH}{attack[2]}"'
+            else:
+                hashcat_command += f' "{WORDLIST_PATH}{attack[1]}"'
+                if len(attack) > 2:
+                    hashcat_command += f' -r "{RULE_PATH}{attack[2]}"'
+        elif "1" in attack[0]:
+            hashcat_command += f' "{WORDLIST_PATH}{attack[1]}" "{WORDLIST_PATH}{attack[2]}"'
+        elif "3" in attack[0]:
+            hashcat_command += f' {attack[1]}'
+        elif "6" in attack[0]:
+            hashcat_command += f' "{WORDLIST_PATH}{attack[1]}" {attack[2]}'
 
-	session_scripts.append(file_id + ".bat")
+        script += hashcat_command + "\n"
+
+    script += f'cd {" /d " if PROJECT_PATH[0] != HASHCAT_PATH[0] else ""}"{PROJECT_PATH}"\n'
+    script += f'python "{PROJECT_PATH}update-network-status.py" {filename}'
+    f.write(script)
+    f.close()
+
+    session_scripts.append(file_id + ".bat")
 
 def process_attack_type_0(attack, hashcat_command, ssid):
+	global filename
 	if "bssid.rule" in attack[1]:
 		return f'echo {get_bssid(filename)} | {hashcat_command} -r "{RULE_PATH}{attack[1]}"'
 	elif ("ssid-ninja.rule" in attack[1]) or ("4-digit-append.rule" in attack[1]):
