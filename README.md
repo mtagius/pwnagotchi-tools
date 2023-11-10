@@ -20,57 +20,57 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
 
 ----
 
-## Windows Dependencies
-
+# Windows Dependencies
 * [Python 3.x](https://www.python.org/downloads/windows/)
 * [Vagrant](https://developer.hashicorp.com/vagrant/install)
 * [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
-  * Vagrant and Virtual Box are only used to convert `.pcap` files to the corresponding `.hccapx`/`.pmkid` files.
-  * Corresponding file locations:
-    * `.pcap`: `.\handshakes\pcap\`
-    * `.hccapx`: `.\handshakes\hccapx\`
-    * `.pmkid`: `.\handshakes\pmkid\` 
+	* Vagrant and Virtual Box are only used to convert `.pcap` files to the corresponding `.hccapx`/`.pmkid` files.
+	* Corresponding file locations:
+		* `.pcap`: `.\handshakes\pcap\`
+		* `.hccapx`: `.\handshakes\hccapx\`
+		* `.pmkid`: `.\handshakes\pmkid\` 
 * [Hashcat v6.2.6 binaries](https://hashcat.net/hashcat/)
-  * Make note of the `PATH` to where you unpacked `Hashcat`.
-    * Example: `C:\Users\XXXXXX\hashcat-6.2.6`
+	* Make note of the `PATH` to where you unpacked `Hashcat`.
+		* Example: `C:\Users\XXXXXX\hashcat-6.2.6`
 * [Word Ninja](https://github.com/keredson/wordninja/)
-  * `pip install wordninja`
+	* `pip install wordninja`
 * [Tabulate](https://github.com/gregbanks/python-tabulate/)
-  * `pip install tabulate`
+	* `pip install tabulate`
 
 ----
 
 # Setup
-
 ## Configuration
 1. Clone the `generate-hashcat-scripts.py.example` file.
-   1. `cp .\generate-hashcat-scripts.py.example .\generate-hashcat-scripts.py`
+	1. `cp .\generate-hashcat-scripts.py.example .\generate-hashcat-scripts.py`
 2. Edit the `generate-hashcat-scripts.py` file setting the file paths for the following variables (Ensure the file pathes end in `\\` so that the generated file pathes are correct):
-    ```Python
-    # The FULL path to the 'pwnagotchi-tools' folder in this repo
-    fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
+	```Python
+	# The FULL path to the 'pwnagotchi-tools' folder in this repo
+	fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
 
-    # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-    # there are problems saving and accessing the session files when running hashcat
-    # commands while not in the hashcat folder, so the full path is needed
-    fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
+	# The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
+	# there are problems saving and accessing the session files when running hashcat
+	# commands while not in the hashcat folder, so the full path is needed
+	fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
 
-    # the FULL path to where your wordlists are saved
-    fullWordListPath = "C:\Users\[PATH_TO_REPO]\wordlists\\"
-    ```
+	# the FULL path to where your wordlists are saved
+	fullWordListPath = "C:\Users\[PATH_TO_REPO]\wordlists\\"
+	```
+3. `Pwnagotchi`
+	1. TBA
 
 ## Wordlists
 By default this repo does not contain any wordlists so you will need to download the ones you want to work with and place them in the `.\wordlists` folder.
 
-### Personal
+### Personal Wordlist
 * You can add your own passwords by cloning the example file and editing it.
-    1. `cp .\known-wpa-passwords.txt.example .\wordlists\known-wpa-passwords.txt`
+	1. `cp .\known-wpa-passwords.txt.example .\wordlists\known-wpa-passwords.txt`
 
 ### Standalone Wordlists
-    * 
+* TBA
 
-### Repos
-
+### Massive Wordlists
+* TBA
 
 ----
 
@@ -78,83 +78,83 @@ By default this repo does not contain any wordlists so you will need to download
 1. Use your `Pwnagotchi` to collect WiFi handshakes.
 2. Plug your `Pwnagotchi` into your computer and ensure the device is in manual (`MANU`) mode.
 3. Run the `get-files-from-pwnagotchi.bat` file to copy the handshakes from your `Pwnagotchi`. This will place the handshakes in the `.\handshakes\pcap\` folder.
-   1. `.\get-files-from-pwnagotchi.bat`
+	1. `.\get-files-from-pwnagotchi.bat`
 4. Build the Vagrant image:
-   1. `cd vagrant`
-   2. `vagrant up`
+	1. `cd vagrant`
+	2. `vagrant up`
 5. Move back to the root directory:
-   1. `cd ..`
+	1. `cd ..`
 6. Run the `generate-hashcat-scripts.py` file to generate the necessary `.bat` scripts to run different `hashcat` attacks. There will be one `.bat` script for each of the WiFi handshake `.pcap` files for each of the different attack methods.
-   1. `python .\generate-hashcat-scripts.py`
+	1. `python .\generate-hashcat-scripts.py`
 7. Run one of the `XXXXXX.bat` scripts in the `.\hashcat\scripts\` folder for a particular WiFi network. Depending on your graphics card, the full set of attacks for a specific WiFi network could take about a day to run.
-   1. `.\hashcat\scripts\[XXXXXX].bat`
+	1. `.\hashcat\scripts\[XXXXXX].bat`
 8. Run the `` file to see a printed list of all of the WiFi networks that have been cracked so far with their `SSID`s and passwords.
-   1. `python .\print-final-results.py`
+	1. `python .\print-final-results.py`
 
 ----
 
 ## Troubleshooting
 * If you run into the following error, do the following:
-  * `ERROR`
-    ```bash
-    Timed out while waiting for the machine to boot.
-    ```
+	* `ERROR`
+		```bash
+		Timed out while waiting for the machine to boot.
+		```
 
-  * `SOLUTION`
-    1. Ensure that Vagrant is running:
-        * `vagrant global-status`
-    2. Run:
-        * `vagrant destroy -f`
+	* `SOLUTION`
+		1. Ensure that Vagrant is running:
+			* `vagrant global-status`
+		2. Run:
+			* `vagrant destroy -f`
 
 * If you run into the foillowing error, do the following:
-  * `ERROR`
-    ```bash
-    The error message "SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 2-3: truncated \UXXXXXXXX escape" means that Python is trying to decode a Unicode escape sequence that is incomplete or invalid. The \UXXXXXXXX escape sequence is used to represent a Unicode character with a hexadecimal code point greater than 0xFFFF.
-    ```
+	* `ERROR`
+		```bash
+		The error message "SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 2-3: truncated \UXXXXXXXX escape" means that Python is trying to decode a Unicode escape sequence that is incomplete or invalid. The \UXXXXXXXX escape sequence is used to represent a Unicode character with a hexadecimal code point greater than 0xFFFF.
+		```
 
-  * `SOLUTION` - Add an `r` infront of the filepath `""`:
-    ```Python
-    # The FULL path to the 'pwnagotchi-tools' folder in this repo
-    fullProjectPath = r"C:\Users\[XXXXXX]\pwnagotchi-tools\\"
+	* `SOLUTION` - Add an `r` infront of the filepath `""`:
+		```Python
+		# The FULL path to the 'pwnagotchi-tools' folder in this repo
+		fullProjectPath = r"C:\Users\[XXXXXX]\pwnagotchi-tools\\"
 
-    # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-    # there are problems saving and accessing the session files when running hashcat
-    # commands while not in the hashcat folder, so the full path is needed
-    fullHashcatPath = r"C:\Users\[XXXXXX]\hashcat-6.2.6\\"
+		# The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
+		# there are problems saving and accessing the session files when running hashcat
+		# commands while not in the hashcat folder, so the full path is needed
+		fullHashcatPath = r"C:\Users\[XXXXXX]\hashcat-6.2.6\\"
 
-    # the FULL path to where your wordlists are saved
-    fullWordListPath = r"C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
-    ```
-
-* If you run into the following error, do the following:
-  * `ERROR`
-    ```bash
-    C:\Users\[XXXXXXX]\Documents\GitHub\pwnagotchi-tools\wordlistsknown-wpa-passwords.txt: No such file or directory
-    ```
-
-  * `SOLUTION`
-    1. Ensure the file pathes in the `generate-hashcat-scripts.py` file end with `\\`:
-        ```Python
-        # The FULL path to the 'pwnagotchi-tools' folder in this repo
-        fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
-
-        # The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-        # there are problems saving and accessing the session files when running hashcat
-        # commands while not in the hashcat folder, so the full path is needed
-        fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
-
-        # the FULL path to where your wordlists are saved
-        fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
-        ```
-    2. Rerun: `python .\generate-hashcat-scripts.py`
+		# the FULL path to where your wordlists are saved
+		fullWordListPath = r"C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
+		```
 
 * If you run into the following error, do the following:
-  * `ERROR`
-    ```bash
-    'hashcat' is not recognized as an internal or external command, operable program or batch file.
-    ```
+	* `ERROR`
+		```bash
+		C:\Users\[XXXXXXX]\Documents\GitHub\pwnagotchi-tools\wordlistsknown-wpa-passwords.txt: No such file or directory
+		```
 
-  * `SOLUTION` - Make sure you downloaded the `Hashcat v6.2.6 binaries` NOT the `Hashcat v6.2.6 sources`.
+	* `SOLUTION`
+		1. Ensure the file pathes in the `generate-hashcat-scripts.py` file end with `\\`:
+			```Python
+			# The FULL path to the 'pwnagotchi-tools' folder in this repo
+			fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
+
+			# The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
+			# there are problems saving and accessing the session files when running hashcat
+			# commands while not in the hashcat folder, so the full path is needed
+			fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
+
+			# the FULL path to where your wordlists are saved
+			fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
+			```
+		2. Rerun: `python .\generate-hashcat-scripts.py`
+
+* If you run into the following error, do the following:
+	* `ERROR`
+		```bash
+		'hashcat' is not recognized as an internal or external command, operable program or batch file.
+		```
+
+	* `SOLUTION` - Make sure you downloaded the `Hashcat v6.2.6 binaries` NOT the `Hashcat v6.2.6 sources`.
 
 ----
 
