@@ -12,7 +12,7 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
 
 ----
 
-## Table of Contents
+# Table of Contents
 * [Windows Dependencies](#windows-dependencies)
 * [Setup](#setup)
 * [Running](#running)
@@ -30,9 +30,9 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
     * `.pcap`: `.\handshakes\pcap\`
     * `.hccapx`: `.\handshakes\hccapx\`
     * `.pmkid`: `.\handshakes\pmkid\` 
-* [Hashcat v6.2.6](https://hashcat.net/hashcat/)
-  * Make note of the `PATH` to your `Hashcat` install.
-  * Ex: `C:\Users\XXXXXX\hashcat-6.2.6`
+* [Hashcat v6.2.6 binaries](https://hashcat.net/hashcat/)
+  * Make note of the `PATH` to where you unpacked `Hashcat`.
+    * Example: `C:\Users\XXXXXX\hashcat-6.2.6`
 * [Word Ninja](https://github.com/keredson/wordninja/)
   * `pip install wordninja`
 * [Tabulate](https://github.com/gregbanks/python-tabulate/)
@@ -41,7 +41,11 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
 ----
 
 # Setup
-1. Edit the `generate-hashcat-scripts.py` file by updating the file paths for the following variables (Ensure the file pathes end in `\\` so that the generated file pathes are correct):
+
+## Configuration
+1. Clone the `generate-hashcat-scripts.py.example` file.
+   1. `cp .\generate-hashcat-scripts.py.example .\generate-hashcat-scripts.py`
+2. Edit the `generate-hashcat-scripts.py` file setting the file paths for the following variables (Ensure the file pathes end in `\\` so that the generated file pathes are correct):
     ```Python
     # The FULL path to the 'pwnagotchi-tools' folder in this repo
     fullProjectPath = "C:\Users\[XXXXXX]\pwnagotchi-tools\\"
@@ -52,8 +56,21 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
     fullHashcatPath = "C:\Users\[XXXXXX]\hashcat-6.2.6\\"
 
     # the FULL path to where your wordlists are saved
-    fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
+    fullWordListPath = "C:\Users\[PATH_TO_REPO]\wordlists\\"
     ```
+
+## Wordlists
+By default this repo does not contain any wordlists so you will need to download the ones you want to work with and place them in the `.\wordlists` folder.
+
+### Personal
+* You can add your own passwords by cloning the example file and editing it.
+    1. `cp .\known-wpa-passwords.txt.example .\wordlists\known-wpa-passwords.txt`
+
+### Standalone Wordlists
+    * 
+
+### Repos
+
 
 ----
 
@@ -77,11 +94,24 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
 ----
 
 ## Troubleshooting
-* If you run into the foillowing error during Step #1 of the [Setup](#setup) section, do the following:
-  * `ERROR`:
-    ```Python
-    
+* If you run into the following error, do the following:
+  * `ERROR`
+    ```bash
+    Timed out while waiting for the machine to boot.
     ```
+
+  * `SOLUTION`
+    1. Ensure that Vagrant is running:
+        * `vagrant global-status`
+    2. Run:
+        * `vagrant destroy -f`
+
+* If you run into the foillowing error, do the following:
+  * `ERROR`
+    ```bash
+    The error message "SyntaxError: (unicode error) 'unicodeescape' codec can't decode bytes in position 2-3: truncated \UXXXXXXXX escape" means that Python is trying to decode a Unicode escape sequence that is incomplete or invalid. The \UXXXXXXXX escape sequence is used to represent a Unicode character with a hexadecimal code point greater than 0xFFFF.
+    ```
+
   * `SOLUTION` - Add an `r` infront of the filepath `""`:
     ```Python
     # The FULL path to the 'pwnagotchi-tools' folder in this repo
@@ -96,8 +126,8 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
     fullWordListPath = r"C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
     ```
 
-* If you run into the following error during Step #3 of the [Usage](#usage) section, do the following:
-  * `ERROR`:
+* If you run into the following error, do the following:
+  * `ERROR`
     ```bash
     C:\Users\[XXXXXXX]\Documents\GitHub\pwnagotchi-tools\wordlistsknown-wpa-passwords.txt: No such file or directory
     ```
@@ -116,17 +146,15 @@ Here is a series of scripts that will automate cracking WiFI handshake collected
         # the FULL path to where your wordlists are saved
         fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
         ```
-    2. Rerun the `generate-hashcat-scripts.py` script.
+    2. Rerun: `python .\generate-hashcat-scripts.py`
 
-* If you run into the following error during Step #4 of the [Usage](#usage) section, do the following:
-  * `Error`:
+* If you run into the following error, do the following:
+  * `ERROR`
     ```bash
-    Timed out while waiting for the machine to boot.
+    'hashcat' is not recognized as an internal or external command, operable program or batch file.
     ```
 
-  * `SOLUTION`
-    1. Ensure that Vagrant is running.
-    2. Run: `vagrant destroy -f`
+  * `SOLUTION` - Make sure you downloaded the `Hashcat v6.2.6 binaries` NOT the `Hashcat v6.2.6 sources`.
 
 ----
 
