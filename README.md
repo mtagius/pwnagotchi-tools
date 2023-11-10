@@ -8,21 +8,28 @@ My goal is to create an updated version of the Windows setup and a new OS X vers
 
 Here is a series of scripts that will automate cracking WiFI handshake collected by a [Pwnagotchi](https://pwnagotchi.ai/).
 
-<img src="./Windows/images/pwnagotchi.gif" width="500">
+<img src="./images/pwnagotchi.gif" width="500">
 
 ----
 
-# Table of Contents
-TBA
+## Table of Contents
+* [Windows Dependencies](#windows-dependencies)
+* [Setup](#setup)
+* [Running](#running)
+* [Troubleshooting](#troubleshooting)
 
 ----
 
-# Windows Dependencies
+## Windows Dependencies
 
 * [Python 3.x](https://www.python.org/downloads/windows/)
 * [Vagrant](https://developer.hashicorp.com/vagrant/install)
 * [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
-  * Vagrant and Virtual Box are only used to convert pcap files to `hccapx/pmkid` files.
+  * Vagrant and Virtual Box are only used to convert `.pcap` files to the corresponding `.hccapx`/`.pmkid` files.
+  * Corresponding file locations:
+    * `.pcap`: `.\handshakes\pcap\`
+    * `.hccapx`: `.\handshakes\hccapx\`
+    * `.pmkid`: `.\handshakes\pmkid\` 
 * [Hashcat v6.2.6](https://hashcat.net/hashcat/)
   * Make note of the `PATH` to your `Hashcat` install.
   * Ex: `C:\Users\XXXXXX\hashcat-6.2.6`
@@ -30,6 +37,8 @@ TBA
   * `pip install wordninja`
 * [Tabulate](https://github.com/gregbanks/python-tabulate/)
   * `pip install tabulate`
+
+----
 
 # Setup
 1. Edit the `generate-hashcat-scripts.py` file by updating the file paths for the following variables (Ensure the file pathes end in `\\` so that the generated file pathes are correct):
@@ -46,24 +55,28 @@ TBA
     fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
     ```
 
-# Usage
+----
+
+# Running
 1. Use your `Pwnagotchi` to collect WiFi handshakes.
 2. Plug your `Pwnagotchi` into your computer and ensure the device is in manual (`MANU`) mode.
-3. Run the `get-files-from-pwnagotchi.bat` file to copy the handshakes from your `Pwnagotchi`. This will place the handshakes in the `.\handshakes\pcap\\` folder.
+3. Run the `get-files-from-pwnagotchi.bat` file to copy the handshakes from your `Pwnagotchi`. This will place the handshakes in the `.\handshakes\pcap\` folder.
    1. `.\get-files-from-pwnagotchi.bat`
 4. Build the Vagrant image:
    1. `cd vagrant`
    2. `vagrant up`
-5. `cd ..`
-6. Run the `generate-hashcat-scripts.py` file to generate the necessary `.bat` scripts to run different `hashcat` attacks.
+5. Move back to the root directory:
+   1. `cd ..`
+6. Run the `generate-hashcat-scripts.py` file to generate the necessary `.bat` scripts to run different `hashcat` attacks. There will be one `.bat` script for each of the WiFi handshake `.pcap` files for each of the different attack methods.
    1. `python .\generate-hashcat-scripts.py`
-7. Run the different `XXXXXX.bat` scripts in the `.\hashcat\scripts\` folder:
+7. Run one of the `XXXXXX.bat` scripts in the `.\hashcat\scripts\` folder for a particular WiFi network. Depending on your graphics card, the full set of attacks for a specific WiFi network could take about a day to run.
    1. `.\hashcat\scripts\[XXXXXX].bat`
-8. 
+8. Run the `` file to see a printed list of all of the WiFi networks that have been cracked so far with their `SSID`s and passwords.
+   1. `python .\print-final-results.py`
 
 ----
 
-# Troubleshooting
+## Troubleshooting
 * If you run into the foillowing error during Step #1 of the [Setup](#setup) section, do the following:
   * `ERROR`:
     ```Python
@@ -104,6 +117,7 @@ TBA
         fullWordListPath = "C:\Users\[XXXXXX]\[PATH_TO_REPO]\wordlists\\"
         ```
     2. Rerun the `generate-hashcat-scripts.py` script.
+
 * If you run into the following error during Step #4 of the [Usage](#usage) section, do the following:
   * `Error`:
     ```bash
@@ -114,24 +128,9 @@ TBA
     1. Ensure that Vagrant is running.
     2. Run: `vagrant destroy -f`
 
-## Usage
-
-1. Run any of the newly created bat scripts found in the `hashcat/scripts` folder. There will be one script for each wifi network the pwnagotchi collected crackable data for. Depending on your graphics card, the full attack could take about a day to run per wifi network.
-1. Run `python print-final-results.py` to see a printed list of all the wifi networks that have been cracked so far with their SSIDs and passwords.
-
-* Optionally, at any point run `python get-next-hashcat-script.py` to print some stats of the wifi networks being tracked in `network-cracked-status.json`
-
 ----
 
 # OLD
-
-## Table of Contents
-* [What can this project do?](#What-can-this-project-do?)
-* [Usage](#Usage)
-* [Installation](#Installation)
-* [Password cracking techniques](#Password-cracking-techniques)
-* [Some thoughts on wifi cracking and pwnagotchi](#Some-thoughts-on-wifi-cracking-and-pwnagotchi)
-* [Credit](#Credit)
 
 ## What can this project do?
 
@@ -148,18 +147,6 @@ In short, these scripts will help you crack WPA/WPA2 passwords in the most autom
 #### These tools were custom made to serve my purposes and as a result these scripts are written for Windows and contain dependencies on Python, Vagrant, Virtual Box, and of course, Hashcat. For example, to convert pcap files into pmkid/hccapx files Vagrant creates a headless Debian Linux VM, which is total overkill for someone already running Linux. To run this project on Linux the bat scripts, Vagrant script, and generate-hashcat-scripts.py would need to be converted.
 
 #### This project is ONLY to be used for wifi security education in conjunction with a pwnagotchi. Hacking wifi networks you don't own is ILLEGAL and is not endorsed by this project.
-
-
-
-### Optionally running hashcat on an AWS EC2 P2 instance
-
-Amazon offers 3 kinds of [EC2 P2](https://aws.amazon.com/ec2/instance-types/p2/) instances with with 1, 8, or 16 GPUs. This is very valuable because cracking WPA/WPA2 is VERY slow and the more power you can add the better. It's expensive, at roughly $1 an hour per GPU, but using 16 GPUs at once you can run the full attack included in this repo in under 7 hours, when it may take a day and a half with 1 consumer GPU. [Here](https://medium.com/@iraklis/running-hashcat-in-amazons-aws-new-16-gpu-p2-16xlarge-instance-9963f607164c) is more of an explanation about running hashcat on AWS P2 instances. 
-
-In this repo is the `aws` folder which contains scripts to help run hashcat on an AWS P2 instance.
-* `move-files-to-aws.bat` will copy files to an aws instance. A ssh key named `aws.pem` must be in the `ssh` folder and the AWS instance id must replace the id included in the file. This file is missing the code to copy wordlists and pmkid/hccapx files.
-* `get-files-from-aws.bat` will download the hashcat output, potfile, and session files. It also needs a ssh key named `aws.pem` in the `ssh` folder and the AWS instance id must replace the id included in the file.
-* `aws-initial-provision.sh` is a bash script to provision an aws p2 instance and install hashcat.
-* `set-nvidia-settings.sh` is a bash script to set the nvidia settings after hashcat has been installed.
 
 ### Wordlists
 
