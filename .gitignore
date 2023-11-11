@@ -1,4 +1,3 @@
-
 # the .vagrant file should never be added to git
 vagrant/.vagrant
 
@@ -20,10 +19,12 @@ hashcat/scripts
 #ssh
 ssh
 
+# config
+config.py
+
+# wordlists
+wordlists/*
+
 # misc
 network-cracked-status.json
-generate-hashcat-scripts.py
 get-files-from-pwnagotchi.bat
-
-generate-hashcat-scripts.py
-wordlists/*
