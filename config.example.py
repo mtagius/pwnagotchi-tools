@@ -1,6 +1,6 @@
 # Define constants for paths
-HASHCAT_PATH = "C:\\[PATH]\\hashcat-6.2.6\\"
-PROJECT_PATH = "C:\\[PATH]\\pwnagotchi-tooling\\"
+HASHCAT_PATH  = "C:\\[PATH]\\hashcat-6.2.6\\"
+PROJECT_PATH  = "C:\\[PATH]\\pwnagotchi-tooling\\"
 WORDLIST_PATH = "C:\\[PATH]\\wordlists\\"
 
 # Define constants for hashcat script
