@@ -6,12 +6,10 @@ My goal is to create an updated version of the Windows setup and a new OS X vers
 
 ----
 
-<img src="./images/pwnagotchi.gif" width="500">
-
-----
-
 # Purpose
 With this repo you will be able to generate a series of `.bat` scripts that will help you automate the cracking process for WiFI handshake collected by a [Pwnagotchi](https://pwnagotchi.ai/).
+
+<img src="./images/pwnagotchi.gif" width="500">
 
 ----
 
@@ -37,7 +35,7 @@ With this repo you will be able to generate a series of `.bat` scripts that will
 		* `.pmkid`: `.\handshakes\pmkid\` 
 * [Hashcat v6.2.6 binaries](https://hashcat.net/hashcat/)
 	* Make note of the `PATH` to where you unpacked `Hashcat`.
-		* Example: `C:\Users\XXXXXX\hashcat-6.2.6`
+		* Example: `C:\\Users\\XXXXXX\\hashcat-6.2.6\\`
 * [Word Ninja](https://github.com/keredson/wordninja/)
 	* `pip install wordninja`
 * [Tabulate](https://github.com/gregbanks/python-tabulate/)
@@ -47,20 +45,14 @@ With this repo you will be able to generate a series of `.bat` scripts that will
 
 # Setup
 ## Configuration
-1. Clone the `generate-hashcat-scripts.py.example` file.
-	1. `cp .\generate-hashcat-scripts.py.example .\generate-hashcat-scripts.py`
-2. Edit the `generate-hashcat-scripts.py` file setting the file paths for the following variables (Ensure the file pathes end in `\\` so that the generated file pathes are correct):
+1. Clone the `config.example.py` file.
+	1. `cp .\config.example.py .\config.py`
+2. Edit the `config.py` file setting the file paths for the following variables (Ensure the file pathes contain `\\` so that the generated file pathes are correct):
 	```Python
-	# The FULL path to the 'pwnagotchi-tools' folder in this repo
-	fullProjectPath = r"C:\Users\[XXXXXX]\pwnagotchi-tools\\"
-
-	# The FULL path to your hashcat 6.x.x install. Even if hashcat is added to your path,
-	# there are problems saving and accessing the session files when running hashcat
-	# commands while not in the hashcat folder, so the full path is needed
-	fullHashcatPath = r"C:\Users\[XXXXXX]\hashcat-6.2.6\\"
-
-	# the FULL path to where your wordlists are saved
-	fullWordListPath = r"C:\Users\[PATH_TO_REPO]\wordlists\\"
+	# Define constants for paths
+	HASHCAT_PATH  = "C:\\[PATH]\\hashcat-6.2.6\\"
+	PROJECT_PATH  = "C:\\[PATH]\\pwnagotchi-tooling\\"
+	WORDLIST_PATH = "C:\\[PATH]\\wordlists\\"
 	```
 3. `Pwnagotchi`
 	1. TBA
@@ -70,7 +62,7 @@ By default this repo does not contain any wordlists so you will need to download
 
 ### Personal Wordlist
 * You can add your own passwords by cloning the example file and editing it.
-	1. `cp .\known-wpa-passwords.txt.example .\wordlists\known-wpa-passwords.txt`
+	1. `cp .\known-wpa-passwords.example.txt .\wordlists\known-wpa-passwords.txt`
 
 ### Standalone Wordlists
 * [netgear-spectrum.txt](https://raw.githubusercontent.com/soxrok2212/PSKracker/master/dicts/netgear-spectrum/netgear-spectrum.txt)
