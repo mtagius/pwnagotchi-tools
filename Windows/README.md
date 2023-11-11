@@ -1,11 +1,3 @@
-# Pwnagotchi-Tooling Refactor
-
-In this repo I am refactoring the original [Pwnagotchi-Tooling](https://github.com/mtagius/pwnagotchi-tools) repo created by: [mtagius](https://github.com/mtagius)
-
-My goal is to create an updated version of the Windows setup and a new OS X version.
-
-----
-
 # Purpose
 With this repo you will be able to generate a series of `.bat` scripts that will help you automate the cracking process for WiFI handshake collected by a [Pwnagotchi](https://pwnagotchi.ai/).
 
