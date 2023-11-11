@@ -112,7 +112,7 @@ By default this repo does not contain any wordlists so you will need to download
 5. Move back to the root directory.
 	1. `cd ..`
 6. Run the `generate-hashcat-scripts.py` script to generate the necessary `.bat` scripts to run different `hashcat` attacks. There will be one `.bat` script for each of the WiFi handshake `.pcap` files for each of the different attack methods.
-	1. `python .\generate-hashcat-scripts.py`
+	1. `python .\generate-hashcat-scripts.py --override`
 7. Run one of the `XXXXXX.bat` scripts in the `.\hashcat\scripts\` folder for a particular WiFi network. Depending on your graphics card, the full set of attacks for a specific WiFi network could take about a day to run.
 	1. `.\hashcat\scripts\[XXXXXX].bat`
 8. Run the `print-final-results.py` script to see a printed list of all of the WiFi networks that have been cracked so far with their `SSID`s and passwords.
