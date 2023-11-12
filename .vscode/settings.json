@@ -1,4 +1,4 @@
 {
-    "workbench.editor.enablePreview": true,
-    "editor.rename.enablePreview": true
+	"workbench.editor.enablePreview": true,
+	"editor.rename.enablePreview": true
 }

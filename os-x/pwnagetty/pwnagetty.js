@@ -95,7 +95,7 @@ function grabBSSID(file) {
 function convertFile(file) {
 	return new Promise((resolve, reject) => {
 		// We favour PMKID"s, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
-		let convertPMKIDs = exec(`hcxpcapngtool -z ../pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
+		let convertPMKIDs = exec(`hcxpcapngtool -o ./handshakes/pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
 			if (error) { reject(error) };
 
 			if (stdout.includes("PMKID(s) written")) {
@@ -103,7 +103,7 @@ function convertFile(file) {
 				successfulPMKIDs++;
 				resolve("pmkid")
 			} else {
-				let convertHCCAPX = exec(`hcxpcapngtool -o ../hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
+				let convertHCCAPX = exec(`hcxpcapngtool -o ./handshakes/hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
 					if (error) {
 						reject(error);
 						console.log(error);
@@ -133,12 +133,12 @@ async function main() {
 		let files = await readDir();
 
 		// if "/pmkid" doesn"t exist, create it.
-		if (!fs.existsSync("../pmkid")) {
-			fs.mkdirSync("../pmkid");
+		if (!fs.existsSync("./handshakes/pmkid")) {
+			fs.mkdirSync("./handshakes/pmkid");
 		}
 		// if "/hccapx" doesn"t exist, create it.
-		if (!fs.existsSync("../hccapx")) {
-			fs.mkdirSync("../hccapx");
+		if (!fs.existsSync("./handshakes/hccapx")) {
+			fs.mkdirSync("./handshakes/hccapx");
 		}
 
 		// Loop over all pcap files
@@ -173,7 +173,7 @@ async function main() {
 			}
 		};
 
-		fs.writeFileSync("bssids.json", JSON.stringify(bssids), () => {
+		fs.writeFileSync("./handshakes/bssids.json", JSON.stringify(bssids), () => {
 			console.log("Saved bssids.json... \n\n")
 		})
 
