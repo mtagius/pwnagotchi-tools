@@ -6,7 +6,8 @@
 	"scripts": {
 		"get": "node ./pwnagetty/pwnagetty_get_pcaps.js",
 		"generate": "node ./pwnagetty/pwnagetty_generate.js",
-		"attacks": "node ./scripts/generate-attacks-list",
+		"attacks": "node ./scripts/generate-attacks-list.js",
+		"scripts": "node ./scripts/generate-hashcat-scripts.js",
 		"clean": "rm -r ./handshakes/hccapx ./handshakes/pmkid",
 		"clean-all": "rm -r ./handshakes/hccapx ./handshakes/pmkid handshakes/pcap"
 	},

@@ -49,47 +49,47 @@ function getFilePaths(directoryOrFile, allowedExtensions = []) {
 function generateAttacks() {
     const attacks = [];
 
-	// Loop through wordlists
-	for (const wordlistDir of config.WORDLISTS) {
-		const wordlistFiles = getFilePaths(wordlistDir, [".txt"]);
+    // Loop through wordlists
+    for (const wordlistDir of config.WORDLISTS) {
+        const wordlistFiles = getFilePaths(wordlistDir, [".txt"]);
 
-		// Loop through dictionaries
-		for (const dictionaryDir of config.DICTIONARIES) {
-			const dictionaryFiles = getFilePaths(dictionaryDir, [".dic"]);
+        // Loop through dictionaries
+        for (const dictionaryDir of config.DICTIONARIES) {
+            const dictionaryFiles = getFilePaths(dictionaryDir, [".dic"]);
 
-			// Loop through rules
-			for (const ruleDir of config.RULES) {
-				const ruleFiles = getFilePaths(ruleDir, [".rule"]);
+            // Loop through rules
+            for (const ruleDir of config.RULES) {
+                const ruleFiles = getFilePaths(ruleDir, [".rule"]);
 
-				// Loop through masks
-				for (const mask of config.MASKS) {
-					// Loop through wordlists
-					for (const wordlist of wordlistFiles) {
-						// Loop through rules
-						for (const rule of ruleFiles) {
-							const attackType = determineAttackType(wordlist, rule, mask);
+                // Loop through masks
+                for (const mask of config.MASKS) {
+                    // Loop through wordlists
+                    for (const wordlist of wordlistFiles) {
+                        // Loop through rules
+                        for (const rule of ruleFiles) {
+                            const attackType = determineAttackType(wordlist, rule, mask);
 
-							if (attackType !== null) {
-								const attack = [`-a ${attackType}`];
+                            if (attackType !== null) {
+                                const attack = [`-a ${attackType}`];
 
-								if (wordlist !== "") {
-									const wordlistFileName = path.basename(wordlist);
-									attack.push(wordlistFileName);
-								}
+                                if (wordlist !== "") {
+                                    // Push the full file path
+                                    attack.push(wordlist);
+                                }
 
-								if (rule !== "") {
-									const ruleFileName = path.basename(rule);
-									attack.push(ruleFileName);
-								}
+                                if (rule !== "") {
+                                    // Push the full file path
+                                    attack.push(rule);
+                                }
 
-								attacks.push(attack);
-							}
-						}
-					}
-				}
-			}
-		}
-	}
+                                attacks.push(attack);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // Add standalone -a 0 attacks for .rule files
     for (const ruleDir of config.RULES) {
@@ -97,7 +97,7 @@ function generateAttacks() {
         for (const rule of ruleFiles) {
             const attackType = determineAttackType("", rule, "");
             if (attackType === 0) {
-                attacks.push([`-a ${attackType}`, "", path.basename(rule)]);
+                attacks.push([`-a ${attackType}`, "", rule]);
             }
         }
     }
@@ -117,7 +117,8 @@ function generateAttacks() {
             for (const wordlist of wordlistFiles) {
                 const attackType = determineAttackType(wordlist, "", mask);
                 if (attackType === 6) {
-                    attacks.push([`-a ${attackType}`, path.basename(wordlist), mask]);
+                    // Push the full file path
+                    attacks.push([`-a ${attackType}`, wordlist, mask]);
                 }
             }
         }
@@ -127,7 +128,8 @@ function generateAttacks() {
             for (const dictionary of dictionaryFiles) {
                 const attackType = determineAttackType(dictionary, "", mask);
                 if (attackType === 6) {
-                    attacks.push([`-a ${attackType}`, path.basename(dictionary), mask]);
+                    // Push the full file path
+                    attacks.push([`-a ${attackType}`, dictionary, mask]);
                 }
             }
         }
