@@ -23,6 +23,7 @@
 	"dependencies": {
 		"commander": "^11.1.0",
 		"fs": "^0.0.1-security",
+		"ssh2": "^1.14.0",
 		"ssh2-sftp-client": "^9.1.0"
 	}
 }

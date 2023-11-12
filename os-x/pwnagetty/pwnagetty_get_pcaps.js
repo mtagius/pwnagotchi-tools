@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const fs = require("fs");
+const sshClient = require("ssh2").Client;
 const commander = require("commander");
 const sftpClient = require("ssh2-sftp-client");
 
@@ -24,7 +25,7 @@ logo = () => {
 	██║     ╚███╔███╔╝██║ ╚████║██║  ██║╚██████╔╝███████╗   ██║      ██║      ██║   
 	╚═╝      ╚══╝╚══╝ ╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝      ╚═╝      ╚═╝   
 																						
-	   
+
 				|===============================================|
 				| Github: https://github.com/CyrisXD/Pwnagetty  |
 				| Twitter: @sudo_overflow                       |
@@ -32,33 +33,64 @@ logo = () => {
 			`);
 }
 
+const config = {
+	host: HOST_IP,
+	username: USERNAME,
+	password: PASSWORD,
+	handshakeDir: HANDSHAKE_DIRECTORY,
+	port: PORT,
+	localDir: LOCAL_PCAP_DIRECTORY
+}
+
+//=================================================================
+// Copy all .pcap files to an accessable folder on the Pwnagotchi
+//=================================================================
+async function moveFiles() {
+	const ssh = new sshClient();
+	const commandToExecute = "sudo rm -r ~/handshakes && sudo cp -r /root/handshakes/ ~/handshakes 2>/dev/null && ls -a ~/handshakes";
+
+	ssh.setMaxListeners(20);
+
+	ssh.on("ready", () => {
+		console.log("Connected to the Pwnagotchi.");
+
+		ssh.exec(commandToExecute, (err, stream) => {
+			if (err)
+				throw err;
+			stream.on("close", (code, signal) => {
+				console.log(`Command execution closed with code ${ code }.`);
+				ssh.end();
+			}).on("data", data => {
+				console.log(`Command output:\n${ data }`);
+			}).stderr.on("data", data => {
+				console.error(`Error output:\n${ data }`);
+			});
+		});
+	}).connect(config);
+}
+
 //=====================================
 // Download all files from Pwnagotchi
 //=====================================
 async function getFiles() {
 	const client = new sftpClient();
-	const config = {
-		host: HOST_IP,
-		username: USERNAME,
-		password: PASSWORD,
-		handshakeDir: HANDSHAKE_DIRECTORY,
-		port: PORT,
-		localDir: LOCAL_PCAP_DIRECTORY
-	}
 
 	// if "/pcap" doesn"t exist, create it.
 	if (!fs.existsSync(LOCAL_PCAP_DIRECTORY)) {
 		fs.mkdirSync(LOCAL_PCAP_DIRECTORY);
 	}
+
 	// connect to pwnagotchi and get files
 	try {
 		await client.connect(config);
 		console.log("Connecting to Pwnagotchi... \n");
+
 		let count = 0;
 		client.on("download", info => {
-			count++
+			count++;
 			process.stdout.write(`Downloaded ${count} captures...` + "\r");
 		});
+
 		let rslt = await client.downloadDir(HANDSHAKE_DIRECTORY, LOCAL_PCAP_DIRECTORY);
 		console.log(`\n`);
 		return rslt;
@@ -77,7 +109,8 @@ async function removeFiles() {
 
 	// connect to pwnagotchi and remove files
 	try {
-		await client.connect(config);       
+		await client.connect(config);
+
 		let list = await client.list(src, "*.pcap");
 		for (let file of list) {
 			await client.delete(src + file.name);
@@ -99,6 +132,7 @@ async function main() {
 			.option("-r, --remove", "Delete handshake files after processing.")
 			.parse(process.argv);
 
+		await moveFiles();
 		await getFiles();
 
 		// if "./handshakes/pmkid" doesn"t exist, create it.
