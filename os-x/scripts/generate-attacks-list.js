@@ -4,25 +4,29 @@ const config = require("../config");
 
 // Function to determine attack type based on file combination
 function determineAttackType(wordlist, rule, mask) {
-	let attackType = 0;
+	if (wordlist.endsWith(".txt") || wordlist.endsWith(".dic")) {
+		if (rule !== "" && mask !== "") {
+			mask = "";
+		}
+	}
 
 	if ((wordlist.endsWith(".txt") || wordlist.endsWith(".dic")) && mask !== "") {
-        console.log(6);
+		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 6`);
 		return 6; // Type -a 6 for .txt/.dic * mask
     }
 
 	if (mask !== "") {
-        console.log(3);
+		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 3`);
 		return 3; // Type -a 3 for masks
     }
 
 	if (rule !== "" && wordlist === "" && mask === "") {
-        console.log(0);
+		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 0`);
 		return 0; // Type -a 0 for .rule by itself
     }
 
     if (rule !== "" && (wordlist.endsWith(".txt") || wordlist.endsWith(".dic"))) {
-        console.log(0);
+		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 0`);
 		return 0; // Type -a 0 for .txt/.dic * .rule
     }
 
@@ -45,48 +49,47 @@ function getFilePaths(directoryOrFile, allowedExtensions = []) {
 function generateAttacks() {
     const attacks = [];
 
-// Loop through wordlists
-for (const wordlistDir of config.WORDLISTS) {
-    const wordlistFiles = getFilePaths(wordlistDir, [".txt"]);
+	// Loop through wordlists
+	for (const wordlistDir of config.WORDLISTS) {
+		const wordlistFiles = getFilePaths(wordlistDir, [".txt"]);
 
-    // Loop through dictionaries
-    for (const dictionaryDir of config.DICTIONARIES) {
-        const dictionaryFiles = getFilePaths(dictionaryDir, [".dic"]);
+		// Loop through dictionaries
+		for (const dictionaryDir of config.DICTIONARIES) {
+			const dictionaryFiles = getFilePaths(dictionaryDir, [".dic"]);
 
-        // Loop through rules
-        for (const ruleDir of config.RULES) {
-            const ruleFiles = getFilePaths(ruleDir, [".rule"]);
+			// Loop through rules
+			for (const ruleDir of config.RULES) {
+				const ruleFiles = getFilePaths(ruleDir, [".rule"]);
 
-            // Loop through masks
-            for (const mask of config.MASKS) {
-                // Loop through wordlists
-                for (const wordlist of wordlistFiles) {
-                    // Loop through rules
-                    for (const rule of ruleFiles) {
-                        const attackType = determineAttackType(wordlist, rule, mask);
+				// Loop through masks
+				for (const mask of config.MASKS) {
+					// Loop through wordlists
+					for (const wordlist of wordlistFiles) {
+						// Loop through rules
+						for (const rule of ruleFiles) {
+							const attackType = determineAttackType(wordlist, rule, mask);
 
-                        if (attackType !== null) {
-                            const attack = [`-a ${attackType}`];
+							if (attackType !== null) {
+								const attack = [`-a ${attackType}`];
 
-                            if (wordlist !== "") {
-                                const wordlistFileName = path.basename(wordlist);
-                                attack.push(wordlistFileName);
-                            }
+								if (wordlist !== "") {
+									const wordlistFileName = path.basename(wordlist);
+									attack.push(wordlistFileName);
+								}
 
-                            if (rule !== "") {
-                                const ruleFileName = path.basename(rule);
-                                attack.push(ruleFileName);
-                            }
+								if (rule !== "") {
+									const ruleFileName = path.basename(rule);
+									attack.push(ruleFileName);
+								}
 
-                            attacks.push(attack);
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
+								attacks.push(attack);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
     // Add standalone -a 0 attacks for .rule files
     for (const ruleDir of config.RULES) {
@@ -143,7 +146,7 @@ function writeAttacksToFile(attacks, filePath) {
 // Main function
 function main() {
     const attacks = generateAttacks();
-    const outputFilePath = "./generated_attacks.js";
+    const outputFilePath = "./hashcat/generated_attacks.js";
 
     writeAttacksToFile(attacks, outputFilePath);
 
