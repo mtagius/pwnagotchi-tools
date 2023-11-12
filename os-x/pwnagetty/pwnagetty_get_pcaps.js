@@ -99,9 +99,9 @@ async function getFiles() {
 	}
 }
 
-//=====================================
+//=========================================
 // Remove processed files from Pwnagotchi
-//=====================================
+//=========================================
 async function removeFiles() {
 	console.log("Removing processed files from Pwnagotchi...\n");
 	const client = new sftpClient();
@@ -121,9 +121,9 @@ async function removeFiles() {
 	}
 }
 
-//=================
+//===============
 // Main Process
-//=================
+//===============
 async function main() {
 	try {
 		logo();
