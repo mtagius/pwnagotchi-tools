@@ -1,4 +1,12 @@
 module.exports = {
+	// Pwnagotchi
+	HOST_IP: "",
+	USERNAME: "",
+	PASSWORD: "",
+	HANDSHAKE_DIRECTORY: "",
+	PORT: 22,
+	LOCAL_PCAP_DIRECTORY: "",
+	
 	// Define paths for attach lists
 	WORDLISTS: [
 		"known-wpa-passwords.txt"

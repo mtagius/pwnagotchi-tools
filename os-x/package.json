@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"get": "",
-		"generate": "node ./pwnagetty/pwnagetty.js "
+		"get": "node ./pwnagetty/pwnagetty_get_pcaps.js",
+		"generate": "node ./pwnagetty/pwnagetty_generate.js "
 	},
 	"repository": {
 		"type": "git",
@@ -17,5 +17,10 @@
 	"bugs": {
 		"url": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/issues"
 	},
-	"homepage": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/os-x#readme"
+	"homepage": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/os-x#readme",
+	"dependencies": {
+		"commander": "^11.1.0",
+		"fs": "^0.0.1-security",
+		"ssh2-sftp-client": "^9.1.0"
+	}
 }
