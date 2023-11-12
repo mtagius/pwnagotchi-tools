@@ -10,10 +10,10 @@ const {
 	HASHCAT_OUTPUT_PATH,
 	RULE_PATH,
 	WORD_NINJA_PATH,
-} = require('./config');
+} = require('../config');
 
 // Import attacks list from attacks.js
-const attacks = require('./attacks_list');
+const attacks = require('../attacks_list');
 
 const fs = require('fs');
 const os = require('os');

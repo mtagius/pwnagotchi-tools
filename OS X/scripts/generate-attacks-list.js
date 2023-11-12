@@ -1,4 +1,4 @@
-const { WORDLISTS, DICTIONARIES, RULES, MASKS } = require('./config');
+const { WORDLISTS, DICTIONARIES, RULES, MASKS } = require('../config');
 
 const generateAttackList = (attackType) => {
 	const attackList = [];
