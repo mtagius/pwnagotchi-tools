@@ -38,11 +38,12 @@ readBSSIDsFile = () => {
 	return new Promise((resolve, reject) => {
 		fs.readFile("./pwnagetty/bssids.json", function (err, data) {
 			if (err) {
-				reject("Unable to read bssids.json file: " + err)
-				return
+				reject(`Unable to read bssids.json file: ${err}`);
+				return;
 			};
-			let json = JSON.parse(data)
-			resolve(json)
+
+			let json = JSON.parse(data);
+			resolve(json);
 		});
 	})
 }
@@ -53,11 +54,10 @@ readBSSIDsFile = () => {
 readDir = () => {
 	return new Promise((resolve, reject) => {
 		fs.readdir(config.localDir, function (err, files) {
-			//handling error
 			if (err) {
-				reject("Unable to scan directory: " + err);
+				reject(`Unable to scan directory: ${err}`);
 			}
-			resolve(files)
+			resolve(files);
 		});
 	})
 }
@@ -69,7 +69,7 @@ function grabBSSID(file) {
 	return new Promise((resolve, reject) => {
 		let aircrack = exec(`aircrack-ng ${config.localDir}${file}`, function (error, stdout) {
 			if (error) {
-				resolve(resolve)
+				resolve(resolve);
 			}
 		});
 
@@ -77,11 +77,12 @@ function grabBSSID(file) {
 			if (data.indexOf("Choosing first network as target") > -1 || data.indexOf("Index number of target network?") > -1) {
 				if (data.match(/\b([0-9A-F]{2}[:-]){5}([0-9A-F]){2}\b/gmi)) {
 					let mac = data.match(/\b([0-9A-F]{2}[:-]){5}([0-9A-F]){2}\b/gmi);
-					aircrack.kill("SIGTERM")
-					resolve(mac[0])
+
+					aircrack.kill("SIGTERM");
+					resolve(mac[0]);
 
 				} else {
-					resolve()
+					resolve();
 				}
 			}
 		})
@@ -89,41 +90,42 @@ function grabBSSID(file) {
 
 }
 
-//=======================================
-// Convert the pcap file to pmkid or hccapx file
-//=======================================
 function convertFile(file) {
-	return new Promise((resolve, reject) => {
-		// We favour PMKID"s, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
-		let convertPMKIDs = exec(`hcxpcapngtool -o ./handshakes/pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
-			if (error) { reject(error) };
+    return new Promise((resolve, reject) => {
+        // We favour PMKID's, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
+        let convertPMKIDs = exec(`hcxpcapngtool -o ./handshakes/pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
+            if (error) {
+                reject(error); // Reject the promise on error
+            }
 
-			if (stdout.includes("PMKID(s) written")) {
-				console.log(`Found PMKID in ${file}.`);
-				successfulPMKIDs++;
-				resolve("pmkid")
-			} else {
-				let convertHCCAPX = exec(`hcxpcapngtool -o ./handshakes/hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
-					if (error) {
-						reject(error);
-						console.log(error);
-					};
-					if (stdout.includes("handshake(s) written")) {
-						console.log(`Found HCCAPX in ${file}`);
-						successfulHCCAPXs++;
-						resolve("hccapx")
-					} else {
-						resolve("No PMKID or HCCAPX found.")
-					}
-				});
-			}
-		});
-	})
+            if (stdout.includes("PMKID(s) written")) {
+                console.log(`Found PMKID in ${file}.`);
+                successfulPMKIDs++;
+                resolve("pmkid");
+            } else {
+                // If PMKID is not found, try converting to HCCAPX
+                let convertHCCAPX = exec(`hcxpcapngtool -o ./handshakes/hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
+                    if (error) {
+                        reject(error); // Reject the promise on error
+                        console.log(error);
+                    }
+
+                    if (stdout.includes("Handshake(s) written.")) {
+                        console.log(`Found HCCAPX in ${file}`);
+                        successfulHCCAPXs++;
+                        resolve("hccapx");
+                    } else {
+                        resolve("No PMKID or HCCAPX found.");
+                    }
+                });
+            }
+        });
+    });
 }
 
-//=================
+//===============
 // Main Process
-//=================
+//===============
 async function main() {
 	try {
 		logo();
@@ -136,6 +138,7 @@ async function main() {
 		if (!fs.existsSync("./handshakes/pmkid")) {
 			fs.mkdirSync("./handshakes/pmkid");
 		}
+
 		// if "/hccapx" doesn"t exist, create it.
 		if (!fs.existsSync("./handshakes/hccapx")) {
 			fs.mkdirSync("./handshakes/hccapx");
@@ -174,8 +177,8 @@ async function main() {
 		};
 
 		fs.writeFileSync("./handshakes/bssids.json", JSON.stringify(bssids), () => {
-			console.log("Saved bssids.json... \n\n")
-		})
+			console.log("Saved bssids.json... \n\n");
+		});
 
 		let numFilesWithNoKeyMaterial = files.length - (successfulHCCAPXs + successfulPMKIDs);
 		let percentFilesWithNoKeyMaterial = Math.round(((numFilesWithNoKeyMaterial * 100) / files.length) * 100) / 100;
@@ -187,7 +190,7 @@ async function main() {
 
 		process.exit(0);
 	} catch (err) {
-		console.log("Main catch: " + err)
+		console.log(`Main catch: ${err}`);
 	}
 }
 

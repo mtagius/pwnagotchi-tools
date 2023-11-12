@@ -145,11 +145,11 @@ handshakes/hccapx/*
 handshakes/pmkid/*
 
 # attacks
-attacks_list.js
+generated_attacks.js
 
 # pacakge
 package-lock.json
 
 # Wordlists
-wordlists/known-passwords.txt
-wordlists/known-passwords.dic
+known-passwords.txt
+known-passwords.dic
