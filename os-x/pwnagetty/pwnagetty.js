@@ -95,7 +95,7 @@ function grabBSSID(file) {
 function convertFile(file) {
 	return new Promise((resolve, reject) => {
 		// We favour PMKID"s, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
-		let convertPMKIDs = exec(`hcxpcaptool -z ../pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
+		let convertPMKIDs = exec(`hcxpcapngtool -z ../pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
 			if (error) { reject(error) };
 
 			if (stdout.includes("PMKID(s) written")) {

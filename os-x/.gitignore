@@ -141,6 +141,8 @@ config.js
 
 # Handshakes
 handshakes/pcap/*
+handshakes/hccapx/*
+handshakes/pmkid/*
 
 # attacks
 attacks_list.js
