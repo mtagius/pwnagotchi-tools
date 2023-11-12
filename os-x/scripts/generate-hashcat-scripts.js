@@ -18,13 +18,13 @@ function generateHashcatCommands(attacks) {
         for (const attack of attacks) {
             const attackType = attack[0];
             switch (attackType) {
-                case "-a 0":
+                case "--attack-mode=0":
                     scriptLines.push(generateType0Command(attack, sessionName, outputFilePath, hcCapxFilePath));
                     break;
-                case "-a 3":
+                case "--attack-mode=3":
                     scriptLines.push(generateType3Command(attack, sessionName, outputFilePath, hcCapxFilePath));
                     break;
-                case "-a 6":
+                case "--attack-mode=6":
                     scriptLines.push(generateType6Command(attack, sessionName, outputFilePath, hcCapxFilePath));
                     break;
                 // Add more cases for other attack types if needed
@@ -43,14 +43,14 @@ function generateType0Command(attack, sessionName, outputFilePath, hcCapxFilePat
     const wordlist = attack[1];
     const rule = attack[2];
 
-    return `hashcat -m ${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_DELAY_TIME} --potfile-path "${config.HASHCAT_POTFILE_PATH}" -o "${outputFilePath}" "${hcCapxFilePath}" -r "${rule}"`;
+    return `hashcat --hash-type=${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_WAIT_TIME} --potfile-path "${config.HASHCAT_POTFILE_PATH}" --outfile="${outputFilePath}" "${hcCapxFilePath}" --rules-file="${rule}" -S "${wordlist}"`;
 }
 
 function generateType3Command(attack, sessionName, outputFilePath, hcCapxFilePath) {
     const attackType = attack[0];
     const mask = attack[1];
 
-    return `hashcat -m ${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_DELAY_TIME} --potfile-path "${config.HASHCAT_POTFILE_PATH}" -o "${outputFilePath}" "${hcCapxFilePath}" -S "${mask}"`;
+    return `hashcat --hash-type=${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_WAIT_TIME} --potfile-path "${config.HASHCAT_POTFILE_PATH}" --outfile="${outputFilePath}" "${hcCapxFilePath}" -S "${mask}"`;
 }
 
 function generateType6Command(attack, sessionName, outputFilePath, hcCapxFilePath) {
@@ -59,7 +59,7 @@ function generateType6Command(attack, sessionName, outputFilePath, hcCapxFilePat
     const rule = attack[2];
     const mask = attack[3];
 
-    return `hashcat -m ${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_DELAY_TIME} --potfile-path "${config.HASHCAT_POTFILE_PATH}" -o "${outputFilePath}" "${hcCapxFilePath}" -r "${rule}" -S "${wordlist}" "${mask}"`;
+    return `hashcat --hash-type=${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_WAIT_TIME} --potfile-path "${config.HASHCAT_POTFILE_PATH}" --outfile="${outputFilePath}" "${hcCapxFilePath}" --rules-file="${rule}" -S "${wordlist}" "${mask}"`;
 }
 
 // Function to generate a random 4-digit integer

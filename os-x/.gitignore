@@ -151,7 +151,7 @@ handshakes/pmkid/*
 attacks-list.js
 
 # attack scripts
-./hashcat/attack-scripts/*
+hashcat/attack-scripts/*
 !example.txt
 
 # Wordlists

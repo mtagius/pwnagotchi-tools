@@ -12,22 +12,22 @@ function determineAttackType(wordlist, rule, mask) {
 
 	if ((wordlist.endsWith(".txt") || wordlist.endsWith(".dic")) && mask !== "") {
 		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 6`);
-		return 6; // Type -a 6 for .txt/.dic * mask
+		return 6; // Type --attack-mode=6 for .txt/.dic * mask
     }
 
 	if (mask !== "") {
 		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 3`);
-		return 3; // Type -a 3 for masks
+		return 3; // Type --attack-mode=3 for masks
     }
 
 	if (rule !== "" && wordlist === "" && mask === "") {
 		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 0`);
-		return 0; // Type -a 0 for .rule by itself
+		return 0; // Type --attack-mode=0 for .rule by itself
     }
 
     if (rule !== "" && (wordlist.endsWith(".txt") || wordlist.endsWith(".dic"))) {
 		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 0`);
-		return 0; // Type -a 0 for .txt/.dic * .rule
+		return 0; // Type --attack-mode=0 for .txt/.dic * .rule
     }
 
     return null; // Unknown combination
@@ -70,7 +70,7 @@ function generateAttacks() {
                             const attackType = determineAttackType(wordlist, rule, mask);
 
                             if (attackType !== null) {
-                                const attack = [`-a ${attackType}`];
+                                const attack = [`--attack-mode=${attackType}`];
 
                                 if (wordlist !== "") {
                                     // Push the full file path
@@ -91,26 +91,26 @@ function generateAttacks() {
         }
     }
 
-    // Add standalone -a 0 attacks for .rule files
+    // Add standalone --attack-mode=0 attacks for .rule files
     for (const ruleDir of config.RULES) {
         const ruleFiles = getFilePaths(ruleDir, [".rule"]);
         for (const rule of ruleFiles) {
             const attackType = determineAttackType("", rule, "");
             if (attackType === 0) {
-                attacks.push([`-a ${attackType}`, "", rule]);
+                attacks.push([`--attack-mode=${attackType}`, "", rule]);
             }
         }
     }
 
-    // Add -a 3 attacks for mask alone
+    // Add --attack-mode=3 attacks for mask alone
     for (const mask of config.MASKS) {
         const attackType = determineAttackType("", "", mask);
         if (attackType === 3) {
-            attacks.push([`-a ${attackType}`, mask]);
+            attacks.push([`--attack-mode=${attackType}`, mask]);
         }
     }
 
-    // Add -a 6 attacks for (.txt * mask) and (.dic * mask)
+    // Add --attack-mode=6 attacks for (.txt * mask) and (.dic * mask)
     for (const mask of config.MASKS) {
         for (const wordlistDir of config.WORDLISTS) {
             const wordlistFiles = getFilePaths(wordlistDir, [".txt"]);
@@ -118,7 +118,7 @@ function generateAttacks() {
                 const attackType = determineAttackType(wordlist, "", mask);
                 if (attackType === 6) {
                     // Push the full file path
-                    attacks.push([`-a ${attackType}`, wordlist, mask]);
+                    attacks.push([`--attack-mode=${attackType}`, wordlist, mask]);
                 }
             }
         }
@@ -129,7 +129,7 @@ function generateAttacks() {
                 const attackType = determineAttackType(dictionary, "", mask);
                 if (attackType === 6) {
                     // Push the full file path
-                    attacks.push([`-a ${attackType}`, dictionary, mask]);
+                    attacks.push([`--attack-mode=${attackType}`, dictionary, mask]);
                 }
             }
         }
