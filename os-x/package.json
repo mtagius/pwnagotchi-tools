@@ -4,18 +4,18 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-	  "test": "echo \"Error: no test specified\" && exit 1"
+		"get": "",
+		"generate": "node ./pwnagetty/pwnagetty.js "
 	},
 	"repository": {
-	  "type": "git",
-	  "url": "git+https://github.com/ivy00johns/os-x-pwnagotchi-tools.git"
+		"type": "git",
+		"url": "git+https://github.com/ivy00johns/os-x-pwnagotchi-tools.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-	  "url": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/issues"
+		"url": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/issues"
 	},
-	"homepage": "https://github.com/ivy00johns/os-x-pwnagotchi-tools#readme"
-  }
-  
+	"homepage": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/os-x#readme"
+}
