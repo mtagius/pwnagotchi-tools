@@ -6,7 +6,7 @@ const { exec } = require("child_process");
 // Configuration 
 //====================================
 const config = {
-	localDir: "/handshakes/pcap/" //shared folder setup in vagrant
+	localDir: "./handshakes/pcap/"
 };
 
 let successfulPMKIDs = 0;
@@ -36,7 +36,7 @@ logo = () => {
 
 readBSSIDsFile = () => {
 	return new Promise((resolve, reject) => {
-		fs.readFile("bssids.json", function (err, data) {
+		fs.readFile("./pwnagetty/bssids.json", function (err, data) {
 			if (err) {
 				reject("Unable to read bssids.json file: " + err)
 				return

@@ -149,5 +149,5 @@ attacks_list.js
 package-lock.json
 
 # Wordlists
-wordlists/known-wpa-passwords.txt
-wordlists/known-wpa-passwords.dic
+wordlists/known-passwords.txt
+wordlists/known-passwords.dic
