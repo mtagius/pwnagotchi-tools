@@ -148,11 +148,10 @@ function writeAttacksToFile(attacks, filePath) {
 // Main function
 function main() {
     const attacks = generateAttacks();
-    const outputFilePath = "./hashcat/generated_attacks.js";
 
-    writeAttacksToFile(attacks, outputFilePath);
+    writeAttacksToFile(attacks, config.HASHCAT_ATTACK_LISTS);
 
-    console.log(`Generated attacks saved to ${outputFilePath}`);
+    console.log(`Generated attacks saved to ${config.HASHCAT_ATTACK_LISTS}.`);
 }
 
 main();

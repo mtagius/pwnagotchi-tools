@@ -5,8 +5,9 @@
 
 # TO-DO
 I need to generate a set of scripts that can execute "hashcat" commands.
-- Example command: hashcat -m 22000 -a 0 --session NONRISPWL_100e7e03b00c_3829 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" -o "./hashcat/hashcat-output.txt" "./handshakes/NONRISPWL_100e7e03b00c.pmkid" -r "./hashcat/rules/d3ad0ne.rule" -S "./wordlists/known-passwords.txt"
+- Example command: `hashcat -m 22000 -a 0 --session NONRISPWL_100e7e03b00c_3829 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" -o "./hashcat/hashcat-output.txt" "./handshakes/NONRISPWL_100e7e03b00c.pmkid" -r "./hashcat/rules/d3ad0ne.rule" -S "./wordlists/known-passwords.txt"`
 - The commands need to reference the config variables in the config.js file. Such as hwmon-temp-abort, list of wordlists, dic, rules, masks.
+
 - The scripts need to generate a combination of scripts for different combinations of attacks.
 ```javascript
 A-0
@@ -68,3 +69,6 @@ Issues
 - There are no standalone -a 0 attacks for .rule files by themselves.
 - There are no -a 3 attacks for mask alone attacks.
 - There are no -a 6 (.txt * mask), and (.dic * mask) attacks.
+
+
+- https://manpages.org/hashcat

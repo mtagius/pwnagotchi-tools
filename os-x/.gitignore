@@ -7,6 +7,9 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+# pacakge-lock
+package-lock.json
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -144,11 +147,12 @@ handshakes/pcap/*
 handshakes/hccapx/*
 handshakes/pmkid/*
 
-# attacks
-generated_attacks.js
+# attacks list
+attacks-list.js
 
-# pacakge
-package-lock.json
+# attack scripts
+./hashcat/attack-scripts/*
+!example.txt
 
 # Wordlists
 known-passwords.txt
