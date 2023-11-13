@@ -3,9 +3,7 @@ module.exports = {
 	HOST_IP: "",
 	USERNAME: "",
 	PASSWORD: "",
-	HANDSHAKE_DIRECTORY: "",
 	PORT: 22,
-	LOCAL_PCAP_DIRECTORY: "",
 	
 	// Define paths for attach lists
 	WORDLISTS: [
