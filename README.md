@@ -173,17 +173,17 @@ const attacks = [
   [
 	"--attack-mode=3",
 	"",
-	"?h?h?h?h?h"
+	"?h?h?h?h?h?h?h?h"
   ],
   [
 	"--attack-mode=6",
 	"./wordlists/known-passwords.txt",
-	"?h?h?h?h?h"
+	"?h?h?h?h?h?h?h?h"
   ],
   [
 	"--attack-mode=6",
 	"./wordlists/known-passwords.dic",
-	"?h?h?h?h?h"
+	"?h?h?h?h?h?h?h?h"
   ]
 ];
 ```
@@ -204,7 +204,7 @@ To generate the necessary scripts to crack the WiFi handshakes run the following
 * `"./handshakes/hccapx/[HC22000_FILE_NAME].hc22000"` - The targetted `.hc22000` file that needs to be cracked.
 * `--rules-file="./hashcat/rules/[RULES_NAME].rule"` - The file that contains the rules for generating password candidates.
 * `-S "./wordlists/[PASSWORDS_LIST_NAME].txt"` - List of passwords.
-* `"?h?h?h?h?h"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
+* `"?h?h?h?h?h?h?h?h"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
 
 ### Attack Command Examples
 #### --attack-mode=0
