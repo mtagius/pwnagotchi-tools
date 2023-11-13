@@ -6,14 +6,14 @@ This repo contains a number of scripts to automate the process of cracking Wi-Fi
 # Dependencies
 * [Brew](https://docs.brew.sh/Installation)
 * [NodeJS](https://nodejs.org/en/download)
+* [hcxpcapngtool](https://github.com/warecrer/Hcxpcaptool)
+* [Hashcat](https://manpages.org/hashcat)
 
 # Installation
 * `git clone https://github.com/ivy00johns/pwnagotchi-tools/`
 * `npm install`
 * `brew install hcxpcaptool`
-	* [hcxpcapngtool](https://github.com/warecrer/Hcxpcaptool)
 * `brew install hashcat`
-	* [Hashcat](https://manpages.org/hashcat)
 
 # Initial Configuration
 1. `cp .config.example .config`
