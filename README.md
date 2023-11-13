@@ -14,6 +14,8 @@
 * Update the generate attack skips to build `.bat` files instead of `.js` files.
 	* `.bat` files need to CD into the hashcat directory. If I can't figure out the pathing issue.
 	* The commands need to have the entire file path in them.
+* Generate the entire absolute file path instead of a relative file path.
+* Write code to generate a password list based on relative information.
 
 # Purpose
 This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.

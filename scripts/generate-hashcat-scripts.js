@@ -14,7 +14,7 @@ function generateHashcatCommands(attacks) {
         const scriptFilePath = path.join(config.HASHCAT_ATTACK_SCRIPTS, `${path.basename(hcCapxFile, path.extname(hcCapxFile))}.txt`);
 
         // Generate blank output and potfile text files
-        generateBlankFiles(outputFilePath, potfilePath);
+        // generateBlankFiles(outputFilePath, potfilePath);
 
         // Create an array to store script lines
         const scriptLines = [];

@@ -7,15 +7,15 @@ module.exports = {
 	
 	// Define paths for attach lists
 	WORDLISTS: [
-		"./wordlists/"
+		"./wordlists"
 	],
 
 	DICTIONARIES: [
-		"./wordlists/"
+		"./wordlists"
 	],
 
 	RULES: [
-		"./hashcat/rules/"
+		"./hashcat/rules"
 	],
 
 	MASKS: [
@@ -23,12 +23,13 @@ module.exports = {
 	],
 
 	// Paths
-	HANDSHAKE_DIRECTORY: `/home/${this.USERNAME}/handshakes/`,
-	LOCAL_PCAP_DIRECTORY: "./handshakes/pcap/",
-	LOCAL_PMKID_DIRECTORY: "./handshakes/pmkid/",
-	LOCAL_HCCAPX_DIRECTORY: "./handshakes/hccapx/",
-	LOCAL_POTFILES_DIRECTORY: "./hashcat/potfiles/",
-	LOCAL_OUTPUT_FILE_DIRECTORY: "./hashcat/outputs/",
+	HANDSHAKE_DIRECTORY: `~/handshakes`,
+	PWNAGOTCHI_HANDSHAKES: `/home/pi/handshakes`,
+	LOCAL_PCAP_DIRECTORY: "./handshakes/pcap",
+	LOCAL_PMKID_DIRECTORY: "./handshakes/pmkid",
+	LOCAL_HCCAPX_DIRECTORY: "./handshakes/hccapx",
+	LOCAL_POTFILES_DIRECTORY: "./hashcat/potfiles",
+	LOCAL_OUTPUT_FILE_DIRECTORY: "./hashcat/outputs",
 
 	// Hashcat script constants
 	HASH_TYPE: 22000,

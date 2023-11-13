@@ -7,9 +7,7 @@
 		"get": "node ./pwnagetty/pwnagetty-get-pcaps.js",
 		"generate": "node ./pwnagetty/pwnagetty-generate.js",
 		"attacks": "node ./scripts/generate-attacks-list.js",
-		"scripts": "node ./scripts/generate-hashcat-scripts.js",
-		"clean-up-handshakes": "rm -rf ./handshakes/hccapx ./handshakes/pmkid",
-		"clean-up-hashcat-logs": "rm -rf ./hashcat/outputs ./hashcat/potfiles"
+		"scripts": "node ./scripts/generate-hashcat-scripts.js"
 	},
 	"repository": {
 		"type": "git",
