@@ -5,6 +5,13 @@
 
 **Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
 
+# TO-DO - For Windows
+* Add logic to get the handshakes from a `Pwnagotchi`.
+* Include the Vagrant files.
+	* Add a note about `--provision`.
+* Include the original `.\handshakes\pwnagetty\pwnagetty.py` file.
+* Update the generate attack skips to build .bat files instead of .js files.
+
 # Purpose
 This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
 
