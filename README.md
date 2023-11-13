@@ -22,6 +22,7 @@ In order to create it I started by refactoring different repos that are no longe
 		* [Standalone Wordlists](#standalone-wordlists)
 		* [Standalone Dictionaries](#standalone-dictionaries)
 		* [Misc Wordlists](#misc-wordlists)
+	* [Rules](#rules)
 * [Scripts](#scripts)
 	* [Copy the .PCAP files to your machine.](#copy-the-pcap-files-to-your-machine)
 	* [Generate the .HC22000/.PMKID files.](#generate-the-hc22000pmkid-files)
@@ -102,6 +103,23 @@ WORDLISTS: [
 
 ### Misc Wordlists
 * [Original Wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists)
+
+## Rules
+### Included Rules
+* [hob064](https://github.com/praetorian-inc/Hob0Rules)
+* [best64](https://trustedsec.com/blog/better-hacking-through-cracking-know-your-rules)
+* [T0XICv1](https://github.com/samirettali/password-cracking-rules/blob/master/T0XlCv1.rule)
+* [T0XICv2](https://github.com/hashcat/hashcat/blob/master/rules/T0XlCv2.rule)
+* [toggles5](https://github.com/hashcat/hashcat/blob/master/rules/toggles5.rule)
+* [InsidePro-PasswordsPro](https://github.com/hashcat/hashcat/blob/master/rules/InsidePro-PasswordsPro.rule)
+* [rockyou-30000](https://github.com/hashcat/hashcat/blob/master/rules/rockyou-30000.rule)
+* [InsidePro-HashManager](https://github.com/hashcat/hashcat/blob/master/rules/InsidePro-HashManager.rule)
+* [d3ad0ne](https://github.com/hashcat/hashcat/blob/master/rules/d3ad0ne.rule)
+* [dive](https://github.com/hashcat/hashcat/blob/master/rules/dive.rule)
+* [unix-ninja-leetspeak](https://github.com/hashcat/hashcat/blob/master/rules/unix-ninja-leetspeak.rule)
+* [generated2](https://github.com/hashcat/hashcat/blob/master/rules/generated2.rule)
+* [d3adhob0](https://github.com/praetorian-inc/Hob0Rules/blob/master/d3adhob0.rule)
+* [_NSAKEY.v2.dive](https://github.com/NSAKEY/nsa-rules/blob/master/_NSAKEY.v2.dive.rule)
 
 ----
 
@@ -376,6 +394,10 @@ Stopped: Sun Nov 12 20:02:49 2023
 	* Default Pwnagotchi configuration file: [defaults.toml](https://github.com/evilsocket/pwnagotchi/blob/master/pwnagotchi/defaults.toml)
 * [Pwnagotchi setup on Mac OS](https://mattgibson.ca/pwnagotchi-1-6-2-with-waveshare-v3-macos-macbook-host/)
 
-* Wordlists:
+* Wordlists
 	* [Weakpass](https://weakpass.com/wordlist)
 	* https://notsosecure.com/one-rule-to-rule-them-all
+
+* Rules
+	* https://github.com/samirettali/password-cracking-rules
+	* [KoreLogic's](https://contest-2010.korelogic.com/rules-hashcat.html)
