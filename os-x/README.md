@@ -1,51 +1,44 @@
-# os-x-pwnagotchi-tools
-# Install
-* `brew install hcxpcaptool`
-* `npm install`
+# os-x-pwnagotchi-tooling
 
-# Wordlists
+# Purpose
+This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
+
+# Dependencies
+* [Brew](https://docs.brew.sh/Installation)
+* [NodeJS](https://nodejs.org/en/download)
+
+# Installation
+* `git clone https://github.com/ivy00johns/pwnagotchi-tools/`
+* `npm install`
+* `brew install hcxpcaptool`
+	* [hcxpcapngtool](https://github.com/warecrer/Hcxpcaptool)
+* `brew install hashcat`
+	* [Hashcat](https://manpages.org/hashcat)
+
+# Initial Configuration
+1. `cp .config.example .config`
+2. Set the details for your `Pwnagotchi`:
+	* `HOST_IP: ""`
+	* `USERNAME: ""`
+	* `PASSWORD: ""`
+
+# Additional Configuration Steps
+## Wordlists
 - Single wordlist. `nerdlist.txt`
 
-# TO-DO
-I need to generate a set of scripts that can execute "hashcat" commands.
-- Example command: `hashcat --hash-type=22000 --attack-mode=0 --session NONRISPWL_100e7e03b00c_3829 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" --outfile="./hashcat/hashcat-output.txt" "./handshakes/hccapx/NONRISPWL_100e7e03b00c.hc22000" --rules-file="./hashcat/rules/d3ad0ne.rule" -S "./wordlists/known-passwords.txt"`
+# Scripts
+## Move .PCAP files on the Pwnagotchi.
 
-```javascript
-hashcat
-	--hash-type=22000
-	--attack-mode=0
-	--session NONRISPWL_100e7e03b00c_3829
-	--hwmon-temp-abort=100
-		-w 2
-	--potfile-path "./hashcat/hashcat-potfile.txt"
-	"./handshakes/NONRISPWL_100e7e03b00c.pmkid"
-	--outfile="./hashcat/hashcat-output.txt"
-	--rules-file="./hashcat/rules/d3ad0ne.rule"
-		-S "./wordlists/known-passwords.txt"
-```
 
-# Command Breakdown
-`hashcat` - "Hashcat is the world’s fastest CPU-based password recovery tool."
-`--hash-type=22000` - Hash type: `WPA2-PSK`
-`--attack-mode=0` - Attack mode: `Straight`
-`--session "NONRISPWL_100e7e03b00c_3829"` - Specify a name for the cracking session which is useful for keeping track of multiple cracking sessions.
-`--hwmon-temp-abort=100` - Abort temperture: `100 C`
-	`-w 2` - Wait for 2 seconds after reaching the abort temperature before shutting down.
-`--potfile-path="./hashcat/hashcat-potfile.txt"` - The potfile is a file that stores the hashes that have been cracked by hashcat. This allows hashcat to resume cracking a hash from where it left off if the process is interrupted.
-`--outfile="./hashcat/hashcat-output.txt"` - The output of the command should be written to a file instead of being displayed on the terminal
-`--rules-file="./hashcat/rules/d3ad0ne.rule"` - The file that contains the rules for generating password candidates.
-	`-S "./wordlists/known-passwords.txt"` - List of known passwords
-`"./handshakes/NONRISPWL_100e7e03b00c.pmkid"` - The targetted .pmkid file that needs to be cracked.
+## Copy the .PCAP files to your machine.
 
-## --attack-mode=0 sample
-`hashcat --hash-type=22000 --attack-mode=0 --session Arcot_6032b1a6ba8f_2713 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" --outfile="./hashcat/Arcot_6032b1a6ba8f-output.txt" "handshakes/hccapx/Arcot_6032b1a6ba8f.hc22000" --rules-file="./hashcat/rules/names.rule" -S "wordlists/known-passwords.txt"`
 
-## --attack-mode=3 sample
-``
+## Generate the .HC22000/.PMKID files.
 
-- The commands need to reference the config variables in the config.js file. Such as hwmon-temp-abort, list of wordlists, dic, rules, masks.
 
-- The scripts need to generate a combination of scripts for different combinations of attacks.
+## Generate the list of attacks.
+
+
 ```javascript
 A-0
 TEXT, RULES
@@ -60,8 +53,6 @@ TEXT, REGEX
 DICT, REGEX
 ```
 
-- The config variables can point to specific files, or directories. The logic needs to loop through them to generate the necessary attack combinations.
-- It should geenrate an array of attacks in seperate standalone file in an array for the attacks for easy review. Example:
 ```javascript
 const attacks = [
   [
@@ -96,23 +87,30 @@ const attacks = [
 ];
 ```
 
-The attach # should be auto determined depend on the combination of file combo. 
-Type -a 0 is for .txt * .rule, .dic *  .rule, and .rules by themselves.
-Type -a 3 is for masks by themselves.
-Type -a 6 is for .txt * mask, and .dic * mask.
+## Generate the attack scripts.
+### Command Breakdown
+* `hashcat` - "Hashcat is the world’s fastest CPU-based password recovery tool."
+* `--hash-type=22000` - Hash type: `WPA2-PSK`
+* `--attack-mode=0` - Attack mode: `Straight`
+* `--session "[HC22000_FILE_PATH]_[RANDOM-NUMBER]"` - Specify a name for the cracking session which is useful for keeping track of multiple cracking sessions.
+* `--hwmon-temp-abort=100` - Abort temperture: `100 C`
+	* `-w 2` - Wait for 2 seconds after reaching the abort temperature before shutting down.
+* `--potfile-path="./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt"` - The potfile is a file that stores the hashes that have been cracked by hashcat. This allows hashcat to resume cracking a hash from where it left off if the process is interrupted
+* `--outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-output.txt"` - The output of the command should be written to a file instead of being displayed on the terminal.
+* `"./handshakes/hccapx/[HC22000_FILE_NAME].hc22000"` - The targetted `.hc22000` file that needs to be cracked.
+* `--rules-file="./hashcat/rules/[RULES_NAME].rule"` - The file that contains the rules for generating password candidates.
+* `-S "./wordlists/[PASSWORDS_LIST_NAME].txt"` - List of passwords.
+* `"MYWIFI?d?d?d?d"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
 
-Issues
-- All (.txt * .rule), (.dic * .rule) attacks are listed as -a 0.
-- There are no standalone -a 0 attacks for .rule files by themselves.
-- There are no -a 3 attacks for mask alone attacks.
-- There are no -a 6 (.txt * mask), and (.dic * mask) attacks.
+### Attack Command Examples
+#### --attack-mode=0
+`hashcat --hash-type=22000 --attack-mode=0 --session [HC22000_FILE_NAME]_[RANDOM-NUMBER] --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt" --outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-outfile.txt" "handshakes/hccapx/[HC22000_FILE_NAME].hc22000" --rules-file="./hashcat/rules/[RULES_NAME].rule" -S "wordlists/[PASSWORDS_LIST_NAME].txt"`
 
+#### --attack-mode=3
+`hashcat --hash-type=22000 --attack-mode=3 --session [HC22000_FILE_NAME]_[RANDOM-NUMBER] --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt" --outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-outfile.txt" "handshakes/hccapx/[HC22000_FILE_NAME].hc22000" "[MASK]"`
 
-- https://manpages.org/hashcat
+#### --attack-mode=6
+`hashcat --hash-type=22000 --attack-mode=6 --session [HC22000_FILE_NAME]_[RANDOM-NUMBER]--hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt" --outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-outfile.txt" "handshakes/hccapx/[HC22000_FILE_NAME].hc22000" "wordlists/[PASSWORDS_LIST_NAME].txt" "[MASK]"`
 
+## Execute the handshake attacks.
 
-hashcat --hash-type=22000 --attack-mode=0 --session Pizzaislife_a0648f5681d7_6091 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" --outfile="./hashcat/Pizzaislife_a0648f5681d7-output.txt" "handshakes/hccapx/Pizzaislife_a0648f5681d7.hc22000" --rules-file="./hashcat/rules/names.rule" -S "wordlists/known-passwords.txt"
-
-hashcat --hash-type=22000 --attack-mode=0 --session Pizzaislife_a0648f5681d7_6091 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" --outfile="./hashcat/Pizzaislife_a0648f5681d7-output.txt" "handshakes/hccapx/Pizzaislife_a0648f5681d7.hc22000" --rules-file="./hashcat/rules/names.rule" -S "wordlists/known-passwords.txt"
-
-hashcat --hash-type=22000 --attack-mode=0 --session BadaiHo_100c6bf75d1b_1066 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" --outfile="./hashcat/BadaiHo_100c6bf75d1b-output.txt" "handshakes/hccapx/BadaiHo_100c6bf75d1b.hc22000" --rules-file="./hashcat/rules/names.rule" -S "wordlists/known-passwords.txt"

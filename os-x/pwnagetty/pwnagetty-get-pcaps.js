@@ -5,7 +5,7 @@ const commander = require("commander");
 const sftpClient = require("ssh2-sftp-client");
 
 const {
-	HOST_IP,
+	HOST_ADDRESS,
 	USERNAME,
 	PASSWORD,
 	HANDSHAKE_DIRECTORY,
@@ -34,7 +34,7 @@ logo = () => {
 }
 
 const config = {
-	host: HOST_IP,
+	host: HOST_ADDRESS,
 	username: USERNAME,
 	password: PASSWORD,
 	handshakeDir: HANDSHAKE_DIRECTORY,

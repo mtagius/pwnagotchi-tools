@@ -1,6 +1,6 @@
 module.exports = {
 	// Pwnagotchi
-	HOST_IP: "",
+	HOST_ADDRESS: "",
 	USERNAME: "",
 	PASSWORD: "",
 	PORT: 22,
@@ -36,8 +36,6 @@ module.exports = {
 	ABORT_WAIT_TIME: 2,
 
 	// Hashcat file paths
-	HASHCAT_POTFILE_PATH: "./hashcat/hashcat-potfile.txt",
-	HASHCAT_OUTPUT_PATH: "./hashcat/cracked-networkds/hashcat-output.txt",
 	HASHCAT_ATTACK_LISTS: "./hashcat/attack-lists/attacks-list.js",
 	HASHCAT_ATTACK_SCRIPTS: "./hashcat/attack-scripts"
 };
