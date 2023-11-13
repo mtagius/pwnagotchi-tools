@@ -9,15 +9,15 @@ module.exports = {
 	
 	// Define paths for attach lists
 	WORDLISTS: [
-		"known-wpa-passwords.txt"
+		"./wordlists"
 	],
 
 	DICTIONARIES: [
-		"known-wpa-passwords.dic"
+		"./wordlists"
 	],
 
 	RULES: [
-		"hashcat/rules/wifi.rule"
+		"./hashcat/rules"
 	],
 
 	MASKS: [
@@ -25,15 +25,21 @@ module.exports = {
 	],
 
 	// Paths
-	WORDLIST_PATH: "./wordlists",
+	HANDSHAKE_DIRECTORY: `/home/${this.USERNAME}/handshakes`,
+	LOCAL_PCAP_DIRECTORY: "./handshakes/pcap",
+	LOCAL_PMKID_DIRECTORY: "./handshakes/pmkid",
+	LOCAL_HCCAPX_DIRECTORY: "./handshakes/hccapx",
+	LOCAL_POTFILES_DIRECTORY: "./hashcat/potfiles",
+	LOCAL_OUTPUT_FILE_DIRECTORY: "./hashcat/outputs",
 
 	// Hashcat script constants
-	HASHCAT_SCRIPT_VERSION: "v1",
-	TEMP_ABORT: "--hwmon-temp-abort=100",
-	WORKLOAD_PROFILE: "-w 2",
+	HASH_TYPE: 22000,
+	ABORT_TEMPERATURE: 100,
+	ABORT_WAIT_TIME: 2,
 
 	// Hashcat file paths
 	HASHCAT_POTFILE_PATH: "./hashcat/hashcat-potfile.txt",
-	HASHCAT_OUTPUT_PATH: "./hashcat/hashcat-output.txt",
-	RULE_PATH: "./hashcat/rules"
+	HASHCAT_OUTPUT_PATH: "./hashcat/cracked-networkds/hashcat-output.txt",
+	HASHCAT_ATTACK_LISTS: "./hashcat/attack-lists/attacks-list.js",
+	HASHCAT_ATTACK_SCRIPTS: "./hashcat/attack-scripts"
 };

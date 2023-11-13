@@ -9,8 +9,12 @@ function generateHashcatCommands(attacks) {
     for (const hcCapxFile of hcCapxFiles) {
         const hcCapxFilePath = path.join(config.LOCAL_HCCAPX_DIRECTORY, hcCapxFile);
         const sessionName = `${path.basename(hcCapxFile, path.extname(hcCapxFile))}_${getRandomInt()}`;
-        const outputFilePath = `./hashcat/${path.basename(hcCapxFile, path.extname(hcCapxFile))}-output.txt`;
+        const outputFilePath = `${config.LOCAL_OUTPUT_FILE_DIRECTORY}/${path.basename(hcCapxFile, path.extname(hcCapxFile))}-output.txt`;
+        const potfilePath = `${config.LOCAL_POTFILES_DIRECTORY}/${path.basename(hcCapxFile, path.extname(hcCapxFile))}-potfile.txt`;
         const scriptFilePath = path.join(config.HASHCAT_ATTACK_SCRIPTS, `${path.basename(hcCapxFile, path.extname(hcCapxFile))}.txt`);
+
+        // Generate blank output and potfile text files
+        generateBlankFiles(outputFilePath, potfilePath);
 
         // Create an array to store script lines
         const scriptLines = [];
@@ -65,6 +69,12 @@ function generateType6Command(attack, sessionName, outputFilePath, hcCapxFilePat
 // Function to generate a random 4-digit integer
 function getRandomInt() {
     return Math.floor(1000 + Math.random() * 9000);
+}
+
+// Function to generate blank output and potfile text files
+function generateBlankFiles(outputFilePath, potfilePath) {
+    fs.writeFileSync(outputFilePath, "", "utf8");
+    fs.writeFileSync(potfilePath, "", "utf8");
 }
 
 generateHashcatCommands(attacks);

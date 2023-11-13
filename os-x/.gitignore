@@ -147,6 +147,10 @@ handshakes/pcap/*
 handshakes/hccapx/*
 handshakes/pmkid/*
 
+# Logs
+hashcat/outputs/*
+hashcat/potfiles/*
+
 # attacks list
 attacks-list.js
 

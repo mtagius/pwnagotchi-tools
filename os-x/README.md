@@ -3,6 +3,9 @@
 * `brew install hcxpcaptool`
 * `npm install`
 
+# Wordlists
+- Single wordlist. `nerdlist.txt`
+
 # TO-DO
 I need to generate a set of scripts that can execute "hashcat" commands.
 - Example command: `hashcat --hash-type=22000 --attack-mode=0 --session NONRISPWL_100e7e03b00c_3829 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" --outfile="./hashcat/hashcat-output.txt" "./handshakes/hccapx/NONRISPWL_100e7e03b00c.hc22000" --rules-file="./hashcat/rules/d3ad0ne.rule" -S "./wordlists/known-passwords.txt"`
