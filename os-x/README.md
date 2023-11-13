@@ -3,6 +3,30 @@
 # Purpose
 This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
 
+# Table Of Contents
+* [Dependencies](#dependencies)
+* [Installation](#installation)
+* [Initial Configuration](#initial-configuration)
+* [Additional Configuration Steps](#additional-configuration-steps)
+	* [Wordlists](#wordlists)
+* [Scripts](#scripts)
+	* [Copy the .PCAP files to your machine.](#copy-the-pcap-files-to-your-machine)
+	* [Generate the .HC22000/.PMKID files.](#generate-the-hc22000pmkid-files)
+	* [Generate the list of attacks.](#generate-the-list-of-attacks)
+		* [Combinations](#combinations)
+		* [Output Example](#output-example)
+	* [Generate the attack scripts.](#generate-the-attack-scripts)
+		* [Command Breakdown](#command-breakdown)
+		* [Attack Command Examples](#attack-command-examples)
+			* [--attack-mode=0](#attack-mode0)
+			* [--attack-mode=3](#attack-mode3)
+			* [--attack-mode=6](#attack-mode6)
+	* [Execute the handshake attacks.](#execute-the-handshake-attacks)
+		* [Example Terminal Output](#example-terminal-output)
+* [Clean-Up](#clean-up)]
+* [Troubleshooting](#troubleshooting)
+	* [Issue #1](#issue-1)
+
 # Dependencies
 * [Brew](https://docs.brew.sh/Installation)
 * [NodeJS](https://nodejs.org/en/download)
@@ -57,7 +81,7 @@ mask
 .dic X mask
 ```
 
-### Example Output
+### Output Example
 ```javascript
 const attacks = [
   [
@@ -246,6 +270,8 @@ Stopped: Sun Nov 12 20:02:49 2023
 ----
 
 # Troubleshooting
+
+## Issue #1
 1. If you get the error, `Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h`, do the following.
 * *TERMINAL OUTPUT*
 	```bash
