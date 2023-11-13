@@ -31,7 +31,8 @@ Vagrant.configure("2") do |config|
 	# the path on the host to the actual folder. The second argument is
 	# the path on the guest to mount the folder. And the optional third
 	# argument is a set of non-required options.
-	config.vm.synced_folder "../handshakes", "/handshakes"
+	config.vm.synced_folder "../../handshakes", "/handshakes"
+	config.vm.synced_folder "../../windows", "/pwnagetty" 
   
 	config.vm.boot_timeout = 600
   
@@ -45,7 +46,7 @@ Vagrant.configure("2") do |config|
 	curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 	apt-get -y install nodejs
 
-	cd /handshakes/windows
+	cd /pwnagetty
 	npm install
 	node pwnagetty-windows.js
 	SHELL
