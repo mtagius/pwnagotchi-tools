@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const fs = require('fs');
-const { exec } = require('child_process');
+const fs = require("fs");
+const { exec } = require("child_process");
 
 //====================================
 // Configuration 
@@ -39,7 +39,7 @@ readBSSIDsFile = () => {
     return new Promise((resolve, reject) => {
         fs.readFile("bssids.json", function (err, data) {
             if (err) {
-                reject('Unable to read bssids.json file: ' + err)
+                reject("Unable to read bssids.json file: " + err)
                 return
             };
             let json = JSON.parse(data)
@@ -56,7 +56,7 @@ readDir = () => {
         fs.readdir(config.localDir, function (err, files) {
             //handling error
             if (err) {
-                reject('Unable to scan directory: ' + err);
+                reject("Unable to scan directory: " + err);
             }
             resolve(files)
         });
@@ -74,11 +74,11 @@ function grabBSSID(file) {
             }
         });
 
-        aircrack.stdout.on('data', (data) => {
-            if (data.indexOf('Choosing first network as target') > -1 || data.indexOf('Index number of target network ?') > -1) {
+        aircrack.stdout.on("data", (data) => {
+            if (data.indexOf("Choosing first network as target") > -1 || data.indexOf("Index number of target network ?") > -1) {
                 if (data.match(/\b([0-9A-F]{2}[:-]){5}([0-9A-F]){2}\b/gmi)) {
                     let mac = data.match(/\b([0-9A-F]{2}[:-]){5}([0-9A-F]){2}\b/gmi);
-                    aircrack.kill('SIGTERM')
+                    aircrack.kill("SIGTERM")
                     resolve(mac[0])
 
                 } else {
@@ -95,8 +95,8 @@ function grabBSSID(file) {
 //=======================================
 function convertFile(file) {
     return new Promise((resolve, reject) => {
-        // We favour PMKID's, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
-        let convertPMKIDs = exec(`hcxpcaptool -z ../pmkid/${file.replace('.pcap', '')}.pmkid ${config.localDir + file}`, function (error, stdout) {
+        // We favour PMKID"s, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
+        let convertPMKIDs = exec(`hcxpcaptool -z ../pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
             if (error) { reject(error) };
 
             if (stdout.includes("PMKID(s) written")) {
@@ -104,7 +104,7 @@ function convertFile(file) {
                 successfulPMKIDs++;
                 resolve("pmkid")
             } else {
-                let convertHCCAPX = exec(`hcxpcapngtool -o ../hccapx/${file.replace('.pcap', '')}.hc22000 ${config.localDir + file}`, function (error, stdout) {
+                let convertHCCAPX = exec(`hcxpcapngtool -o ../hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
                     if (error) {
                         reject(error);
                         console.log(error);
@@ -133,19 +133,19 @@ async function main() {
 
         let files = await readDir();
 
-        // if '/pmkid' doesn't exist, create it.
-        if (!fs.existsSync('../pmkid')) {
-            fs.mkdirSync('../pmkid');
+        // if "/pmkid" doesn"t exist, create it.
+        if (!fs.existsSync("../../handshakes/pmkid")) {
+            fs.mkdirSync("../../handshakes/pmkid");
         }
-        // if '/hccapx' doesn't exist, create it.
-        if (!fs.existsSync('../hccapx')) {
-            fs.mkdirSync('../hccapx');
+        // if "/hccapx" doesn"t exist, create it.
+        if (!fs.existsSync("../../handshakes/hccapx")) {
+            fs.mkdirSync("../../handshakes/hccapx");
         }
 
         // Loop over all pcap files
         for (let file of files) {
             // get ssid from filename
-            let pos = file.lastIndexOf('_');
+            let pos = file.lastIndexOf("_");
             var ssid = file.substring(0, pos);
 
             console.log(`\nProcessing: ${ssid}`);
@@ -165,9 +165,9 @@ async function main() {
                     console.log(result);
                 }
             } else {
-                if (bssids[file]['type'] == "pmkid") {
+                if (bssids[file]["type"] == "pmkid") {
                     successfulPMKIDs++;
-                } else if (bssids[file]['type'] == "hccapx") {
+                } else if (bssids[file]["type"] == "hccapx") {
                     successfulHCCAPXs++;
                 }
                 console.log(`${ssid} has already been converted.\n`);
@@ -175,16 +175,16 @@ async function main() {
         };
 
         fs.writeFileSync("bssids.json", JSON.stringify(bssids), () => {
-            console.log("Saved bssids.json... \n\n")
+            console.log("Saved bssids.json...\n\n")
         })
 
         let numFilesWithNoKeyMaterial = files.length - (successfulHCCAPXs + successfulPMKIDs);
         let percentFilesWithNoKeyMaterial = Math.round(((numFilesWithNoKeyMaterial * 100) / files.length) * 100) / 100;
 
-        console.log(`\n${files.length} total PCAP files found`);
-        console.log(`${successfulPMKIDs} successful PMKIDs found`);
-        console.log(`${successfulHCCAPXs} successful HCCAPXs found\n`);
-        console.log(`${numFilesWithNoKeyMaterial} files (${percentFilesWithNoKeyMaterial}%) did not have key material\n\n`);
+        console.log(`\n${files.length} total PCAP files found.`);
+        console.log(`${successfulPMKIDs} successful PMKIDs found.`);
+        console.log(`${successfulHCCAPXs} successful HCCAPXs found.\n`);
+        console.log(`${numFilesWithNoKeyMaterial} files (${percentFilesWithNoKeyMaterial}%) did not have key material.\n\n`);
 
         process.exit(0);
     } catch (err) {
