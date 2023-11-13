@@ -1,5 +1,10 @@
 # os-x-pwnagotchi-tooling
 
+# DISCLAIMER
+**This project is for WiFi security education ONLY!**
+
+**Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
+
 # Purpose
 This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
 
@@ -9,6 +14,10 @@ This repo contains a number of scripts to automate the process of cracking Wi-Fi
 * [Initial Configuration](#initial-configuration)
 * [Additional Configuration Steps](#additional-configuration-steps)
 	* [Wordlists](#wordlists)
+		* [Personal Wordlist](#personal-wordlist)
+		* [Standalone Wordlists](#standalone-wordlists)
+		* [Standalone Dictionaries](#standalone-dictionaries)
+		* [Misc Wordlists](#misc-wordlists)
 * [Scripts](#scripts)
 	* [Copy the .PCAP files to your machine.](#copy-the-pcap-files-to-your-machine)
 	* [Generate the .HC22000/.PMKID files.](#generate-the-hc22000pmkid-files)
@@ -48,7 +57,46 @@ This repo contains a number of scripts to automate the process of cracking Wi-Fi
 
 # Additional Configuration Steps
 ## Wordlists
-- Single wordlist. `nerdlist.txt`
+By default this repo contains a single example wordlist. You will want to download additional ones to work with. You can place them in the provided `./wordlists` directory, or you can reference the directory directly in the `.config.js` file.
+```javascript
+...
+WORDLISTS: [
+	"./wordlists",
+	"[PATH_TO_WORDLIST]"
+],
+...
+```
+
+### Personal Wordlist
+* You can add your own known passwords by cloning the example file and editing it.
+	1. `cp ./known-passwords.example.txt ./wordlists/known-passwords.txt`
+
+### Standalone Wordlists
+* [netgear-spectrum.txt](https://raw.githubusercontent.com/soxrok2212/PSKracker/master/dicts/netgear-spectrum/netgear-spectrum.txt)
+	* Part of the much larger colleciton [PSKracker](https://github.com/soxrok2212/PSKracker) by [soxrok2212](https://github.com/soxrok2212/).
+
+* [openwall.net-all.txt](https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/openwall.net-all.txt)
+	* Part of the [DanielMiessler's SecLists](https://github.com/danielmiessler/SecLists/) larger collection of [passwords](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
+
+* [shortKrak.txt](https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/wordlists/shortKrak.txt)
+	* Part of the [praetorian-inc/Hob0Rules](https://github.com/praetorian-inc/Hob0Rules/) collection of [wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists).
+
+* [nerdlist.txt](https://raw.githubusercontent.com/TheNerdlist/nerdlist/main/nerdlist.txt)
+
+* [English Words](https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt)
+
+### Standalone Dictionaries
+* [Outpost9 Dictionary](https://www.outpost9.com/files/wordlists/)
+	* [Names](https://www.outpost9.com/files/wordlists/names.zip)
+
+### Massive Wordlists
+* [Weakpass Wordlists](https://weakpass.com/wordlist/)
+	* [Custom-WPA](https://weakpass.com/wordlist/490)
+	* [Super-WPA](https://weakpass.com/wordlist/500)
+	* [hashesorg2019](https://weakpass.com/wordlist/1851)
+
+### Misc Wordlists
+* [Original Wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists)
 
 ----
 

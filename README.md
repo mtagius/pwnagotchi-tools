@@ -16,3 +16,4 @@ My goal is to create an updated version of the Windows setup and setup a new Nod
 
 * Wordlists:
 	* [Weakpass](https://weakpass.com/wordlist)
+	* https://notsosecure.com/one-rule-to-rule-them-all
