@@ -26,9 +26,11 @@ This repo contains a number of scripts to automate the process of cracking Wi-Fi
 ## Wordlists
 - Single wordlist. `nerdlist.txt`
 
+----
+
 # Scripts
 ## Copy the .PCAP files to your machine.
-To copy the `.pcap` files from your `Pwnagotchi` run the following script. It will copy the files from the `/root/handshakes` directory to one that you can access from your machine, `/usr/[USERNAME]/handshakes`.
+To copy the `.pcap` files from your `Pwnagotchi` run the following script. It will copy the files from the `/root/handshakes` directory on the `Pwnagotchi` to one that you can access from your machine, `/usr/[USERNAME]/handshakes`. Then it will copy the `/usr/[USERNAME]/handshakes` directory to your machine.
 * `npm run get`
 
 ## Generate the .HC22000/.PMKID files.
@@ -92,6 +94,9 @@ const attacks = [
 ```
 
 ## Generate the attack scripts.
+To generate the necessary scripts to crack the WiFi handshakes run the following script.
+* `npm run scripts`
+
 ### Command Breakdown
 * `hashcat` - "Hashcat is the world’s fastest CPU-based password recovery tool."
 * `--hash-type=22000` - Hash type: `WPA2-PSK`
@@ -123,4 +128,122 @@ hashcat --hash-type=22000 --attack-mode=6 --session [HC22000_FILE_NAME]_[RANDOM-
 ```
 
 ## Execute the handshake attacks.
+
+
+### Example Terminal Output
+```bash
+hashcat (v6.2.6) starting
+
+* Device #2: Apple's OpenCL drivers (GPU) are known to be unreliable.
+             You have been warned.
+
+METAL API (Metal 341.16)
+========================
+* Device #1: Apple M1, 5408/10922 MB, 8MCU
+
+OpenCL API (OpenCL 1.2 (Aug  5 2023 05:54:47)) - Platform #1 [Apple]
+====================================================================
+* Device #2: Apple M1, skipped
+
+Minimum password length supported by kernel: 8
+Maximum password length supported by kernel: 63
+
+Hashes: 36 digests; 12 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+
+Optimizers applied:
+* Zero-Byte
+* Single-Salt
+* Slow-Hash-SIMD-LOOP
+
+Watchdog: Temperature abort trigger set to 100c
+
+Host memory required for this attack: 281 MB
+
+Dictionary cache hit:
+* Filename..: wordlists/known-passwords.txt
+* Passwords.: 2
+* Bytes.....: 17
+* Keyspace..: 20000
+
+The wordlist or mask that you are using is too small.
+This means that hashcat cannot use the full parallel power of your device(s).
+Unless you supply more work, your cracking speed will drop.
+For tips on supplying more work, see: https://hashcat.net/faq/morework
+
+Approaching final keyspace - workload adjusted.           
+
+Cracking performance lower than expected?                 
+
+* Append -w 3 to the commandline.
+  This can cause your screen to lag.
+
+* Update your backend API runtime / driver the right way:
+  https://hashcat.net/faq/wrongdriver
+
+* Create more work items to make use of your parallelization power:
+  https://hashcat.net/faq/morework
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit => q
+
+Session..........: EXAMPLE_a0648f5681d7_6215          
+Status...........: Quit
+Hash.Mode........: 22000 (WPA-PBKDF2-PMKID+EAPOL)
+Hash.Target......: handshakes/hccapx/EXAMPLE_a0648f5681d7.hc22000
+Time.Started.....: Sun Nov 12 20:02:04 2023 (44 secs)
+Time.Estimated...: Sun Nov 12 21:02:18 2023 (59 mins, 30 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (wordlists/known-passwords.txt), Left Side
+Guess.Mod........: Mask (MYWIFI?d?d?d?d) [10], Right Side
+Guess.Queue.Base.: 1/1 (100.00%)
+Guess.Queue.Mod..: 1/1 (100.00%)
+Speed.#1.........:        6 H/s (0.27ms) @ Accel:1024 Loops:8 Thr:32 Vec:1
+Recovered........: 0/12 (0.00%) Digests (total), 0/12 (0.00%) Digests (new)
+Progress.........: 244/20000 (1.22%)
+Rejected.........: 0/244 (0.00%)
+Restore.Point....: 0/2 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:122-123 Iteration:0-12
+Candidate.Engine.: Device Generator
+Candidates.#1....: passwordMYWIFI0777 -> passwordMYWIFI0777
+Hardware.Mon.#1..: Util: 95%
+
+
+
+Session..........: Pizzaislife_a0648f5681d7_6215
+Status...........: Quit
+Hash.Mode........: 22000 (WPA-PBKDF2-PMKID+EAPOL)
+Hash.Target......: handshakes/hccapx/EXAMPLE_a0648f5681d7.hc22000
+Time.Started.....: Sun Nov 12 20:02:04 2023 (44 secs)
+Time.Estimated...: Sun Nov 12 21:02:18 2023 (59 mins, 30 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (wordlists/known-passwords.txt), Left Side
+Guess.Mod........: Mask (MYWIFI?d?d?d?d) [10], Right Side
+Guess.Queue.Base.: 1/1 (100.00%)
+Guess.Queue.Mod..: 1/1 (100.00%)
+Speed.#1.........:        6 H/s (0.27ms) @ Accel:1024 Loops:8 Thr:32 Vec:1
+Recovered........: 0/12 (0.00%) Digests (total), 0/12 (0.00%) Digests (new)
+Progress.........: 244/20000 (1.22%)
+Rejected.........: 0/244 (0.00%)
+Restore.Point....: 0/2 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:122-123 Iteration:0-12
+Candidate.Engine.: Device Generator
+Candidates.#1....: passwordMYWIFI0777 -> passwordMYWIFI0777
+Hardware.Mon.#1..: Util: 95%
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit => Started: Sun Nov 12 20:01:49 2023
+Stopped: Sun Nov 12 20:02:49 2023
+```
+
+---
+
+# Clean-Up
+* If you want to delete the generated `.hc22000`/`.pmkid` files, run the following script.
+	* `npm run clean-up-handshakes`
+
+* If you want to delete the generated `[HC22000_FILE_NAME]-output.txt`/`[HC22000_FILE_NAME]-potfile.txt` files, run the following script.
+	* `npm run clean-up-hashcat-logs`
+
+----
+
+# Troubleshooting
 
