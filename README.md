@@ -6,11 +6,14 @@
 **Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
 
 # TO-DO - For Windows
+* Add instructions for installing `hashcat` and including it in the file path.
 * Add logic to get the handshakes from a `Pwnagotchi`.
 * Include the Vagrant files.
 	* Add a note about `--provision`.
 * Include the original `.\handshakes\pwnagetty\pwnagetty.py` file.
-* Update the generate attack skips to build .bat files instead of .js files.
+* Update the generate attack skips to build `.bat` files instead of `.js` files.
+	* `.bat` files need to CD into the hashcat directory. If I can't figure out the pathing issue.
+	* The commands need to have the entire file path in them.
 
 # Purpose
 This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
@@ -392,6 +395,26 @@ Stopped: Sun Nov 12 20:02:49 2023
 
 * *SOLUTION*
 	* TBA
+
+## Issue #2 - WINDOWS
+1. If you see the following error,`./OpenCL/: No such file or directory`, do the following.
+* *TERMINAL OUTPUT*
+```bash
+PS C:\Users\John\pwnagotchi-tools> hashcat --hash-type=22000 --attack-mode=0 --session Pizzaislife_a0648f5681d7_6450 --hwmon-temp-abort=100 -w 2 --potfile-path="./hashcat/pa0648f5681d7_6450-potfile.txt" --outfile="./hashcat/outputs/Pizzaislife_a0648f5681d7_6450-outfile.txt" "./handshakes/hccapx/Pizzaislife_a0648f5681d7.hc22000" --rules-file=".rule" -S "./wordlists/shortKrak.txt"
+>>
+hashcat (v6.2.6) starting
+
+./OpenCL/: No such file or directory
+
+Started: Mon Nov 13 02:02:16 2023
+Stopped: Mon Nov 13 02:02:16 2023
+```
+
+* *ERROR*
+	* `./OpenCL/: No such file or directory`
+
+* *SOLUTION*
+	* Ensure that `hashcat` is included in your `PATH`.
 
 ----
 
