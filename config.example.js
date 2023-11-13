@@ -36,6 +36,6 @@ module.exports = {
 	ABORT_WAIT_TIME: 2,
 
 	// Hashcat file paths
-	HASHCAT_ATTACK_LISTS: "./hashcat/attack-lists/attacks-list.js",
+	HASHCAT_ATTACK_LISTS: "./hashcat/attacks-list/attacks-list.js",
 	HASHCAT_ATTACK_SCRIPTS: "./hashcat/attack-scripts"
 };
