@@ -91,36 +91,43 @@ function grabBSSID(file) {
 }
 
 function convertFile(file) {
-    return new Promise((resolve, reject) => {
-        // We favour PMKID's, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
-        let convertPMKIDs = exec(`hcxpcapngtool -o ./handshakes/pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
-            if (error) {
-                reject(error); // Reject the promise on error
-            }
+	return new Promise((resolve, reject) => {
+		// Exclude ".gitkeep" files
+		if (file === ".gitkeep") {
+			console.log(`Skipping ${file}.`);
+			resolve("Skipped");
+			return;
+		}
 
-            if (stdout.includes("PMKID(s) written")) {
-                console.log(`Found PMKID in ${file}.`);
-                successfulPMKIDs++;
-                resolve("pmkid");
-            } else {
-                // If PMKID is not found, try converting to HCCAPX
-                let convertHCCAPX = exec(`hcxpcapngtool -o ./handshakes/hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
-                    if (error) {
-                        reject(error); // Reject the promise on error
-                        console.log(error);
-                    }
+		// We favour PMKID's, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
+		let convertPMKIDs = exec(`hcxpcapngtool -o ./handshakes/pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
+			if (error) {
+				reject(error); // Reject the promise on error
+			}
 
-                    if (stdout.includes("Handshake(s) written.")) {
-                        console.log(`Found HCCAPX in ${file}`);
-                        successfulHCCAPXs++;
-                        resolve("hccapx");
-                    } else {
-                        resolve("No PMKID or HCCAPX found.");
-                    }
-                });
-            }
-        });
-    });
+			if (stdout.includes("PMKID(s) written")) {
+				console.log(`Found PMKID in ${file}.`);
+				successfulPMKIDs++;
+				resolve("pmkid");
+			} else {
+				// If PMKID is not found, try converting to HCCAPX
+				let convertHCCAPX = exec(`hcxpcapngtool -o ./handshakes/hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
+					if (error) {
+						reject(error); // Reject the promise on error
+						console.log(error);
+					}
+
+					if (stdout.includes("Handshake(s) written.")) {
+						console.log(`Found HCCAPX in ${file}`);
+						successfulHCCAPXs++;
+						resolve("hccapx");
+					} else {
+						resolve("No PMKID or HCCAPX found.");
+					}
+				});
+			}
+		});
+	});
 }
 
 //===============
