@@ -1,227 +1,403 @@
-# Pwnagotchi Tools
+# os-x-pwnagotchi-tooling
 
-A series of scripts that automate password cracking wifi handshakes collected from a [pwnagotchi.](https://pwnagotchi.ai/)
+# DISCLAIMER
+**This project is for WiFi security education ONLY!**
 
-<img src="images/pwnagotchi.gif" width="500">
+**Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
 
-## Table of Contents
-* [What can this project do?](#What-can-this-project-do?)
-* [Usage](#Usage)
-* [Installation](#Installation)
-* [Password cracking techniques](#Password-cracking-techniques)
-* [Some thoughts on wifi cracking and pwnagotchi](#Some-thoughts-on-wifi-cracking-and-pwnagotchi)
-* [Credit](#Credit)
+# Purpose
+This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
 
-## What can this project do?
+In order to create it I started by refactoring different repos that are no longer maintained.
+* [Pwnagotchi-Tools](https://github.com/mtagius/pwnagotchi-tools): [mtagius](https://github.com/mtagius)
+* [Pwnagetty](https://github.com/CyrisXD/Pwnagetty/): [CyrisXD](https://github.com/CyrisXD)
 
-The [pwnagotchi](https://pwnagotchi.ai/) automates the process of capturing 4-way handshakes and other crackable material from wifi networks. This project fills in some of the gaps in the full process of wifi hacking after the pwnagotchi is used. Included here are scripts to:
+# Table Of Contents
+* [Dependencies](#dependencies)
+* [Installation](#installation)
+* [Initial Configuration](#initial-configuration)
+* [Additional Configuration Steps](#additional-configuration-steps)
+	* [Wordlists](#wordlists)
+		* [Personal Wordlist](#personal-wordlist)
+		* [Standalone Wordlists](#standalone-wordlists)
+		* [Standalone Dictionaries](#standalone-dictionaries)
+		* [Misc Wordlists](#misc-wordlists)
+	* [Rules](#rules)
+* [Scripts](#scripts)
+	* [Copy the .PCAP files to your machine.](#copy-the-pcap-files-to-your-machine)
+	* [Generate the .HC22000/.PMKID files.](#generate-the-hc22000pmkid-files)
+	* [Generate the list of attacks.](#generate-the-list-of-attacks)
+		* [Combinations](#combinations)
+		* [Output Example](#output-example)
+	* [Generate the attack scripts.](#generate-the-attack-scripts)
+		* [Command Breakdown](#command-breakdown)
+		* [Attack Command Examples](#attack-command-examples)
+			* [--attack-mode=0](#attack-mode0)
+			* [--attack-mode=3](#attack-mode3)
+			* [--attack-mode=6](#attack-mode6)
+	* [Execute the handshake attacks.](#execute-the-handshake-attacks)
+		* [Example Terminal Output](#example-terminal-output)
+* [Clean-Up](#clean-up)]
+* [Troubleshooting](#troubleshooting)
+	* [Issue #1](#issue-1)
+* [LINKS](#links)
 
-* Copy all pcap files from the pwnagotchi onto your computer
-* Convert those pcap files into pmkid/hccapx files that can be used with hashcat
-* Keep a list of the pmkid/hccapx files and track if they have been cracked or if attempts to crack failed
-* Generate hashcat scripts to run a set of [custom designed attacks](#Password-cracking-techniques) for WPA/WPA2 password cracking
-* Optionally, provision a AWS EC2 P2 instance for running hashcat in the cloud
+# Dependencies
+* [Brew](https://docs.brew.sh/Installation)
+* [NodeJS](https://nodejs.org/en/download)
+* [hcxpcapngtool](https://github.com/warecrer/Hcxpcaptool)
+* [Hashcat](https://manpages.org/hashcat)
 
-In short, these scripts will help you crack WPA/WPA2 passwords in the most automated way possible.
+# Installation
+* `git clone https://github.com/ivy00johns/pwnagotchi-tools/`
+* `npm install`
+* `brew install hcxpcaptool`
+* `brew install hashcat`
 
-#### These tools were custom made to serve my purposes and as a result these scripts are written for Windows and contain dependencies on Python, Vagrant, Virtual Box, and of course, Hashcat. For example, to convert pcap files into pmkid/hccapx files Vagrant creates a headless Debian Linux VM, which is total overkill for someone already running Linux. To run this project on Linux the bat scripts, Vagrant script, and generate-hashcat-scripts.py would need to be converted.
+# Initial Configuration
+1. `cp .config.example .config`
+2. Set the details for your `Pwnagotchi`:
+	* `HOST_IP: ""`
+	* `USERNAME: ""`
+	* `PASSWORD: ""`
 
-#### This project is ONLY to be used for wifi security education in conjunction with a pwnagotchi. Hacking wifi networks you don't own is ILLEGAL and is not endorsed by this project.
+# Additional Configuration Steps
+## Wordlists
+By default this repo contains a single example wordlist. You will want to download additional ones to work with. You can place them in the provided `./wordlists` directory, or you can reference the directory directly in the `.config.js` file.
+```javascript
+...
+WORDLISTS: [
+	"./wordlists",
+	"[PATH_TO_WORDLIST]"
+],
+...
+```
 
-## Usage
+### Personal Wordlist
+* You can add your own known passwords by cloning the example file and editing it.
+	1. `cp ./known-passwords.example.txt ./wordlists/known-passwords.txt`
 
-1. Use your pwnagotchi to collect wifi handshakes.
-1. Plug your pwnagotchi into your computer and place the device in manual mode. You will see the "MANU" icon on the bottom right of its screen.
-1. Run `get-files-from-pwnagotchi.bat`  This will copy the pcap files off of your device and place them in the `handshakes/pcap` folder.
-1. Run `cd vagrant` to change into the vagrant folder. Ensure VirtualBox is running and then, run `vagrant up`. This will create a headless Debian VM that will install and run the tools needed to convert pcap files into crackable pmkid/hccapx files. If this command gets stuck and shows the error `Timed out while waiting for the machine to boot` then ensure VirtualBox is running and the VM was not paused. Run `vagrant destroy -f` and then `vagrant up` to try again.
-1. Once that has finished run `vagrant destroy -f` to delete the VM and run `cd ..` to get back to the root folder.
-1. Run `python generate-hashcat-scripts.py` to generate the bat scripts you will use to run the [custom WPA/WPA2 hashcat attacks](#Password-cracking-techniques) included in this repo.
-1. Run any of the newly created bat scripts found in the `hashcat/scripts` folder. There will be one script for each wifi network the pwnagotchi collected crackable data for. Depending on your graphics card, the full attack could take about a day to run per wifi network.
-1. Run `python print-final-results.py` to see a printed list of all the wifi networks that have been cracked so far with their SSIDs and passwords.
+### Standalone Wordlists
+* [netgear-spectrum.txt](https://raw.githubusercontent.com/soxrok2212/PSKracker/master/dicts/netgear-spectrum/netgear-spectrum.txt)
+	* Part of the much larger colleciton [PSKracker](https://github.com/soxrok2212/PSKracker) by [soxrok2212](https://github.com/soxrok2212/).
 
-* Optionally, at any point run `python get-next-hashcat-script.py` to print some stats of the wifi networks being tracked in `network-cracked-status.json`
-
-### Optionally running hashcat on an AWS EC2 P2 instance
-
-Amazon offers 3 kinds of [EC2 P2](https://aws.amazon.com/ec2/instance-types/p2/) instances with with 1, 8, or 16 GPUs. This is very valuable because cracking WPA/WPA2 is VERY slow and the more power you can add the better. It's expensive, at roughly $1 an hour per GPU, but using 16 GPUs at once you can run the full attack included in this repo in under 7 hours, when it may take a day and a half with 1 consumer GPU. [Here](https://medium.com/@iraklis/running-hashcat-in-amazons-aws-new-16-gpu-p2-16xlarge-instance-9963f607164c) is more of an explanation about running hashcat on AWS P2 instances. 
-
-In this repo is the `aws` folder which contains scripts to help run hashcat on an AWS P2 instance.
-* `move-files-to-aws.bat` will copy files to an aws instance. A ssh key named `aws.pem` must be in the `ssh` folder and the AWS instance id must replace the id included in the file. This file is missing the code to copy wordlists and pmkid/hccapx files.
-* `get-files-from-aws.bat` will download the hashcat output, potfile, and session files. It also needs a ssh key named `aws.pem` in the `ssh` folder and the AWS instance id must replace the id included in the file.
-* `aws-initial-provision.sh` is a bash script to provision an aws p2 instance and install hashcat.
-* `set-nvidia-settings.sh` is a bash script to set the nvidia settings after hashcat has been installed.
-
-## Installation
-
-### Dependencies
-
-* Windows - This is because bat files are used, but they can be converted to bash scripts to get this running on Linux
-* Python 3.x
-* [Vagrant](https://www.vagrantup.com/) - Vagrant and Virtual Box are only used to convert pcap files to hccapx/pmkid files
-* [Virtual Box](https://www.virtualbox.org/)
-* [Hashcat v6.2.6](https://hashcat.net/hashcat/)
-* [Word Ninja](https://github.com/keredson/wordninja) - pip install wordninja
-* [Tabulate](https://github.com/gregbanks/python-tabulate) - pip install tabulate
-
-### Wordlists
-
-This project comes with no wordlists, so you will need download them yourself. If you do not download these lists then any wordlist attacks set up for hashcat will fail. All of these wordlists should be placed in the same folder of your choosing. The wordlist folder is configured in the `generate-hashcat-scripts.py` file.
-
-* known-wpa-passwords.txt - This is your own personal list of your cracked wifi passwords.
-* [netgear-spectrum.txt](https://raw.githubusercontent.com/soxrok2212/PSKracker/master/dicts/netgear-spectrum/netgear-spectrum.txt) - The repo for this list is [here](https://github.com/soxrok2212/PSKracker)
-* [NAMES.DIC](https://www.outpost9.com/files/wordlists/names.zip)-  Any list of all lowercase first names can replace this.
-* [words_alpha.txt](https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt) - Any list of all lowercase common words can replace this.
-* [hashesorg2019](https://weakpass.com/wordlist/1851)
 * [openwall.net-all.txt](https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/openwall.net-all.txt)
-* [rockyou](https://github.com/praetorian-code/Hob0Rules/blob/master/wordlists/rockyou.txt.gz) - Literally the famous rockyou list. This is the first link I found online to download it.
-* [Top24Million-WPA-probable-v2.txt](https://github.com/berzerk0/Probable-Wordlists/blob/master/Real-Passwords/WPA-Length/Real-Password-WPA-MegaLinks.md)
-* [Top1pt8Billion-WPA-probable-v2.txt](https://github.com/berzerk0/Probable-Wordlists/blob/master/Real-Passwords/WPA-Length/Real-Password-WPA-MegaLinks.md)
-* [passphrases.txt](https://initstring.keybase.pub/passphrase-wordlist/passphrases.txt?dl=1) - The repo for this list is [here](https://github.com/initstring/passphrase-wordlist).
-* [Custom-WPA](https://weakpass.com/wordlist/490)
-* [Super-WPA](https://weakpass.com/wordlist/500)
-* [nerdlist.txt](https://github.com/tarahmarie/nerdlist/blob/master/nerdlist.txt)
+	* Part of the [DanielMiessler's SecLists](https://github.com/danielmiessler/SecLists/) larger collection of [passwords](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
 
-### Configs
+* [shortKrak.txt](https://raw.githubusercontent.com/praetorian-inc/Hob0Rules/master/wordlists/shortKrak.txt)
+	* Part of the [praetorian-inc/Hob0Rules](https://github.com/praetorian-inc/Hob0Rules/) collection of [wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists).
 
-* Create an SSH key for your pwnagotchi (and optionally your AWS SSH key) and place it in the `ssh` folder. The SSH key for the pwnagotchi should be named `id_rsa`. The optional AWS SSH key should be named `aws.pem`
-* If your pwnagotchi is not named `pwnagotchi` change the `pi@pwnagotchi.local` name in the `get-files-from-pwnagotchi.bat`
-* `generate-hashcat-scripts.py`
-  * Change the value for `fullProjectPath` to the FULL path to this `pwnagotchi-tools` folder
-  * Change the value for `fullHashcatPath` to the FULL path to your hashcat install folder
-  * Change the value for `fullWordListPath` to the FULL path to the folder where all of your wordlists are saved 
+* [nerdlist.txt](https://raw.githubusercontent.com/TheNerdlist/nerdlist/main/nerdlist.txt)
 
-## Password cracking techniques
+* [English Words](https://raw.githubusercontent.com/dwyl/english-words/master/words_alpha.txt)
 
-I have compiled a comprehensive list of attacks that includes many wordlist attacks, attacks that use the MAC address of the AP, attacks on router default passwords, and many brute force attacks. As passwords evolve this list will get less effective over time so, it is important to keep updating these attacks and to analyze your cracked passwords for new patterns and points of weakness. To help automate the process of using new attacks if you update the attack list in `generate-hashcat-scripts.py` and then run `generate-hashcat-scripts.py` new scripts will be generated for any networks listed as `waiting` in `network-cracked-status.json`.
+### Standalone Dictionaries
+* [Outpost9 Dictionary](https://www.outpost9.com/files/wordlists/)
+	* [Names](https://www.outpost9.com/files/wordlists/names.zip)
 
-| Attack | Keyspace | Notes |
-|---|--:|---|
-| known-wpa-passwords.txt quick-ssid.rule | ~1240 | known-wpa-passwords.txt is your list of cracked wifi passwords. Keyspace is calculated assuming a list of 20 passwords | 
-| known-wpa-passwords.txt unix-ninja-leetspeak.rule | ~61420 | |
-| known-wpa-passwords.txt rockyou-30000.rule | ~600000 | |
-| known-wpa-passwords.txt d3ad0ne.rule | ~681980 | |
-| nerdlist.txt quick-ssid.rule | 19220 | nerdlist.txt is a small (< 500) list of "nerdy" passwords and references like "hacktheplanet" |
-| nerdlist.txt unix-ninja-leetspeak.rule | 9300000 | |
-| nerdlist.txt rockyou-30000.rule | 9300000 | |
-| nerdlist.txt d3ad0ne.rule | 10570690 | |
-| bssid.rule | 225 | The BSSID (MAC Address) of the AP (router) with all combinations of uppercase/lowercase, with/without colons, and with all lengths of chars chopped off the end.  |
-| ssid-ninja.rule | ~5300 | Uses `wordNinjaGenerator.py` to generate a wordlist from the ssid Ex: LuckyCoffeeWifi --> Lucky123! Keyspace is generated assuming a wordlist generated from the SSID with 100 words. |
-| MYWIFI?d?d?d?d | 10000 | all default passwords for MYWIFI (EE) routers |
-| wifi?d?d?d?d | 10000 | Ex: wifi1970 |
-| -1 !@$??#~%^&*^^ wifi?d?d?d?1 | 10000 | Ex: wifi123! The charset looks weird because windows cmd chars must be escaped |
-| wifi?d?d?d?d?d | 100000 | Ex: wifi12345 |
-| ?d?d?d?dwifi | 10000 | Ex: 1989wifi |
-| ?d?d?d?d?dwifi | 100000 | Ex: 12345wifi |
-| WIFI?d?d?d?d | 10000 | Ex: WIFI2008 |
-| -1 !@$??#~%^&*^^ WIFI?d?d?d?1 | 10000 | Ex: WIFI343@ |
-| WIFI?d?d?d?d?d | 100000 | Ex: WIFI12345 |
-| ?d?d?d?dWIFI | 10000 | Ex: 2006WIFI |
-| ?d?d?d?d?dWIFI | 100000 | Ex: 12345WIFI |
-| ?l?l?l?lwifi | 456976 | Ex: bookwifi |
-| -1 !@$??#~%^&*^^ ?l?l?l?lwifi?1 | 4569760 | Ex: pinkwifi! |
-| ?l?l?l?l?lwifi | 11881376 | Ex: trackwifi |
-| wifi?l?l?l?l | 456976 | Ex: wificook |
-| -1 !@$??#~%^&*^^ wifi?l?l?l?l?1 | 4569760 | Ex: wificafe$ |
-| wifi?l?l?l?l?l | 11881376 | Ex: wififrogs |
-| ?u?l?l?lWifi | 456976 | Ex: CafeWifi |
-| ?u?l?l?l?lWifi | 11881376 | Ex: MarioWifi |
-| ?u?u?u?uWIFI | 456976 | Ex: CAFEWIFI |
-| -1 !@$??#~%^&*^^ ?u?u?u?uWIFI?1 | 4569760 | Ex: MECHWIFI# |
-| ?u?u?u?u?uWIFI | 11881376 | Ex: BULLSWIFI |
-| WIFI?u?u?u?u | 456976 | Ex: WIFISHOE |
-| -1 !@$??#~%^&*^^ WIFI?u?u?u?u?1 | 4569760 | Ex: WIFIBOAT! |
-| WIFI?u?u?u?u?u | 11881376 | Ex: WIFICOACH |
-| NAMES.DIC names.rule | 2595058 | Ex: lukewifi2020 |
-| words_alpha.txt names.rule | 34789776 | Ex: pizzawifi |
-| 4-digit-append.rule | ~1111000 | Uses `wordNinjaGenerator.py` to append all 1-4 digit number combinations to ssid words Ex: MyCafeWifi --> CafeWifi2020 Keyspace is generated assuming a wordlist generated from the SSID with 100 words. |
-| ?d?d?d?d?d?d?d?d | 100000000 | all 8 digit number combos |
-| netgear-spectrum.txt ?d?d?d | 573348000 | MANY netgear and other routers have a default password that is a word + word + 1-3 digits. If I could only run 1 attack this is the one I would run. |
-| netgear-spectrum.txt ?d | 5733480 | |
-| netgear-spectrum.txt ?d?d | 57334800 | |
-| openwall.net-all.txt quick-ssid.rule | 68651298 | simple wordlist |
-| netgear-spectrum.txt quick-ssid.rule | 9845724 | Ex: breezyapplewifi |
-| words_alpha.txt ?d | 3701040 | Ex: seashell1 |
-| words_alpha.txt -1 !@$??#~%^&*^^ ?1 | 3701040 | Ex: seashell$ |
-| words_alpha.txt -1 !@$??#~%^&*^^ ?d?1 | 37010400 | Ex: seashell1! |
-| words_alpha.txt -1 !@$??#~%^&*^^ ?1?d | 37010400 | Ex: seashell!0 |
-| words_alpha.txt ?d?d | 37010400 | Ex: seashell69 |
-| words_alpha.txt -1 !@$??#~%^&*^^ ?d?d?1 | 370104000 | Ex: seashell92@ |
-| words_alpha.txt ?d?d?d | 370104000 | Ex: seashell123 |
-| ?l?l?l?l?l?l1! | 308915776 | Ex: slyfox1! |
-| ?u?l?l?l?l?l1! | 308915776 | Ex: Slyfox1! |
-| ?u?u?u?u?u?u1! | 308915776 | Ex: SLYFOX1! |
-| ?d?d?d?d?d?d?d?d?d | 1000000000 | all 9 digit number combos |
-| hashesorg2019 | 1279729139 | a modern wordlist with a great hit ratio |
-| rockyou.txt quick-ssid.rule | 889352242 | rockyou is a classic wordlist. quick-ssid.rule has rules made for wifi cracking. It's worth noting that rockyou comes from a database dump and online account passwords are often different from wifi passwords. |
-| NAMES.DIC rockyou-30000.rule | 828210000 | Ex: j0sh2009 |
-| netgear-spectrum.txt unix-ninja-leetspeak.rule | 1760751708 | Ex: br33zyappl3 |
-| Top1pt8Billion-WPA-probable-v2.txt | 1800000000 | Top1pt8Billion-WPA-probable-v2.txt is a popular wordlist. It claims to be 'WPA probable' but really they just cut out all passwords less then 8 chars. That doesn't make it wifi probable. |
-| Top24Million-WPA-probable-v2.txt quick-ssid.rule | 1487550376 | |
-| passphrases.txt passphrases.rule | 1441673030 | This is from the [passphrases repo](https://github.com/initstring/passphrase-wordlist). This SHOULD help with passwords like 'youshallnotpass' and 'maytheforcebewithyou' |
-| Custom-WPA | 185866729 | This is a large wordlist. Ex: au7h0rized |
-| Super-WPA | 982963903 | This is a large wordlist. Ex: au7h0rized |
-| ?h?h?h?h?h?h?h?h | 4294967296 | MANY router default passwords are 8 hex chars (0-9,a-f) |
-| ?H?H?H?H?H?H?H?H | 4294967296 | MANY router default passwords are 8 hex chars (0-9,A-F) |
-| ?d?d?d?d?d?d?d?d?d?d | 10000000000 | This is, by far, the longest attack, but is covers ALL 10 digit number combos, which includes ALL US phone numbers and area codes. |
-| Total: | 33,021,512,190 | At 375 kH/s (GTX 1080) it would take about 24.4 hours to run all attacks. |
+### Massive Wordlists
+* [Weakpass Wordlists](https://weakpass.com/wordlist/)
+	* [Custom-WPA](https://weakpass.com/wordlist/490)
+	* [Super-WPA](https://weakpass.com/wordlist/500)
+	* [hashesorg2019](https://weakpass.com/wordlist/1851)
 
-## Some thoughts on wifi cracking and pwnagotchi
+### Misc Wordlists
+* [Original Wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists)
 
-### What is wifi cracking
+## Rules
+### Included Rules
+* [hob064](https://github.com/praetorian-inc/Hob0Rules)
+* [best64](https://trustedsec.com/blog/better-hacking-through-cracking-know-your-rules)
+* [T0XICv1](https://github.com/samirettali/password-cracking-rules/blob/master/T0XlCv1.rule)
+* [T0XICv2](https://github.com/hashcat/hashcat/blob/master/rules/T0XlCv2.rule)
+* [toggles5](https://github.com/hashcat/hashcat/blob/master/rules/toggles5.rule)
+* [InsidePro-PasswordsPro](https://github.com/hashcat/hashcat/blob/master/rules/InsidePro-PasswordsPro.rule)
+* [rockyou-30000](https://github.com/hashcat/hashcat/blob/master/rules/rockyou-30000.rule)
+* [InsidePro-HashManager](https://github.com/hashcat/hashcat/blob/master/rules/InsidePro-HashManager.rule)
+* [d3ad0ne](https://github.com/hashcat/hashcat/blob/master/rules/d3ad0ne.rule)
+* [dive](https://github.com/hashcat/hashcat/blob/master/rules/dive.rule)
+* [unix-ninja-leetspeak](https://github.com/hashcat/hashcat/blob/master/rules/unix-ninja-leetspeak.rule)
+* [generated2](https://github.com/hashcat/hashcat/blob/master/rules/generated2.rule)
+* [d3adhob0](https://github.com/praetorian-inc/Hob0Rules/blob/master/d3adhob0.rule)
+* [_NSAKEY.v2.dive](https://github.com/NSAKEY/nsa-rules/blob/master/_NSAKEY.v2.dive.rule)
 
-Specifically, `wifi cracking` is the process of obtaining the password to a wifi network. There is tremendous value in getting the wifi password for a network and here are some examples:
-* Once you have the wifi password, you can decrypt the encryption the router placed on web traffic of devices connected to that wifi. Most sites will still use `https` so there is a whole other layer of encryption you will not break, but any sites using `http` will have their data sent in the clear.
-* Once on a network you can scan for other vulnerable devices and interact with them. For example, you could play a video on a chromecast or turn on and off [smart switches.](https://github.com/softScheck/tplink-smartplug)
-* Once you have the password you can place new devices on the network like a [signal owl](https://shop.hak5.org/products/signal-owl) to monitor devices, monitor traffic, and coordinate other attacks.
-* You can have free internet access.
+----
 
-### The real difficulty of wifi cracking
+# Scripts
+## Copy the .PCAP files to your machine.
+To copy the `.pcap` files from your `Pwnagotchi` run the following script. It will copy the files from the `/root/handshakes` directory on the `Pwnagotchi` to one that you can access from your machine, `/usr/[USERNAME]/handshakes`. Then it will copy the `/usr/[USERNAME]/handshakes` directory to your machine.
+* `npm run get`
 
-I had passively heard about wifi cracking methods before I started this project from reading articles like these ([1](https://www.guru99.com/how-to-hack-wireless-networks.html), [2](https://medium.com/bugbountywriteup/how-i-hacked-into-my-neighbours-wifi-and-harvested-credentials-487fab106bfc), [3](https://thehackernews.com/2018/08/how-to-hack-wifi-password.html)). These articles explain that wifi cracking is as easy as capturing the wifi handshake and running a password cracker to get the password. This does little to explain that attempting to crack a WPA/WPA2 password is by far the hardest part of wifi cracking. In my experience the odds of successfully cracking a wifi password is about 40%, so wifi cracking is not as easy as these articles make it out to be. This process is so hard because WPA/WPA2 is very slow to crack and wifi passwords are hard to guess.
+## Generate the .HC22000/.PMKID files.
+To generate the necessary `.hc22000`/`.pmkid` files needed to crack the WiFi handshakes run the following script.
+* `npm run generate`
 
-### WPA/WPA2 is a very slow algorithm to crack
+## Generate the list of attacks.
+To generate the list of attacks based on the config variables outlined in the `.config` file, run the following script.
+* `npm run attacks`
 
-WPA/WPA2 is slow to crack and each network is unique, much like if salts were used on a database list of password hashes, so there is no speed benefit to running an attack against several networks at once.
+### Combinations
+The script will generate commands based on the following combinations.
+```text
+--attack-mode=0
+.txt X .rule
+.dic X .rule
+.rule
 
-Lets look at how slow it takes to crack WPA/WPA2 compared to other hashes. I used H/s to further show how slow it is to crack WPA/WPA2.
+--attack-mode=3
+mask
 
-##### GeForce GTX 1060 6GB:
-| Hash | Speed (H/s) |
-|---|--:|
-| MD5 | 11,560,200,000 H/s |
-| SHA2-256 | 1,478,300,000 H/s |
-| WPA2 | 205,800 H/s |
+--attack-mode=6
+.txt X mask
+.dic X mask
+```
 
-##### AWS p2.16xlarge 16 GPU Instance:
-| Hash | Speed (H/s) |
-|---|--:|
-| MD5 | 73,286,500,000 H/s |
-| SHA2-256 | 12,275,600,000 H/s |
-| WPA2 | 1,316,200 H/s |
+### Output Example
+```javascript
+const attacks = [
+  [
+	"--attack-mode=0",
+	"./wordlists/known-passwords.txt",
+	"./hashcat/rules/wifi.rule"
+  ],
+  [
+	"--attack-mode=0",
+	"./wordlists/known-passwords.dic",
+	"./hashcat/rules/wifi.rule"
+  ],
+  [
+	"--attack-mode=0",
+	"",
+	"./hashcat/rules/wifi.rule"
+  ],
+  [
+	"--attack-mode=3",
+	"",
+	"?h?h?h?h?h"
+  ],
+  [
+	"--attack-mode=6",
+	"./wordlists/known-passwords.txt",
+	"?h?h?h?h?h"
+  ],
+  [
+	"--attack-mode=6",
+	"./wordlists/known-passwords.dic",
+	"?h?h?h?h?h"
+  ]
+];
+```
 
-Let's say you wanted to run a mask attack in hashcat against a WPA2 handshake for the mask `?d?d?d?d?d?d?d?d?d?d` (all 10 digit combos). This attack would take about 13.5 hours to run on a GTX 1060. By comparison, the same 10 digit attack against a SHA2-256 hash would take about 7 seconds to run. Due to the complexity it takes to calculate WPA2, it takes WAY more time to run attacks against it than it takes to run attacks against many other hashes.
+## Generate the attack scripts.
+To generate the necessary scripts to crack the WiFi handshakes run the following script.
+* `npm run scripts`
 
-### Wifi passwords are hard to guess
+### Command Breakdown
+* `hashcat` - "Hashcat is the world’s fastest CPU-based password recovery tool."
+* `--hash-type=22000` - Hash type: `WPA2-PSK`
+* `--attack-mode=0` - Attack mode: `Straight`
+* `--session "[HC22000_FILE_NAME]_[RANDOM-NUMBER]"` - Specify a name for the cracking session which is useful for keeping track of multiple cracking sessions.
+* `--hwmon-temp-abort=100` - Abort temperture: `100 C`
+	* `-w 2` - Wait for 2 seconds after reaching the abort temperature before shutting down.
+* `--potfile-path="./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt"` - The potfile is a file that stores the hashes that have been cracked by hashcat. This allows hashcat to resume cracking a hash from where it left off if the process is interrupted
+* `--outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-output.txt"` - The output of the command should be written to a file instead of being displayed on the terminal.
+* `"./handshakes/hccapx/[HC22000_FILE_NAME].hc22000"` - The targetted `.hc22000` file that needs to be cracked.
+* `--rules-file="./hashcat/rules/[RULES_NAME].rule"` - The file that contains the rules for generating password candidates.
+* `-S "./wordlists/[PASSWORDS_LIST_NAME].txt"` - List of passwords.
+* `"?h?h?h?h?h"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
 
-Decades of database dumps and hundreds of millions of leaked passwords create a huge sample size to learn from that has given password crackers wordlists, techniques, and strategies to crack passwords used in online accounts. Wifi passwords are often not similar to online account passwords and sample sizes of leaked passwords for home and office wifi routers is MUCH smaller. As a result, most traditional wordlists and cracking strategies designed for online accounts are not useful for wifi passwords.
+### Attack Command Examples
+#### --attack-mode=0
+```bash
+hashcat --hash-type=22000 --attack-mode=0 --session [HC22000_FILE_NAME]_[RANDOM-NUMBER] --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt" --outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-outfile.txt" "handshakes/hccapx/[HC22000_FILE_NAME].hc22000" --rules-file="./hashcat/rules/[RULES_NAME].rule" -S "wordlists/[PASSWORDS_LIST_NAME].txt"
+```
 
-Many [WPA wordlists](https://github.com/berzerk0/Probable-Wordlists/tree/master/Real-Passwords/WPA-Length) are just regular wordlists from online accounts with all passwords removed that are under 8 characters because WPA has an 8 character minimum. So, those lists still don't source their data from real wifi passwords and can miss the mark a bit.
+#### --attack-mode=3
+```bash
+hashcat --hash-type=22000 --attack-mode=3 --session [HC22000_FILE_NAME]_[RANDOM-NUMBER] --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt" --outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-outfile.txt" "handshakes/hccapx/[HC22000_FILE_NAME].hc22000" "[MASK]"
+```
 
-It's not all bad news. Wifi passwords are often created to be shared. So, while an online account password might look like this `pAri$lover252!` a wifi password might look more like this `jakeswifi1` because it is shared to guests to give wifi access. In many cases that means wifi passwords are less complex, so they can be easier to crack. However, that also means the wifi passwords that are complex are often complex in ways we don't have enough of a sample size to create wordlists or strategies for.
+#### --attack-mode=6
+```bash
+hashcat --hash-type=22000 --attack-mode=6 --session [HC22000_FILE_NAME]_[RANDOM-NUMBER] --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/potfiles/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-potfile.txt" --outfile="./hashcat/outputs/[HC22000_FILE_NAME]_[RANDOM-NUMBER]-outfile.txt" "handshakes/hccapx/[HC22000_FILE_NAME].hc22000" "wordlists/[PASSWORDS_LIST_NAME].txt" "[MASK]"
+```
 
-The other good news is that many wifi networks use the default password provided by the AP (router) and the [keyspace for most router default passwords is known.](https://github.com/soxrok2212/PSKracker/blob/master/keyspace.md) Some of these defaults are super easy to attack, like the ones that are just 8 digits, so in under 10 minutes you can run through all combinations. However, a default password made with 10 lowercase hex characters will take about 2 months to run through all combinations.
+## Execute the handshake attacks.
 
-When you combine the horrendous cracking speed of WPA/WPA2 that makes running attacks slow and the need to run many attacks because there is not a big enough sample size of leaked wifi passwords to nail down reliable wordlists or strategies it's not a surprise wifi password cracking is pretty tough.
 
-### The advantage of using pwnagotchi
+### Example Terminal Output
+```bash
+hashcat (v6.2.6) starting
 
-The real advantage of using pwnagotchi is that it can automatically collect data from dozens of wifi networks to get a large sample size and then the lowest hanging fruit from those networks can be cracked. You get the best odds of cracking a few networks without all the waste of manually capturing the wifi handshake just to be unsuccessful at cracking the password. So, I made this project to best automate the process of password cracking batches of handshakes the pwnagotchi has collected.
+* Device #2: Apple's OpenCL drivers (GPU) are known to be unreliable.
+             You have been warned.
 
-## Credit
+METAL API (Metal 341.16)
+========================
+* Device #1: Apple M1, 5408/10922 MB, 8MCU
 
-* Thank you Danie Conradie for writing a nice article on [hackaday](https://hackaday.com/2020/09/30/automated-tools-for-wifi-cracking/) about this project!
-* Thanks to CyrisXD for writing [Pwnagetty](https://github.com/CyrisXD/Pwnagetty). I use Pwnagetty to convert pcap files to pmkid/hccapx files. I modified the script so much it hardly looks like the original, but still, thank you CyrisXD.
-* I made liberal use of the WPA/WPA2 password cracking techniques from [PSKracker](https://github.com/soxrok2212/PSKracker) by soxrok2212. To discover wordlist words for default passwords soxrok2212 searches for wifi routers on ebay and then looks at the photos to find default passwords written on the serial number sticker. That's brilliant!
-* I totally got the idea to use [word ninja](https://github.com/keredson/wordninja) on the ssid from dizcza's [repo.](https://github.com/dizcza/hashcat-wpa-server)
-* I used the hashcat rules and wordlists for complex passwords from initstring's [repo.](https://github.com/initstring/passphrase-wordlist)
-* The [pwnagotchi](https://pwnagotchi.ai/) project was created by [evilsocket](https://twitter.com/evilsocket) and [hexwaxwing](https://twitter.com/gniwxawxeh). Unfortunately, very serious allegations that evilsocket domestically abused hexwaxwing have brought to light disturbing behavior I cannot support. As a result, many references to evilsocket on this page have been removed.
+OpenCL API (OpenCL 1.2 (Aug  5 2023 05:54:47)) - Platform #1 [Apple]
+====================================================================
+* Device #2: Apple M1, skipped
+
+Minimum password length supported by kernel: 8
+Maximum password length supported by kernel: 63
+
+Hashes: 36 digests; 12 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+
+Optimizers applied:
+* Zero-Byte
+* Single-Salt
+* Slow-Hash-SIMD-LOOP
+
+Watchdog: Temperature abort trigger set to 100c
+
+Host memory required for this attack: 281 MB
+
+Dictionary cache hit:
+* Filename..: wordlists/known-passwords.txt
+* Passwords.: 2
+* Bytes.....: 17
+* Keyspace..: 20000
+
+The wordlist or mask that you are using is too small.
+This means that hashcat cannot use the full parallel power of your device(s).
+Unless you supply more work, your cracking speed will drop.
+For tips on supplying more work, see: https://hashcat.net/faq/morework
+
+Approaching final keyspace - workload adjusted.           
+
+Cracking performance lower than expected?                 
+
+* Append -w 3 to the commandline.
+  This can cause your screen to lag.
+
+* Update your backend API runtime / driver the right way:
+  https://hashcat.net/faq/wrongdriver
+
+* Create more work items to make use of your parallelization power:
+  https://hashcat.net/faq/morework
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit => q
+
+Session..........: EXAMPLE_a0648f5681d7_6215          
+Status...........: Quit
+Hash.Mode........: 22000 (WPA-PBKDF2-PMKID+EAPOL)
+Hash.Target......: handshakes/hccapx/EXAMPLE_a0648f5681d7.hc22000
+Time.Started.....: Sun Nov 12 20:02:04 2023 (44 secs)
+Time.Estimated...: Sun Nov 12 21:02:18 2023 (59 mins, 30 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (wordlists/known-passwords.txt), Left Side
+Guess.Mod........: Mask (MYWIFI?d?d?d?d) [10], Right Side
+Guess.Queue.Base.: 1/1 (100.00%)
+Guess.Queue.Mod..: 1/1 (100.00%)
+Speed.#1.........:        6 H/s (0.27ms) @ Accel:1024 Loops:8 Thr:32 Vec:1
+Recovered........: 0/12 (0.00%) Digests (total), 0/12 (0.00%) Digests (new)
+Progress.........: 244/20000 (1.22%)
+Rejected.........: 0/244 (0.00%)
+Restore.Point....: 0/2 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:122-123 Iteration:0-12
+Candidate.Engine.: Device Generator
+Candidates.#1....: passwordMYWIFI0777 -> passwordMYWIFI0777
+Hardware.Mon.#1..: Util: 95%
+
+
+
+Session..........: Pizzaislife_a0648f5681d7_6215
+Status...........: Quit
+Hash.Mode........: 22000 (WPA-PBKDF2-PMKID+EAPOL)
+Hash.Target......: handshakes/hccapx/EXAMPLE_a0648f5681d7.hc22000
+Time.Started.....: Sun Nov 12 20:02:04 2023 (44 secs)
+Time.Estimated...: Sun Nov 12 21:02:18 2023 (59 mins, 30 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (wordlists/known-passwords.txt), Left Side
+Guess.Mod........: Mask (MYWIFI?d?d?d?d) [10], Right Side
+Guess.Queue.Base.: 1/1 (100.00%)
+Guess.Queue.Mod..: 1/1 (100.00%)
+Speed.#1.........:        6 H/s (0.27ms) @ Accel:1024 Loops:8 Thr:32 Vec:1
+Recovered........: 0/12 (0.00%) Digests (total), 0/12 (0.00%) Digests (new)
+Progress.........: 244/20000 (1.22%)
+Rejected.........: 0/244 (0.00%)
+Restore.Point....: 0/2 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:122-123 Iteration:0-12
+Candidate.Engine.: Device Generator
+Candidates.#1....: passwordMYWIFI0777 -> passwordMYWIFI0777
+Hardware.Mon.#1..: Util: 95%
+
+[s]tatus [p]ause [b]ypass [c]heckpoint [f]inish [q]uit => Started: Sun Nov 12 20:01:49 2023
+Stopped: Sun Nov 12 20:02:49 2023
+```
+
+---
+
+# Clean-Up
+* If you want to delete the generated `.hc22000`/`.pmkid` files, run the following script.
+	* `npm run clean-up-handshakes`
+
+* If you want to delete the generated `[HC22000_FILE_NAME]-output.txt`/`[HC22000_FILE_NAME]-potfile.txt` files, run the following script.
+	* `npm run clean-up-hashcat-logs`
+
+----
+
+# Troubleshooting
+
+## Issue #1
+1. If you get the error, `Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h`, do the following.
+* *TERMINAL OUTPUT*
+	```bash
+	hashcat (v6.2.6) starting
+
+	* Device #2: Apple's OpenCL drivers (GPU) are known to be unreliable.
+				You have been warned.
+
+	METAL API (Metal 341.16)
+	========================
+	* Device #1: Apple M1, 5408/10922 MB, 8MCU
+
+	OpenCL API (OpenCL 1.2 (Aug  5 2023 05:54:47)) - Platform #1 [Apple]
+	====================================================================
+	* Device #2: Apple M1, skipped
+
+	Minimum password length supported by kernel: 8
+	Maximum password length supported by kernel: 63
+
+	Hashes: 36 digests; 12 unique digests, 1 unique salts
+	Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+
+	Optimizers applied:
+	* Zero-Byte
+	* Single-Salt
+	* Slow-Hash-SIMD-LOOP
+
+	Watchdog: Temperature abort trigger set to 100c
+
+	Host memory required for this attack: 281 MB
+
+	Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h
+
+	Started: Sun Nov 12 22:14:36 2023
+	Stopped: Sun Nov 12 22:14:38 2023
+	```
+
+* *ERROR*
+	* `Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h`
+
+* *SOLUTION*
+	* TBA
+
+----
+
+# LINKS
+* [pwnagotchi.ai](https://pwnagotchi.ai/)
+* Main Pwnagotchi repo: [Pwnagotchi](https://github.com/evilsocket/pwnagotchi)
+	* Default Pwnagotchi configuration file: [defaults.toml](https://github.com/evilsocket/pwnagotchi/blob/master/pwnagotchi/defaults.toml)
+* [Pwnagotchi setup on Mac OS](https://mattgibson.ca/pwnagotchi-1-6-2-with-waveshare-v3-macos-macbook-host/)
+
+* Wordlists
+	* [Weakpass](https://weakpass.com/wordlist)
+	* https://notsosecure.com/one-rule-to-rule-them-all
+
+* Rules
+	* https://github.com/samirettali/password-cracking-rules
+	* [KoreLogic's](https://contest-2010.korelogic.com/rules-hashcat.html)

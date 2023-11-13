@@ -1,0 +1,31 @@
+{
+	"name": "os-x-pwnagotchi-tools",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"get": "node ./pwnagetty/pwnagetty-get-pcaps.js",
+		"generate": "node ./pwnagetty/pwnagetty-generate.js",
+		"attacks": "node ./scripts/generate-attacks-list.js",
+		"scripts": "node ./scripts/generate-hashcat-scripts.js",
+		"clean-up-handshakes": "rm -rf ./handshakes/hccapx ./handshakes/pmkid",
+		"clean-up-hashcat-logs": "rm -rf ./hashcat/outputs ./hashcat/potfiles"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ivy00johns/os-x-pwnagotchi-tools.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/issues"
+	},
+	"homepage": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/os-x#readme",
+	"dependencies": {
+		"commander": "^11.1.0",
+		"fs": "^0.0.1-security",
+		"ssh2": "^1.14.0",
+		"ssh2-sftp-client": "^9.1.0"
+	}
+}

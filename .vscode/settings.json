@@ -1,0 +1,6 @@
+{
+	"workbench.editor.enablePreview": true,
+	"editor.rename.enablePreview": true,
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4 
+}
