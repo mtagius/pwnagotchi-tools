@@ -11,22 +11,18 @@ function determineAttackType(wordlist, rule, mask) {
 	}
 
 	if ((wordlist.endsWith(".txt") || wordlist.endsWith(".dic")) && mask !== "") {
-		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 6`);
 		return 6; // Type --attack-mode=6 for .txt/.dic * mask
     }
 
 	if (mask !== "") {
-		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 3`);
 		return 3; // Type --attack-mode=3 for masks
     }
 
 	if (rule !== "" && wordlist === "" && mask === "") {
-		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 0`);
 		return 0; // Type --attack-mode=0 for .rule by itself
     }
 
     if (rule !== "" && (wordlist.endsWith(".txt") || wordlist.endsWith(".dic"))) {
-		// console.log(`Results: ${wordlist}, ${rule}, ${mask}, 0`);
 		return 0; // Type --attack-mode=0 for .txt/.dic * .rule
     }
 

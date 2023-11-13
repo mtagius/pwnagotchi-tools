@@ -78,17 +78,17 @@ const attacks = [
   [
 	"--attack-mode=3",
 	"",
-	"?h?h?h?h?h?h?h?h"
+	"?h?h?h?h?h"
   ],
   [
 	"--attack-mode=6",
 	"./wordlists/known-passwords.txt",
-	"?h?h?h?h?h?h?h?h"
+	"?h?h?h?h?h"
   ],
   [
 	"--attack-mode=6",
 	"./wordlists/known-passwords.dic",
-	"?h?h?h?h?h?h?h?h"
+	"?h?h?h?h?h"
   ]
 ];
 ```
@@ -109,7 +109,7 @@ To generate the necessary scripts to crack the WiFi handshakes run the following
 * `"./handshakes/hccapx/[HC22000_FILE_NAME].hc22000"` - The targetted `.hc22000` file that needs to be cracked.
 * `--rules-file="./hashcat/rules/[RULES_NAME].rule"` - The file that contains the rules for generating password candidates.
 * `-S "./wordlists/[PASSWORDS_LIST_NAME].txt"` - List of passwords.
-* `"MYWIFI?d?d?d?d"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
+* `"?h?h?h?h?h"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
 
 ### Attack Command Examples
 #### --attack-mode=0
@@ -246,4 +246,45 @@ Stopped: Sun Nov 12 20:02:49 2023
 ----
 
 # Troubleshooting
+1. If you get the error, `Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h`, do the following.
+* *TERMINAL OUTPUT*
+	```bash
+	hashcat (v6.2.6) starting
 
+	* Device #2: Apple's OpenCL drivers (GPU) are known to be unreliable.
+				You have been warned.
+
+	METAL API (Metal 341.16)
+	========================
+	* Device #1: Apple M1, 5408/10922 MB, 8MCU
+
+	OpenCL API (OpenCL 1.2 (Aug  5 2023 05:54:47)) - Platform #1 [Apple]
+	====================================================================
+	* Device #2: Apple M1, skipped
+
+	Minimum password length supported by kernel: 8
+	Maximum password length supported by kernel: 63
+
+	Hashes: 36 digests; 12 unique digests, 1 unique salts
+	Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+
+	Optimizers applied:
+	* Zero-Byte
+	* Single-Salt
+	* Slow-Hash-SIMD-LOOP
+
+	Watchdog: Temperature abort trigger set to 100c
+
+	Host memory required for this attack: 281 MB
+
+	Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h
+
+	Started: Sun Nov 12 22:14:36 2023
+	Stopped: Sun Nov 12 22:14:38 2023
+	```
+
+* *ERROR*
+	* `Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h`
+
+* *SOLUTION*
+	* TBA
