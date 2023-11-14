@@ -4,7 +4,11 @@ module.exports = {
 	USERNAME: "",
 	PASSWORD: "",
 	PORT: 22,
-	
+
+	// Windows configs
+	WINDOWS: false,
+	HASHCAT_PATH: "",
+
 	// Define paths for attach lists
 	WORDLISTS: [
 		"./wordlists"
