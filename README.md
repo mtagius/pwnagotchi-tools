@@ -1,14 +1,9 @@
-# os-x-pwnagotchi-tooling
+# pwnagotchi-tooling
 
 # DISCLAIMER
 **This project is for WiFi security education ONLY!**
 
 **Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
-
-# TO-DO - For Windows
-* Add logic to get the handshakes from a `Pwnagotchi`.
-* Write code to generate a password list based on relative information.
-* Promote the repo on Reddit.
 
 # Purpose
 This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling, on both Windows and OS X systems.
