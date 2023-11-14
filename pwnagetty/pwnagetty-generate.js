@@ -15,9 +15,8 @@ let successfulHCCAPXs = 0;
 //=======================
 // Console log the logo
 //=======================
-logo = () => {
+function logo() {
 	console.log(`
-
 	██████╗ ██╗    ██╗███╗   ██╗ █████╗  ██████╗ ███████╗████████╗████████╗██╗   ██╗
 	██╔══██╗██║    ██║████╗  ██║██╔══██╗██╔════╝ ██╔════╝╚══██╔══╝╚══██╔══╝╚██╗ ██╔╝
 	██████╔╝██║ █╗ ██║██╔██╗ ██║███████║██║  ███╗█████╗     ██║      ██║    ╚████╔╝ 
@@ -31,10 +30,10 @@ logo = () => {
 					| Twitter: @sudo_overflow                       |
 					|===============================================|
 
-			`)
+			`);
 }
 
-readBSSIDsFile = () => {
+async function readBSSIDsFile() {
 	return new Promise((resolve, reject) => {
 		fs.readFile("./pwnagetty/bssids.json", function (err, data) {
 			if (err) {
@@ -51,7 +50,7 @@ readBSSIDsFile = () => {
 //=================================
 // Get all pcap files in the directory
 //=================================
-readDir = () => {
+async function readDir() {
 	return new Promise((resolve, reject) => {
 		fs.readdir(config.localDir, function (err, files) {
 			if (err) {
@@ -65,7 +64,7 @@ readDir = () => {
 //===============================================================
 // Extract BSSID from PCAP file - Terrible way using Aircrack-ng
 //===============================================================
-function grabBSSID(file) {
+async function grabBSSID(file) {
 	return new Promise((resolve, reject) => {
 		let aircrack = exec(`aircrack-ng ${config.localDir}${file}`, function (error, stdout) {
 			if (error) {
@@ -74,7 +73,7 @@ function grabBSSID(file) {
 		});
 
 		aircrack.stdout.on("data", (data) => {
-			if (data.indexOf("Choosing first network as target") > -1 || data.indexOf("Index number of target network?") > -1) {
+			if (data.indexOf("Choosing first network as target.") > -1 || data.indexOf("Index number of target network?") > -1) {
 				if (data.match(/\b([0-9A-F]{2}[:-]){5}([0-9A-F]){2}\b/gmi)) {
 					let mac = data.match(/\b([0-9A-F]{2}[:-]){5}([0-9A-F]){2}\b/gmi);
 
@@ -87,15 +86,14 @@ function grabBSSID(file) {
 			}
 		})
 	});
-
 }
 
-function convertFile(file) {
+async function convertFile(file) {
 	return new Promise((resolve, reject) => {
 		// Exclude ".gitkeep" files
 		if (file === ".gitkeep") {
-			console.log(`Skipping ${file}.`);
-			resolve("Skipped");
+			console.log(`Skipping: ${file}`);
+			resolve(`${file} successfully skipped.`);
 			return;
 		}
 
@@ -105,7 +103,7 @@ function convertFile(file) {
 				reject(error); // Reject the promise on error
 			}
 
-			if (stdout.includes("PMKID(s) written")) {
+			if (stdout.includes("PMKID(s) written.")) {
 				console.log(`Found PMKID in ${file}.`);
 				successfulPMKIDs++;
 				resolve("pmkid");
@@ -118,7 +116,7 @@ function convertFile(file) {
 					}
 
 					if (stdout.includes("Handshake(s) written.")) {
-						console.log(`Found HCCAPX in ${file}`);
+						console.log(`Found HCCAPX in ${file}.`);
 						successfulHCCAPXs++;
 						resolve("hccapx");
 					} else {
@@ -138,8 +136,7 @@ async function main() {
 		logo();
 
 		let bssids = await readBSSIDsFile();
-
-		let files = await readDir();
+		let files  = await readDir();
 
 		// if "/pmkid" doesn"t exist, create it.
 		if (!fs.existsSync("./handshakes/pmkid")) {
@@ -154,7 +151,7 @@ async function main() {
 		// Loop over all pcap files
 		for (let file of files) {
 			// get ssid from filename
-			let pos = file.lastIndexOf("_");
+			let pos  = file.lastIndexOf("_");
 			var ssid = file.substring(0, pos);
 
 			console.log(`\nProcessing: ${ssid}`);
@@ -184,7 +181,7 @@ async function main() {
 		};
 
 		fs.writeFileSync("./handshakes/bssids.json", JSON.stringify(bssids), () => {
-			console.log("Saved bssids.json... \n\n");
+			console.log("Saved bssids.json...\n\n");
 		});
 
 		let numFilesWithNoKeyMaterial = files.length - (successfulHCCAPXs + successfulPMKIDs);
