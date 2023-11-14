@@ -192,6 +192,8 @@ To generate the necessary `.hc22000`/`.pmkid` files needed to crack the WiFi han
 
 ## Generate the list of attacks.
 To generate the list of attacks based on the config variables outlined in the `.config` file, run the following script.
+It will generate the `attacks-list.js` file in the `./hashcat/attacks-list` directory.
+When ever you modify the `WORDLISTS`, `DICTIONARIES`, `RULES`, and/or `MASKS` variables in the `.config` file, make sure to rerun the script.
 * `npm run attacks`
 
 ### Combinations
@@ -247,7 +249,7 @@ const attacks = [
 ```
 
 ## Generate the attack scripts.
-To generate the necessary scripts to crack the WiFi handshakes run the following script.
+To generate the necessary scripts to crack the WiFi handshakes based on the `./hashcat/attacks-list/attacks-list.js` file, run the following script.
 * `npm run scripts`
 
 ### Command Breakdown
