@@ -1,1 +1,0 @@
-hashcat -m 22000 -a 0 --session Example_6032b1a6ba8f_1234 --hwmon-temp-abort=100 -w 2 --potfile-path "./hashcat/hashcat-potfile.txt" -o "./hashcat/Example_6032b1a6ba8f-output.txt" "handshakes/hccapx/Example_6032b1a6ba8f.hc22000" -r "./hashcat/rules/names.rule"

@@ -5,8 +5,13 @@
 
 **Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
 
+# TO-DO - For Windows
+* Add logic to get the handshakes from a `Pwnagotchi`.
+* Write code to generate a password list based on relative information.
+* Promote the repo on Reddit.
+
 # Purpose
-This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
+This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling, on both Windows and OS X systems.
 
 In order to create it I started by refactoring different repos that are no longer maintained.
 * [Pwnagotchi-Tools](https://github.com/mtagius/pwnagotchi-tools): [mtagius](https://github.com/mtagius)
@@ -14,8 +19,17 @@ In order to create it I started by refactoring different repos that are no longe
 
 # Table Of Contents
 * [Dependencies](#dependencies)
+	* [OS X](#os-x-dependencies)
+	* [Windows](#windows-dependencies)
+* [Pwnagotchi Setup](#pwnagotchi-setup)
+	* [OS X](#os-x-setup)
+	* [Windows](#windows-setup)
 * [Installation](#installation)
+	* [OS X](#os-x-installation)
+	* [Windows](#windows-installation)
 * [Initial Configuration](#initial-configuration)
+	* [OS X](#os-x-configuration)
+	* [Windows](#windows-configuration)
 * [Additional Configuration Steps](#additional-configuration-steps)
 	* [Wordlists](#wordlists)
 		* [Personal Wordlist](#personal-wordlist)
@@ -26,6 +40,8 @@ In order to create it I started by refactoring different repos that are no longe
 * [Scripts](#scripts)
 	* [Copy the .PCAP files to your machine.](#copy-the-pcap-files-to-your-machine)
 	* [Generate the .HC22000/.PMKID files.](#generate-the-hc22000pmkid-files)
+		* [OS X](#os-x---generate)
+		* [Windows](#windows---generate)
 	* [Generate the list of attacks.](#generate-the-list-of-attacks)
 		* [Combinations](#combinations)
 		* [Output Example](#output-example)
@@ -37,29 +53,65 @@ In order to create it I started by refactoring different repos that are no longe
 			* [--attack-mode=6](#attack-mode6)
 	* [Execute the handshake attacks.](#execute-the-handshake-attacks)
 		* [Example Terminal Output](#example-terminal-output)
-* [Clean-Up](#clean-up)]
+* [Clean-Up](#clean-up)
 * [Troubleshooting](#troubleshooting)
 	* [Issue #1](#issue-1)
 * [LINKS](#links)
 
 # Dependencies
+## OS X Dependencies
 * [Brew](https://docs.brew.sh/Installation)
 * [NodeJS](https://nodejs.org/en/download)
 * [hcxpcapngtool](https://github.com/warecrer/Hcxpcaptool)
 * [Hashcat](https://manpages.org/hashcat)
 
+## Windows Dependencies
+* [NodeJS](https://nodejs.org/en/download)
+* [Vagrant](https://developer.hashicorp.com/vagrant/install)
+* [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
+	* Vagrant and Virtual Box are only used to convert `.pcap` files to the corresponding `.hccapx`/`.pmkid` files.
+* [Hashcat v6.2.6 binaries](https://hashcat.net/hashcat/)
+	* Make note of the `PATH` to where you unpacked `Hashcat`.
+		* Example: `C:\\Users\\XXXXXX\\hashcat-6.2.6\\`
+
+# Pwnagotchi Setup
+## OS X Setup
+* Official
+	* [Connecting to your Pwnagotchi: pwnagotchi.ai](https://pwnagotchi.ai/configuration/#connect-to-your-pwnagotchi)
+* Other
+	* https://mattgibson.ca/pwnagotchi-1-6-2-with-waveshare-v3-macos-macbook-host/
+
+## Windows Setup
+* Other
+	* https://blog.manchestergreyhats.co.uk/posts/2020-01-10-pwnagotchi-setup/
+
 # Installation
+## OS X Installation
 * `git clone https://github.com/ivy00johns/pwnagotchi-tools/`
 * `npm install`
 * `brew install hcxpcaptool`
 * `brew install hashcat`
 
+## Windows Installation
+* `git clone https://github.com/ivy00johns/pwnagotchi-tools/`
+* `npm install`
+
 # Initial Configuration
+## OS X Configuration
 1. `cp .config.example .config`
 2. Set the details for your `Pwnagotchi`:
 	* `HOST_IP: ""`
 	* `USERNAME: ""`
 	* `PASSWORD: ""`
+
+## Windows Configuration
+1. `cp .config.example .config`
+2. Set the details for your `Pwnagotchi`:
+	* `HOST_IP: ""`
+	* `USERNAME: ""`
+	* `PASSWORD: ""`
+	* `WINDOWS: true`
+	* `HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6"`
 
 # Additional Configuration Steps
 ## Wordlists
@@ -125,15 +177,23 @@ WORDLISTS: [
 
 # Scripts
 ## Copy the .PCAP files to your machine.
-To copy the `.pcap` files from your `Pwnagotchi` run the following script. It will copy the files from the `/root/handshakes` directory on the `Pwnagotchi` to one that you can access from your machine, `/usr/[USERNAME]/handshakes`. Then it will copy the `/usr/[USERNAME]/handshakes` directory to your machine.
+To copy the `.pcap` files from your `Pwnagotchi` run the following script.
+It will copy the files from the `/root/handshakes` directory on the `Pwnagotchi` to one that you can access from your machine, `/usr/[USERNAME]/handshakes`.
+Then it will copy the `/usr/[USERNAME]/handshakes` directory to your machine, in the `./handshakes/pcap` directory.
 * `npm run get`
 
 ## Generate the .HC22000/.PMKID files.
 To generate the necessary `.hc22000`/`.pmkid` files needed to crack the WiFi handshakes run the following script.
+### OS X - Generate
 * `npm run generate`
+
+### Windows - Generate
+* `npm run vagrant-up`
 
 ## Generate the list of attacks.
 To generate the list of attacks based on the config variables outlined in the `.config` file, run the following script.
+It will generate the `attacks-list.js` file in the `./hashcat/attacks-list` directory.
+When ever you modify the `WORDLISTS`, `DICTIONARIES`, `RULES`, and/or `MASKS` variables in the `.config` file, make sure to rerun the script.
 * `npm run attacks`
 
 ### Combinations
@@ -173,23 +233,23 @@ const attacks = [
   [
 	"--attack-mode=3",
 	"",
-	"?h?h?h?h?h"
+	"?h?h?h?h?h?h?h?h"
   ],
   [
 	"--attack-mode=6",
 	"./wordlists/known-passwords.txt",
-	"?h?h?h?h?h"
+	"?h?h?h?h?h?h?h?h"
   ],
   [
 	"--attack-mode=6",
 	"./wordlists/known-passwords.dic",
-	"?h?h?h?h?h"
+	"?h?h?h?h?h?h?h?h"
   ]
 ];
 ```
 
 ## Generate the attack scripts.
-To generate the necessary scripts to crack the WiFi handshakes run the following script.
+To generate the necessary scripts to crack the WiFi handshakes based on the `./hashcat/attacks-list/attacks-list.js` file, run the following script.
 * `npm run scripts`
 
 ### Command Breakdown
@@ -204,7 +264,7 @@ To generate the necessary scripts to crack the WiFi handshakes run the following
 * `"./handshakes/hccapx/[HC22000_FILE_NAME].hc22000"` - The targetted `.hc22000` file that needs to be cracked.
 * `--rules-file="./hashcat/rules/[RULES_NAME].rule"` - The file that contains the rules for generating password candidates.
 * `-S "./wordlists/[PASSWORDS_LIST_NAME].txt"` - List of passwords.
-* `"?h?h?h?h?h"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
+* `"?h?h?h?h?h?h?h?h"` - A mask is a string of characters that represents the structure of a password. It uses placeholders to indicate which characters can be used at each position in the password. This allows hashcat to generate password candidates more efficiently than a brute-force attack, which would try every possible combination of characters.
 
 ### Attack Command Examples
 #### --attack-mode=0
@@ -223,7 +283,15 @@ hashcat --hash-type=22000 --attack-mode=6 --session [HC22000_FILE_NAME]_[RANDOM-
 ```
 
 ## Execute the handshake attacks.
+### OS X Execution
+* Locate the necessary `.sh` file in the `./hashcat/attack-scripts` directory.
+* Run the script:
+	* `./hashcat/attack-scripts/NETWORK_a0648f5681d7.sh`
 
+### Windows Execution
+* Locate the necessary `.bat` file in the `.\hashcat\attack-scripts` directory.
+* Run the script:
+	* `.\hashcat\attack-scripts\NETWORK_a0648f5681d7.bat`
 
 ### Example Terminal Output
 ```bash
@@ -303,8 +371,7 @@ Candidates.#1....: passwordMYWIFI0777 -> passwordMYWIFI0777
 Hardware.Mon.#1..: Util: 95%
 
 
-
-Session..........: Pizzaislife_a0648f5681d7_6215
+Session..........: EXAMPLE_a0648f5681d7_6215
 Status...........: Quit
 Hash.Mode........: 22000 (WPA-PBKDF2-PMKID+EAPOL)
 Hash.Target......: handshakes/hccapx/EXAMPLE_a0648f5681d7.hc22000
@@ -385,6 +452,26 @@ Stopped: Sun Nov 12 20:02:49 2023
 
 * *SOLUTION*
 	* TBA
+
+## Issue #2 - WINDOWS
+1. If you see the following error,`./OpenCL/: No such file or directory`, do the following.
+* *TERMINAL OUTPUT*
+```bash
+PS C:\Users\John\pwnagotchi-tools> hashcat --hash-type=22000 --attack-mode=0 --session Pizzaislife_a0648f5681d7_6450 --hwmon-temp-abort=100 -w 2 --potfile-path="./hashcat/pa0648f5681d7_6450-potfile.txt" --outfile="./hashcat/outputs/Pizzaislife_a0648f5681d7_6450-outfile.txt" "./handshakes/hccapx/Pizzaislife_a0648f5681d7.hc22000" --rules-file=".rule" -S "./wordlists/shortKrak.txt"
+>>
+hashcat (v6.2.6) starting
+
+./OpenCL/: No such file or directory
+
+Started: Mon Nov 13 02:02:16 2023
+Stopped: Mon Nov 13 02:02:16 2023
+```
+
+* *ERROR*
+	* `./OpenCL/: No such file or directory`
+
+* *SOLUTION*
+	* Ensure that `hashcat` is included in your `PATH`.
 
 ----
 

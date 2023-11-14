@@ -4,7 +4,11 @@ module.exports = {
 	USERNAME: "",
 	PASSWORD: "",
 	PORT: 22,
-	
+
+	// Windows configs
+	WINDOWS: false,
+	HASHCAT_PATH: "",
+
 	// Define paths for attach lists
 	WORDLISTS: [
 		"./wordlists"
@@ -19,11 +23,12 @@ module.exports = {
 	],
 
 	MASKS: [
-		"?h?h?h?h?h"
+		"?h?h?h?h?h?h?h?h"
 	],
 
 	// Paths
-	HANDSHAKE_DIRECTORY: `/home/${this.USERNAME}/handshakes`,
+	HANDSHAKE_DIRECTORY: `~/handshakes`,
+	PWNAGOTCHI_HANDSHAKES: `/home/pi/handshakes`,
 	LOCAL_PCAP_DIRECTORY: "./handshakes/pcap",
 	LOCAL_PMKID_DIRECTORY: "./handshakes/pmkid",
 	LOCAL_HCCAPX_DIRECTORY: "./handshakes/hccapx",
@@ -36,6 +41,6 @@ module.exports = {
 	ABORT_WAIT_TIME: 2,
 
 	// Hashcat file paths
-	HASHCAT_ATTACK_LISTS: "./hashcat/attack-lists/attacks-list.js",
+	HASHCAT_ATTACK_LISTS: "./hashcat/attacks-list/attacks-list.js",
 	HASHCAT_ATTACK_SCRIPTS: "./hashcat/attack-scripts"
 };

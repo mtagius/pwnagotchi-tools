@@ -1,0 +1,17 @@
+{
+	"name": "pwnagetty",
+	"version": "1.0.0",
+	"description": "Get your Pwnagotchi handshakes and convert them in one go.",
+	"main": "bin/index.js",
+	"scripts": {
+	  "test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [],
+	"author": "CyrisXD (https://github.com/cyrisxd)",
+	"license": "MIT",
+	"bin": {
+	  "pwnagetty": "./bin/index.js"
+	},
+	"dependencies": {}
+  }
+  
