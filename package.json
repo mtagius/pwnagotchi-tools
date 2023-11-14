@@ -1,5 +1,5 @@
 {
-	"name": "os-x-pwnagotchi-tools",
+	"name": "pwnagotchi-tools",
 	"version": "1.0.0",
 	"description": "",
 	"main": "index.js",
@@ -7,19 +7,21 @@
 		"get": "node ./pwnagetty/pwnagetty-get-pcaps.js",
 		"generate": "node ./pwnagetty/pwnagetty-generate.js",
 		"attacks": "node ./scripts/generate-attacks-list.js",
-		"scripts": "node ./scripts/generate-hashcat-scripts.js"
+		"scripts": "node ./scripts/generate-hashcat-scripts.js",
+		"vagrant-up": "cd ./windows/vagrant && vagrant up --provision",
+		"vagrant-destroy": "cd ./windows/vagrant && vagrant destroy -f"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ivy00johns/os-x-pwnagotchi-tools.git"
+		"url": "git+https://github.com/ivy00johns/pwnagotchi-tools.git"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/issues"
+		"url": "https://github.com/ivy00johns/pwnagotchi-tools/issues"
 	},
-	"homepage": "https://github.com/ivy00johns/os-x-pwnagotchi-tools/os-x#readme",
+	"homepage": "https://github.com/ivy00johns/pwnagotchi-tools#readme",
 	"dependencies": {
 		"commander": "^11.1.0",
 		"fs": "^0.0.1-security",

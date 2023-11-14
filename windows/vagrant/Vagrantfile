@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
 	apt-get -y install curl
 	apt-get -y install hcxtools
 
-	curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+	curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 	apt-get -y install nodejs
 
 	cd /pwnagetty
