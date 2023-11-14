@@ -21,7 +21,9 @@ function generateHashcatCommands(attacks) {
 			scriptLines.push(":: v1");
 			scriptLines.push(`cd ${config.HASHCAT_PATH}`);
 		} else {
-			scriptFilePath = path.join(projectDirectory, config.HASHCAT_ATTACK_SCRIPTS, `${path.basename(hcCapxFile, path.extname(hcCapxFile))}.txt`);
+			scriptLines.push("#!/bin/bash");
+
+			scriptFilePath = path.join(projectDirectory, config.HASHCAT_ATTACK_SCRIPTS, `${path.basename(hcCapxFile, path.extname(hcCapxFile))}.sh`);
 		}
 
 		for (const attack of attacks) {

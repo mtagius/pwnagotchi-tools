@@ -284,7 +284,9 @@ hashcat --hash-type=22000 --attack-mode=6 --session [HC22000_FILE_NAME]_[RANDOM-
 
 ## Execute the handshake attacks.
 ### OS X Execution
-* TBD
+* Locate the necessary `.sh` file in the `./hashcat/attack-scripts` directory.
+* Run the script:
+	* `./hashcat/attack-scripts/NETWORK_a0648f5681d7.sh`
 
 ### Windows Execution
 * Locate the necessary `.bat` file in the `.\hashcat\attack-scripts` directory.

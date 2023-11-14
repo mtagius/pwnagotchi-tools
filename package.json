@@ -7,7 +7,7 @@
 		"get": "node ./pwnagetty/pwnagetty-get-pcaps.js",
 		"generate": "node ./pwnagetty/pwnagetty-generate.js",
 		"attacks": "node ./scripts/generate-attacks-list.js",
-		"scripts": "node ./scripts/generate-hashcat-scripts.js",
+		"scripts": "node ./scripts/generate-hashcat-scripts.js && chmod +x ./hashcat/attack-scripts/*",
 		"vagrant-up": "cd ./windows/vagrant && vagrant up --provision",
 		"vagrant-destroy": "cd ./windows/vagrant && vagrant destroy -f"
 	},
