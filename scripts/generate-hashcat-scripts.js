@@ -10,14 +10,18 @@ function generateHashcatCommands(attacks) {
 	for (const hcCapxFile of hcCapxFiles) {
 		const hcCapxFilePath = path.join(projectDirectory, config.LOCAL_HCCAPX_DIRECTORY, hcCapxFile);
 		const sessionName = `${path.basename(hcCapxFile, path.extname(hcCapxFile))}_${getRandomInt()}`;
-		const scriptFilePath = path.join(projectDirectory, config.HASHCAT_ATTACK_SCRIPTS, `${path.basename(hcCapxFile, path.extname(hcCapxFile))}.txt`);
+		let scriptFilePath = "";
 
 		// Create an array to store script lines
 		const scriptLines = [];
 
 		if (config.WINDOWS) {
+			scriptFilePath = path.join(projectDirectory, config.HASHCAT_ATTACK_SCRIPTS, `${path.basename(hcCapxFile, path.extname(hcCapxFile))}.bat`);
+
 			scriptLines.push(":: v1");
 			scriptLines.push(`cd ${config.HASHCAT_PATH}`);
+		} else {
+			scriptFilePath = path.join(projectDirectory, config.HASHCAT_ATTACK_SCRIPTS, `${path.basename(hcCapxFile, path.extname(hcCapxFile))}.txt`);
 		}
 
 		for (const attack of attacks) {
