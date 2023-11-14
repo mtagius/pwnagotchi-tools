@@ -150,7 +150,6 @@ handshakes/pmkid/*
 # Logs
 hashcat/outputs/*
 hashcat/potfiles/*
-windows/bssids.json
 
 # attacks list
 attacks-list.js
