@@ -6,19 +6,12 @@
 **Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
 
 # TO-DO - For Windows
-* Add instructions for installing `hashcat` and including it in the file path.
 * Add logic to get the handshakes from a `Pwnagotchi`.
-* Include the Vagrant files.
-	* Add a note about `--provision`.
-* Include the original `.\handshakes\pwnagetty\pwnagetty.py` file.
-* Update the generate attack skips to build `.bat` files instead of `.js` files.
-	* `.bat` files need to CD into the hashcat directory. If I can't figure out the pathing issue.
-	* The commands need to have the entire file path in them.
-* Generate the entire absolute file path instead of a relative file path.
 * Write code to generate a password list based on relative information.
+* Promote the repo on Reddit.
 
 # Purpose
-This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling.
+This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling, on both Windows and OS X systems.
 
 In order to create it I started by refactoring different repos that are no longer maintained.
 * [Pwnagotchi-Tools](https://github.com/mtagius/pwnagotchi-tools): [mtagius](https://github.com/mtagius)
@@ -26,8 +19,17 @@ In order to create it I started by refactoring different repos that are no longe
 
 # Table Of Contents
 * [Dependencies](#dependencies)
+	* [OS X](#os-x-dependencies)
+	* [Windows](#windows-dependencies)
+* [Pwnagotchi Setup](#pwnagotchi-setup)
+	* [OS X](#os-x-setup)
+	* [Windows](#windows-setup)
 * [Installation](#installation)
+	* [OS X](#os-x-installation)
+	* [Windows](#windows-installation)
 * [Initial Configuration](#initial-configuration)
+	* [OS X](#os-x-configuration)
+	* [Windows](#windows-configuration)
 * [Additional Configuration Steps](#additional-configuration-steps)
 	* [Wordlists](#wordlists)
 		* [Personal Wordlist](#personal-wordlist)
@@ -38,6 +40,8 @@ In order to create it I started by refactoring different repos that are no longe
 * [Scripts](#scripts)
 	* [Copy the .PCAP files to your machine.](#copy-the-pcap-files-to-your-machine)
 	* [Generate the .HC22000/.PMKID files.](#generate-the-hc22000pmkid-files)
+		* [OS X](#os-x---generate)
+		* [Windows](#windows---generate)
 	* [Generate the list of attacks.](#generate-the-list-of-attacks)
 		* [Combinations](#combinations)
 		* [Output Example](#output-example)
@@ -55,23 +59,59 @@ In order to create it I started by refactoring different repos that are no longe
 * [LINKS](#links)
 
 # Dependencies
+## OS-X Dependencies
 * [Brew](https://docs.brew.sh/Installation)
 * [NodeJS](https://nodejs.org/en/download)
 * [hcxpcapngtool](https://github.com/warecrer/Hcxpcaptool)
 * [Hashcat](https://manpages.org/hashcat)
 
+## Windows Dependencies
+* [NodeJS](https://nodejs.org/en/download)
+* [Vagrant](https://developer.hashicorp.com/vagrant/install)
+* [Virtual Box](https://www.virtualbox.org/wiki/Downloads)
+	* Vagrant and Virtual Box are only used to convert `.pcap` files to the corresponding `.hccapx`/`.pmkid` files.
+* [Hashcat v6.2.6 binaries](https://hashcat.net/hashcat/)
+	* Make note of the `PATH` to where you unpacked `Hashcat`.
+		* Example: `C:\\Users\\XXXXXX\\hashcat-6.2.6\\`
+
+# Pwnagotchi Setup
+## OS X Setup
+* Official
+	* [Connecting to your Pwnagotchi: pwnagotchi.ai](https://pwnagotchi.ai/configuration/#connect-to-your-pwnagotchi)
+* Other
+	* https://mattgibson.ca/pwnagotchi-1-6-2-with-waveshare-v3-macos-macbook-host/
+
+## Windows Setup
+* Other
+	* https://blog.manchestergreyhats.co.uk/posts/2020-01-10-pwnagotchi-setup/
+
 # Installation
+## OS X Installation
 * `git clone https://github.com/ivy00johns/pwnagotchi-tools/`
 * `npm install`
 * `brew install hcxpcaptool`
 * `brew install hashcat`
 
+## Windows Installation
+* `git clone https://github.com/ivy00johns/pwnagotchi-tools/`
+* `npm install`
+
 # Initial Configuration
+## OS X Configuration
 1. `cp .config.example .config`
 2. Set the details for your `Pwnagotchi`:
 	* `HOST_IP: ""`
 	* `USERNAME: ""`
 	* `PASSWORD: ""`
+
+## Windows Configuration
+1. `cp .config.example .config`
+2. Set the details for your `Pwnagotchi`:
+	* `HOST_IP: ""`
+	* `USERNAME: ""`
+	* `PASSWORD: ""`
+	* `WINDOWS: true`
+	* `HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6"`
 
 # Additional Configuration Steps
 ## Wordlists
@@ -142,7 +182,11 @@ To copy the `.pcap` files from your `Pwnagotchi` run the following script. It wi
 
 ## Generate the .HC22000/.PMKID files.
 To generate the necessary `.hc22000`/`.pmkid` files needed to crack the WiFi handshakes run the following script.
+### OS X - Generate
 * `npm run generate`
+
+### Windows - Generate
+* `npm run vagrant-up`
 
 ## Generate the list of attacks.
 To generate the list of attacks based on the config variables outlined in the `.config` file, run the following script.
@@ -235,7 +279,13 @@ hashcat --hash-type=22000 --attack-mode=6 --session [HC22000_FILE_NAME]_[RANDOM-
 ```
 
 ## Execute the handshake attacks.
+### OS X Execution
+* TBD
 
+### Windows Execution
+* Locate the necessary `.bat` file in the `.\hashcat\attack-scripts` directory.
+* Run the script:
+	* `.\hashcat\attack-scripts\NETWORK_a0648f5681d7.bat`
 
 ### Example Terminal Output
 ```bash
@@ -315,8 +365,7 @@ Candidates.#1....: passwordMYWIFI0777 -> passwordMYWIFI0777
 Hardware.Mon.#1..: Util: 95%
 
 
-
-Session..........: Pizzaislife_a0648f5681d7_6215
+Session..........: EXAMPLE_a0648f5681d7_6215
 Status...........: Quit
 Hash.Mode........: 22000 (WPA-PBKDF2-PMKID+EAPOL)
 Hash.Target......: handshakes/hccapx/EXAMPLE_a0648f5681d7.hc22000
