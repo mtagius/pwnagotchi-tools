@@ -53,13 +53,13 @@ In order to create it I started by refactoring different repos that are no longe
 			* [--attack-mode=6](#attack-mode6)
 	* [Execute the handshake attacks.](#execute-the-handshake-attacks)
 		* [Example Terminal Output](#example-terminal-output)
-* [Clean-Up](#clean-up)]
+* [Clean-Up](#clean-up)
 * [Troubleshooting](#troubleshooting)
 	* [Issue #1](#issue-1)
 * [LINKS](#links)
 
 # Dependencies
-## OS-X Dependencies
+## OS X Dependencies
 * [Brew](https://docs.brew.sh/Installation)
 * [NodeJS](https://nodejs.org/en/download)
 * [hcxpcapngtool](https://github.com/warecrer/Hcxpcaptool)
