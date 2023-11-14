@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 const fs = require("fs");
+const path = require("path");
+const util = require("util");
 const { exec } = require("child_process");
 
 //====================================
@@ -25,17 +27,16 @@ function logo() {
 	╚═╝      ╚══╝╚══╝ ╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝   ╚═╝      ╚═╝      ╚═╝   
 																						
 	   
-					|===============================================|
-					| Github: https://github.com/CyrisXD/Pwnagetty  |
-					| Twitter: @sudo_overflow                       |
-					|===============================================|
-
+				|===============================================|
+				| Github: https://github.com/CyrisXD/Pwnagetty  |
+				| Twitter: @sudo_overflow                       |
+				|===============================================|
 			`);
 }
 
 async function readBSSIDsFile() {
 	return new Promise((resolve, reject) => {
-		fs.readFile("./pwnagetty/bssids.json", function (err, data) {
+		fs.readFile(path.join(__dirname, "bssids.json"), function (err, data) {
 			if (err) {
 				reject(`Unable to read bssids.json file: ${err}`);
 				return;
@@ -66,7 +67,7 @@ async function readDir() {
 //===============================================================
 async function grabBSSID(file) {
 	return new Promise((resolve, reject) => {
-		let aircrack = exec(`aircrack-ng ${config.localDir}${file}`, function (error, stdout) {
+		let aircrack = util.promisify(exec)(`aircrack-ng ${config.localDir}${file}`, function (error, stdout) {
 			if (error) {
 				resolve(resolve);
 			}
@@ -98,7 +99,7 @@ async function convertFile(file) {
 		}
 
 		// We favour PMKID's, if we find that we ignore handshakes, if no PMKID is found then we look for a handshake.
-		let convertPMKIDs = exec(`hcxpcapngtool -o ./handshakes/pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
+		util.promisify(exec)(`hcxpcapngtool -o ./handshakes/pmkid/${file.replace(".pcap", "")}.pmkid ${config.localDir + file}`, function (error, stdout) {
 			if (error) {
 				reject(error); // Reject the promise on error
 			}
@@ -109,7 +110,7 @@ async function convertFile(file) {
 				resolve("pmkid");
 			} else {
 				// If PMKID is not found, try converting to HCCAPX
-				let convertHCCAPX = exec(`hcxpcapngtool -o ./handshakes/hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
+				util.promisify(exec)(`hcxpcapngtool -o ./handshakes/hccapx/${file.replace(".pcap", "")}.hc22000 ${config.localDir + file}`, function (error, stdout) {
 					if (error) {
 						reject(error); // Reject the promise on error
 						console.log(error);
@@ -140,12 +141,12 @@ async function main() {
 
 		// if "/pmkid" doesn"t exist, create it.
 		if (!fs.existsSync("./handshakes/pmkid")) {
-			fs.mkdirSync("./handshakes/pmkid");
+			fs.mkdirSync("./handshakes/pmkid", { recursive: true });
 		}
 
 		// if "/hccapx" doesn"t exist, create it.
 		if (!fs.existsSync("./handshakes/hccapx")) {
-			fs.mkdirSync("./handshakes/hccapx");
+			fs.mkdirSync("./handshakes/hccapx", { recursive: true });
 		}
 
 		// Loop over all pcap files
@@ -154,7 +155,7 @@ async function main() {
 			let pos  = file.lastIndexOf("_");
 			var ssid = file.substring(0, pos);
 
-			console.log(`\nProcessing: ${ssid}`);
+			console.log(`\nProcessing: ${file}`);
 
 			if (bssids[file] == undefined) {
 				let result = await convertFile(file);
