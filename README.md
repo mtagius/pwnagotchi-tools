@@ -177,7 +177,9 @@ WORDLISTS: [
 
 # Scripts
 ## Copy the .PCAP files to your machine.
-To copy the `.pcap` files from your `Pwnagotchi` run the following script. It will copy the files from the `/root/handshakes` directory on the `Pwnagotchi` to one that you can access from your machine, `/usr/[USERNAME]/handshakes`. Then it will copy the `/usr/[USERNAME]/handshakes` directory to your machine.
+To copy the `.pcap` files from your `Pwnagotchi` run the following script.
+It will copy the files from the `/root/handshakes` directory on the `Pwnagotchi` to one that you can access from your machine, `/usr/[USERNAME]/handshakes`.
+Then it will copy the `/usr/[USERNAME]/handshakes` directory to your machine, in the `./handshakes/pcap` directory.
 * `npm run get`
 
 ## Generate the .HC22000/.PMKID files.
