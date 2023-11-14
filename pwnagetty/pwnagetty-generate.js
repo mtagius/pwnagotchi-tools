@@ -66,6 +66,8 @@ async function readDir() {
 // Extract BSSID from PCAP file - Terrible way using Aircrack-ng
 //===============================================================
 async function grabBSSID(file) {
+	console.log(`Attempting to grab BSSID for file: ${file}`);
+
 	return new Promise((resolve, reject) => {
 		let aircrack = util.promisify(exec)(`aircrack-ng ${config.localDir}${file}`, function (error, stdout) {
 			if (error) {
@@ -138,7 +140,7 @@ async function main() {
 
 		let bssids = await readBSSIDsFile();
 		let files  = await readDir();
-
+		
 		// if "/pmkid" doesn"t exist, create it.
 		if (!fs.existsSync("./handshakes/pmkid")) {
 			fs.mkdirSync("./handshakes/pmkid", { recursive: true });
@@ -159,6 +161,7 @@ async function main() {
 
 			if (bssids[file] == undefined) {
 				let result = await convertFile(file);
+
 				if (result == "pmkid" || result == "hccapx") {
 					let BSSID = await grabBSSID(file);
 					bssids[file] = {
