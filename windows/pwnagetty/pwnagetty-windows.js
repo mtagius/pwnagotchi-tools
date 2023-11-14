@@ -139,12 +139,12 @@ async function main() {
 		let files  = await readDir();
 
 		// if "/pmkid" doesn"t exist, create it.
-		if (!fs.existsSync("../../handshakes/pmkid")) {
-			fs.mkdirSync("../../handshakes/pmkid");
+		if (!fs.existsSync("../../../handshakes/pmkid")) {
+			fs.mkdirSync("../../../handshakes/pmkid");
 		}
 		// if "/hccapx" doesn"t exist, create it.
-		if (!fs.existsSync("../../handshakes/hccapx")) {
-			fs.mkdirSync("../../handshakes/hccapx");
+		if (!fs.existsSync("../../../handshakes/hccapx")) {
+			fs.mkdirSync("../../../handshakes/hccapx");
 		}
 
 		// Loop over all pcap files

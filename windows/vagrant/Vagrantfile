@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
 	# the path on the guest to mount the folder. And the optional third
 	# argument is a set of non-required options.
 	config.vm.synced_folder "../../handshakes", "/handshakes"
-	config.vm.synced_folder "../../windows", "/pwnagetty" 
+	config.vm.synced_folder "../../windows/pwnagetty", "/pwnagetty" 
   
 	config.vm.boot_timeout = 600
   
