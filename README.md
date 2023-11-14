@@ -5,6 +5,11 @@
 
 **Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
 
+# TO-DO
+* [] Correct the counters staying at 0 even though keys are located.
+* [] Add status files that are easier to access and view like the original repo.
+* [] Add tabular summaries like the original repo.
+
 # Purpose
 This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling, on both Windows and OS X systems.
 
@@ -48,10 +53,10 @@ In order to create it I started by refactoring different repos that are no longe
 			* [--attack-mode=6](#attack-mode6)
 	* [Execute the handshake attacks.](#execute-the-handshake-attacks)
 		* [Example Terminal Output](#example-terminal-output)
-* [Clean-Up](#clean-up)
 * [Troubleshooting](#troubleshooting)
 	* [Issue #1](#issue-1)
-* [LINKS](#links)
+	* [Issue #2](#issue-2---windows)
+* [Links](#links)
 
 # Dependencies
 ## OS X Dependencies
@@ -391,19 +396,9 @@ Hardware.Mon.#1..: Util: 95%
 Stopped: Sun Nov 12 20:02:49 2023
 ```
 
----
-
-# Clean-Up
-* If you want to delete the generated `.hc22000`/`.pmkid` files, run the following script.
-	* `npm run clean-up-handshakes`
-
-* If you want to delete the generated `[HC22000_FILE_NAME]-output.txt`/`[HC22000_FILE_NAME]-potfile.txt` files, run the following script.
-	* `npm run clean-up-hashcat-logs`
-
 ----
 
 # Troubleshooting
-
 ## Issue #1
 1. If you get the error, `Integer overflow detected in keyspace of mask: ?h?h?h?h?h?h?h?h`, do the following.
 * *TERMINAL OUTPUT*
@@ -452,7 +447,7 @@ Stopped: Sun Nov 12 20:02:49 2023
 1. If you see the following error,`./OpenCL/: No such file or directory`, do the following.
 * *TERMINAL OUTPUT*
 ```bash
-PS C:\Users\John\pwnagotchi-tools> hashcat --hash-type=22000 --attack-mode=0 --session Pizzaislife_a0648f5681d7_6450 --hwmon-temp-abort=100 -w 2 --potfile-path="./hashcat/pa0648f5681d7_6450-potfile.txt" --outfile="./hashcat/outputs/Pizzaislife_a0648f5681d7_6450-outfile.txt" "./handshakes/hccapx/Pizzaislife_a0648f5681d7.hc22000" --rules-file=".rule" -S "./wordlists/shortKrak.txt"
+PS C:\Users\John\pwnagotchi-tools> hashcat --hash-type=22000 --attack-mode=0 --session EXAMPLE_a0648f5681d7_6450 --hwmon-temp-abort=100 -w 2 --potfile-path="./hashcat/pa0648f5681d7_6450-potfile.txt" --outfile="./hashcat/outputs/EXAMPLE_a0648f5681d7_6450-outfile.txt" "./handshakes/hccapx/EXAMPLE_a0648f5681d7.hc22000" --rules-file=".rule" -S "./wordlists/shortKrak.txt"
 >>
 hashcat (v6.2.6) starting
 
@@ -466,11 +461,11 @@ Stopped: Mon Nov 13 02:02:16 2023
 	* `./OpenCL/: No such file or directory`
 
 * *SOLUTION*
-	* Ensure that `hashcat` is included in your `PATH`.
+	* If you are running a single line in the `.bat` file, outside of the `.bat` file, ensure that you `cd` insto the `hashcat` installation directory.
 
 ----
 
-# LINKS
+# Links
 * [pwnagotchi.ai](https://pwnagotchi.ai/)
 * Main Pwnagotchi repo: [Pwnagotchi](https://github.com/evilsocket/pwnagotchi)
 	* Default Pwnagotchi configuration file: [defaults.toml](https://github.com/evilsocket/pwnagotchi/blob/master/pwnagotchi/defaults.toml)
