@@ -1,17 +1,22 @@
 # pwnagotchi-tooling
 
 # DISCLAIMER
-**This project is for WiFi security education ONLY!**
+### This project is for WiFi security education purposes ONLY!
+### Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!
 
-**Hacking WiFi networks that you DO NOT OWN IS ILLEGAL!**
+## TO-DO
+- [ ] Correct the counters staying at 0 even though keys are located and files are generated.
+	```bash
+	Processing: EXAMPLE_c8d71922525c.pcap
+	No PMKID or HCCAPX found.
+	```
+- [ ] Add status files that are easier to access and view like the original repo.
+- [ ] Add [tabular](https://www.npmjs.com/package/tabulator-tables) summaries like the original repo.
 
-# TO-DO
-* [] Correct the counters staying at 0 even though keys are located.
-* [] Add status files that are easier to access and view like the original repo.
-* [] Add tabular summaries like the original repo.
+----
 
 # Purpose
-This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling, on both Windows and OS X systems.
+This repo contains a number of scripts to automate the process of cracking Wi-Fi handshakes gathered by a `Pwnagotchi` using the `Hashcat` tooling, on both the OS X and Windows operating systems.
 
 In order to create it I started by refactoring different repos that are no longer maintained.
 * [Pwnagotchi-Tools](https://github.com/mtagius/pwnagotchi-tools): [mtagius](https://github.com/mtagius)
@@ -100,33 +105,48 @@ In order to create it I started by refactoring different repos that are no longe
 ## OS X Configuration
 1. `cp .config.example .config`
 2. Set the details for your `Pwnagotchi`:
-	* `HOST_IP: ""`
-	* `USERNAME: ""`
-	* `PASSWORD: ""`
+	```javascript
+	...
+	HOST_IP: "",
+	USERNAME: "",
+	PASSWORD: "",
+	WINDOWS: false,
+	...
+	```
 
 ## Windows Configuration
 1. `cp .config.example .config`
 2. Set the details for your `Pwnagotchi`:
-	* `HOST_IP: ""`
-	* `USERNAME: ""`
-	* `PASSWORD: ""`
-	* `WINDOWS: true`
-	* `HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6"`
-
+	```javascript
+	...
+	`HOST_IP: "",
+	`USERNAME: "",
+	`PASSWORD: "",
+	`WINDOWS: true,
+	`HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6",
+	...
+	```
 # Additional Configuration Steps
 ## Wordlists
-By default this repo contains a single example wordlist. You will want to download additional ones to work with. You can place them in the provided `./wordlists` directory, or you can reference the directory directly in the `.config.js` file.
+By default this repo contains a small example wordlist, `./wordlists/shortKrak.txt`. You will want to download additional ones to work with. You can place them in the provided `./wordlists` directory, or reference the directory directly in the `.config.js` file.
 ```javascript
 ...
 WORDLISTS: [
 	"./wordlists",
-	"[PATH_TO_WORDLIST]"
+],
+...
+```
+
+```javascript
+...
+WORDLISTS: [
+	"./wordlists/shortKrak.txt",
 ],
 ...
 ```
 
 ### Personal Wordlist
-* You can add your own known passwords by cloning the example file and editing it.
+* You can add your own known or suspected passwords by cloning the example file and editing it.
 	1. `cp ./known-passwords.example.txt ./wordlists/known-passwords.txt`
 
 ### Standalone Wordlists
@@ -154,9 +174,40 @@ WORDLISTS: [
 	* [hashesorg2019](https://weakpass.com/wordlist/1851)
 
 ### Misc Wordlists
-* [Original Wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists)
+* [Original Forked Repo Wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists)
 
 ## Rules
+[Hashcat Rules](https://hashcat.net/wiki/doku.php?id=rule_based_attack):
+
+```text
+Hashcat rules are a powerful tool for generating password candidates based on patterns and rules. They can be used to crack passwords that follow specific patterns, such as those that use common words, numbers, or symbols. Hashcat rules can also be used to generate passwords that are more complex and less likely to be guessed.
+
+Here is a brief explanation of some of the basic Hashcat rules:
+
+Case modification rules: These rules change the capitalization of letters in a word. For example, the l rule converts all letters to lowercase, the u rule converts all letters to uppercase, and the c rule capitalizes the first letter of each word.
+
+String manipulation rules: These rules add, remove, or modify characters in a word. For example, the $N rule appends a character to the end of each word, the ^N rule prefixes a character to the start of each word, and the d rule duplicates each word in the wordlist.
+
+Reversal rules: These rules reverse the order of letters in a word. For example, the r rule reverses each word in the wordlist.
+
+Conditional rules: These rules control which password candidates are generated. For example, the ?N rule skips passwords that do not contain a specific character, and the !N rule skips passwords that contain a specific character.
+
+Hashcat rules can be combined in a variety of ways to create complex password-generation patterns. For example, the following rule generates passwords that are at least six characters long and start with a lowercase letter:
+
+?l?l?l?l?l?l
+
+This rule will skip any passwords that are less than six characters long or do not start with a lowercase letter. It will then generate all possible combinations of lowercase letters, numbers, and symbols to create passwords that meet these criteria.
+
+Hashcat rules are a powerful tool for cracking passwords, but they are also a valuable asset for security researchers. By understanding how Hashcat rules work, security researchers can develop better defenses against password-based attacks.
+```
+
+* Here are some additional resources for learning more about Hashcat rules:	
+
+* Hashcat rule-based attack: https://en.wikipedia.org/wiki/Hashcat
+* Explanation of Hashcat Rules: https://hashcat.net/wiki/doku.php?id=rule_based_attack
+* An Explanation of Hashcat Rules: https://raw.githubusercontent.com/hashcat/team-hashcat/main/CMIYC2021/CMIYC2021TeamHashcatWriteup.pdf
+* Hashcat explained: How this password cracker works: https://www.youtube.com/watch?v=OPTJei6cnw4
+
 ### Included Rules
 * [hob064](https://github.com/praetorian-inc/Hob0Rules)
 * [best64](https://trustedsec.com/blog/better-hacking-through-cracking-know-your-rules)
@@ -190,14 +241,29 @@ To generate the necessary `.hc22000`/`.pmkid` files needed to crack the WiFi han
 ### Windows - Generate
 * `npm run vagrant-up`
 
+#### Issue
+* When you run the `npm run generate` command you will see the following message that I am trying to resolve. It says it found no files when it did indeed generate the files.
+	```bash
+	Skipping: .gitkeep
+	.gitkeep successfully skipped.
+
+	Processing: EXAMPLE_c8d71922525c.pcap
+	No PMKID or HCCAPX found.
+
+	Processing: EXAMPLE_3c7a8a78adb8.pcap
+	No PMKID or HCCAPX found.
+
+	Processing: EXAMPLE_a41162403502.pcap
+	No PMKID or HCCAPX found.
+	```
+
 ## Generate the list of attacks.
-To generate the list of attacks based on the config variables outlined in the `.config` file, run the following script.
-It will generate the `attacks-list.js` file in the `./hashcat/attacks-list` directory.
-When ever you modify the `WORDLISTS`, `DICTIONARIES`, `RULES`, and/or `MASKS` variables in the `.config` file, make sure to rerun the script.
-* `npm run attacks`
+* To generate the list of attack combinations based on the variables outlined in the `.config` file, run the following script. It will generate the `attacks-list.js` file in the `./hashcat/attacks-list` directory.
+	* `npm run attacks`
+		* **When ever you modify the `WORDLISTS`, `DICTIONARIES`, `RULES`, and/or `MASKS` variables in the `.config` file, make sure to rerun this script before running the `npm run scripts` command.**
 
 ### Combinations
-The script will generate commands based on the following combinations.
+This script will generate a list of attacks based on the following combinations.
 ```text
 --attack-mode=0
 .txt X .rule
