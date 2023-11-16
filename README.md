@@ -119,11 +119,11 @@ In order to create it I started by refactoring different repos that are no longe
 2. Set the details for your `Pwnagotchi`:
 	```javascript
 	...
-	`HOST_IP: "",
-	`USERNAME: "",
-	`PASSWORD: "",
-	`WINDOWS: true,
-	`HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6",
+	HOST_IP: "",
+	USERNAME: "",
+	PASSWORD: "",
+	WINDOWS: true,
+	HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6",
 	...
 	```
 # Additional Configuration Steps
