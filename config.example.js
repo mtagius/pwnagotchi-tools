@@ -11,11 +11,11 @@ module.exports = {
 
 	// Define paths for attach lists
 	WORDLISTS: [
-		"./wordlists"
+		"./hashcat/wordlists"
 	],
 
 	DICTIONARIES: [
-		"./dictionaries"
+		"./hashcat/dictionaries"
 	],
 
 	RULES: [
@@ -27,8 +27,8 @@ module.exports = {
 	],
 
 	// Paths
-	HANDSHAKE_DIRECTORY: `~/handshakes`,
-	PWNAGOTCHI_HANDSHAKES: `/home/pi/handshakes`,
+	HANDSHAKE_DIRECTORY: "~/handshakes",
+	PWNAGOTCHI_HANDSHAKES: "/home/pi/handshakes",
 	LOCAL_PCAP_DIRECTORY: "./handshakes/pcap",
 	LOCAL_PMKID_DIRECTORY: "./handshakes/pmkid",
 	LOCAL_HCCAPX_DIRECTORY: "./handshakes/hccapx",

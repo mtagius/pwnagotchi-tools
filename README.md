@@ -128,11 +128,11 @@ In order to create it I started by refactoring different repos that are no longe
 	```
 # Additional Configuration Steps
 ## Wordlists
-By default this repo contains a small example wordlist, `./wordlists/shortKrak.txt`. You will want to download additional ones to work with. You can place them in the provided `./wordlists` directory, or reference the directory directly in the `.config.js` file.
+By default this repo contains a small example wordlist, `./hashcat/wordlists/shortKrak.txt`. You will want to download additional ones to work with. You can place them in the provided `./hashcat/wordlists` directory, or reference the directory directly in the `.config.js` file.
 ```javascript
 ...
 WORDLISTS: [
-	"./wordlists",
+	"./hashcat/wordlists",
 ],
 ...
 ```
@@ -140,14 +140,15 @@ WORDLISTS: [
 ```javascript
 ...
 WORDLISTS: [
-	"./wordlists/shortKrak.txt",
+	"./hashcat/wordlists/shortKrak.txt",
 ],
 ...
 ```
 
 ### Personal Wordlist
-* You can add your own known or suspected passwords by cloning the example file and editing it.
-	1. `cp ./known-passwords.example.txt ./wordlists/known-passwords.txt`
+* You can add your own known or suspected passwords by cloning the example wordlist and/or dictionary file and editing it.
+	1. `cp ./hashcat/known-passwords.example.txt ./hashcat/wordlists/known-passwords.txt`
+	2. `cp ./hashcat/known-passwords.example.dic ./hashcat/dictionaries/known-passwords.dic`
 
 ### Standalone Wordlists
 * [netgear-spectrum.txt](https://raw.githubusercontent.com/soxrok2212/PSKracker/master/dicts/netgear-spectrum/netgear-spectrum.txt)
@@ -177,7 +178,7 @@ WORDLISTS: [
 * [Original Forked Repo Wordlists](https://github.com/praetorian-inc/Hob0Rules/tree/master/wordlists)
 
 ## Rules
-[Hashcat Rules](https://hashcat.net/wiki/doku.php?id=rule_based_attack):
+[Hashcat Rules](https://hashcat.net/wiki/doku.php?id=rule_based_attack)
 
 ```text
 Hashcat rules are a powerful tool for generating password candidates based on patterns and rules. They can be used to crack passwords that follow specific patterns, such as those that use common words, numbers, or symbols. Hashcat rules can also be used to generate passwords that are more complex and less likely to be guessed.
