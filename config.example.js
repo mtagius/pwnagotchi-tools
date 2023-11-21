@@ -15,7 +15,7 @@ module.exports = {
 	],
 
 	DICTIONARIES: [
-		"./wordlists"
+		"./dictionaries"
 	],
 
 	RULES: [

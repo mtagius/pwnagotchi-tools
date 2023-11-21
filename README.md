@@ -12,6 +12,7 @@
 	```
 - [ ] Add status files that are easier to access and view like the original repo.
 - [ ] Add [tabular](https://www.npmjs.com/package/tabulator-tables) summaries like the original repo.
+- [ ] Add an attack for wordlists only without a set of rules.
 
 ----
 
@@ -269,6 +270,7 @@ This script will generate a list of attacks based on the following combinations.
 .txt X .rule
 .dic X .rule
 .rule
+.txt
 
 --attack-mode=3
 mask
@@ -528,6 +530,20 @@ Stopped: Mon Nov 13 02:02:16 2023
 
 * *SOLUTION*
 	* If you are running a single line in the `.bat` file, outside of the `.bat` file, ensure that you `cd` insto the `hashcat` installation directory.
+
+## Issue #3
+```bash
+Cracking performance lower than expected?
+
+* Append -w 3 to the commandline.
+  This can cause your screen to lag.
+
+* Update your backend API runtime / driver the right way:
+  https://hashcat.net/faq/wrongdriver
+
+* Create more work items to make use of your parallelization power:
+  https://hashcat.net/faq/morework
+```
 
 ----
 

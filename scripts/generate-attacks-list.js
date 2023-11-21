@@ -59,8 +59,10 @@ function generateAttacks() {
 
 				// Loop through masks
 				for (const mask of config.MASKS) {
+
 					// Loop through wordlists
 					for (const wordlist of wordlistFiles) {
+
 						// Loop through rules
 						for (const rule of ruleFiles) {
 							const attackType = determineAttackType(wordlist, rule, mask);
@@ -76,6 +78,11 @@ function generateAttacks() {
 								if (rule !== "") {
 									// Push the full file path
 									attack.push(rule);
+								}
+
+								if (wordlist !== "" && rule == "") {
+									// Push the full file path
+									attack.push(wordlist);
 								}
 
 								attacks.push(attack);

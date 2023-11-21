@@ -9,7 +9,9 @@
 		"attacks": "node ./scripts/generate-attacks-list.js",
 		"scripts": "node ./scripts/generate-hashcat-scripts.js && chmod +x ./hashcat/attack-scripts/*",
 		"vagrant-up": "cd ./windows/vagrant && vagrant up --provision",
-		"vagrant-destroy": "cd ./windows/vagrant && vagrant destroy -f"
+		"vagrant-destroy": "cd ./windows/vagrant && vagrant destroy -f",
+		"most": "npm run generate && npm run attacks && npm run scripts",
+		"all": "npm run get && npm run most"
 	},
 	"repository": {
 		"type": "git",

@@ -55,7 +55,10 @@ function generateType0Command(attack, sessionName, hcCapxFilePath) {
 	const rule = attack[2];
 
 	if (wordlist != "") {
-		return `hashcat --hash-type=${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_WAIT_TIME} --potfile-path "${path.join(projectDirectory, config.LOCAL_POTFILES_DIRECTORY, `${sessionName}-potfile.txt`)}" --outfile="${path.join(projectDirectory, config.LOCAL_OUTPUT_FILE_DIRECTORY, `${sessionName}-outfile.txt`)}" "${hcCapxFilePath}" --rules-file="${path.join(projectDirectory, rule)}" -S "${path.join(projectDirectory, wordlist)}"`;
+		let LISTS_ONLY = `hashcat --hash-type=${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_WAIT_TIME} --potfile-path "${path.join(projectDirectory, config.LOCAL_POTFILES_DIRECTORY, `${sessionName}-potfile.txt`)}" --outfile="${path.join(projectDirectory, config.LOCAL_OUTPUT_FILE_DIRECTORY, `${sessionName}-outfile.txt`)}" "${hcCapxFilePath}" --rules-file="${path.join(projectDirectory, rule)}" -S "${path.join(projectDirectory, wordlist)}"`;
+		let RULES_ONLY = `hashcat --hash-type=${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_WAIT_TIME} --potfile-path "${path.join(projectDirectory, config.LOCAL_POTFILES_DIRECTORY, `${sessionName}-potfile.txt`)}" --outfile="${path.join(projectDirectory, config.LOCAL_OUTPUT_FILE_DIRECTORY, `${sessionName}-outfile.txt`)}" "${hcCapxFilePath}" -S "${path.join(projectDirectory, wordlist)}"`
+		
+		return `${LISTS_ONLY}\n${RULES_ONLY}`;
 	} else {
 		return `hashcat --hash-type=${config.HASH_TYPE} ${attackType} --session ${sessionName} --hwmon-temp-abort=${config.ABORT_TEMPERATURE} -w ${config.ABORT_WAIT_TIME} --potfile-path "${path.join(projectDirectory, config.LOCAL_POTFILES_DIRECTORY, `${sessionName}-potfile.txt`)}" --outfile="${path.join(projectDirectory, config.LOCAL_OUTPUT_FILE_DIRECTORY, `${sessionName}-outfile.txt`)}" "${hcCapxFilePath}" --rules-file="${path.join(projectDirectory, rule)}"`;
 	}
