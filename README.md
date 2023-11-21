@@ -12,7 +12,6 @@
 	```
 - [ ] Add status files that are easier to access and view like the original repo.
 - [ ] Add [tabular](https://www.npmjs.com/package/tabulator-tables) summaries like the original repo.
-- [ ] Add an attack for wordlists only without a set of rules.
 
 ----
 
