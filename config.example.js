@@ -19,7 +19,7 @@ module.exports = {
 	],
 
 	RULES: [
-		"./hashcat/rules"
+		"./hashcat/rules/best64.rule"
 	],
 
 	MASKS: [
