@@ -163,6 +163,3 @@ known-passwords.txt
 known-passwords.dic
 hashcat/wordlists/*
 !rockyou.txt.gz
-
-# Generated wordlist
-generate/*.txt
