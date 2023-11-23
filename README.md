@@ -41,6 +41,9 @@ In order to create it I started by refactoring different repos that are no longe
 		* [Standalone Wordlists](#standalone-wordlists)
 		* [Standalone Dictionaries](#standalone-dictionaries)
 		* [Misc Wordlists](#misc-wordlists)
+	* [Unzip rockyou.txt.gz](#unzip-rockyoutxtgz)
+		* [OS X](#unzip-os-x)
+		* [Windows](#unzip-windows)
 	* [Rules](#rules)
 * [Scripts](#scripts)
 	* [Copy the .PCAP files to your machine.](#copy-the-pcap-files-to-your-machine)
@@ -128,7 +131,7 @@ In order to create it I started by refactoring different repos that are no longe
 	```
 # Additional Configuration Steps
 ## Wordlists
-By default this repo contains a small example wordlist, `./hashcat/wordlists/shortKrak.txt`. You will want to download additional ones to work with. You can place them in the provided `./hashcat/wordlists` directory, or reference the directory directly in the `.config.js` file.
+By default this repo contains a single popular large wordlist, `./hashcat/wordlists/rockyou.txt.gz`, that you will need to unzip (See below). You will want to download additional ones to work with as well. You can place any new wordlists in the provided `./hashcat/wordlists` directory, or reference the directory path in the `.config.js` file.
 ```javascript
 ...
 WORDLISTS: [
@@ -140,10 +143,17 @@ WORDLISTS: [
 ```javascript
 ...
 WORDLISTS: [
-	"./hashcat/wordlists/shortKrak.txt",
+	"./hashcat/wordlists/rockyou.txt",
 ],
 ...
 ```
+
+### Unzip rockyou.txt.gz
+#### Unzip OS X
+1. `gzip ./hashcat/wordlists/rockyou.txt.gz --keep`
+
+#### Unzip Windows
+1. `tar -zxvf .\hashcat\wordlists\rockyou.txt.gz`
 
 ### Personal Wordlist
 * You can add your own known or suspected passwords by cloning the example wordlist and/or dictionary file and editing it.
