@@ -562,6 +562,7 @@ Cracking performance lower than expected?
 * Main Pwnagotchi repo: [Pwnagotchi](https://github.com/evilsocket/pwnagotchi)
 	* Default Pwnagotchi configuration file: [defaults.toml](https://github.com/evilsocket/pwnagotchi/blob/master/pwnagotchi/defaults.toml)
 * [Pwnagotchi setup on Mac OS](https://mattgibson.ca/pwnagotchi-1-6-2-with-waveshare-v3-macos-macbook-host/)
+* https://cryptokait.com/2020/02/24/password-cracking-with-hashcat/
 
 * Wordlists
 	* [Weakpass](https://weakpass.com/wordlist)
