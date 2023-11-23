@@ -131,7 +131,7 @@ In order to create it I started by refactoring different repos that are no longe
 	```
 # Additional Configuration Steps
 ## Wordlists
-By default this repo contains a single popular large wordlist, `./hashcat/wordlists/rockyou.txt.gz`, that you will need to unzip (See below). You will want to download additional ones to work with as well. You can place any new wordlists in the provided `./hashcat/wordlists` directory, or reference the directory path in the `.config.js` file.
+By default this repo contains a single popular large wordlist, `./hashcat/wordlists/rockyou.txt.gz` (`~54 MB`), that you will need to unzip (`~140 MB`). You will want to download additional ones to work with as well. You can place any new wordlists in the provided `./hashcat/wordlists` directory, or reference the directory path in the `.config.js` file.
 ```javascript
 ...
 WORDLISTS: [
