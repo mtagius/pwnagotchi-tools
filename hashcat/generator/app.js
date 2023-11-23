@@ -2,15 +2,19 @@ const fs = require('fs');
 const config = require('./config');
 
 function generateCombinations(words) {
-	const combinations = [];
+  const combinations = [];
 
-	// Generate combinations
-	for (let i = 0; i < words.length; i++) {
-		for (let j = i + 1; j < words.length; j++) {
-			const combined = words[i] + words[j];
-			combinations.push(combined);
-		}
-	}
+  // Generate combinations
+  for (let i = 0; i < words.length; i++) {
+    for (let j = i + 1; j < words.length; j++) {
+      const combined = words[i] + words[j];
+      combinations.push(combined);
+
+      // Add reversed combination as well
+      const reversedCombined = words[j] + words[i];
+      combinations.push(reversedCombined);
+    }
+  }
 
   return combinations;
 }
