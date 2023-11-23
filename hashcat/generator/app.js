@@ -16,21 +16,29 @@ function generateCombinations(words) {
 		}
 	}
 
-  return combinations;
+	return combinations;
 }
 
 // Example usage with the provided list
 const initialWords = config.wordList;
 const result = generateCombinations(initialWords);
 
+// Print count of combos generated in the terminal
+console.log(`Generated ${result.length} combinations.`);
+
+// Sort combinations alphabetically
+const sortedResult = result.sort();
+
 // Print specified number of items in the terminal
-const itemsToPrint = Math.min(config.printItems, result.length);
+const itemsToPrint = Math.min(config.printItems, sortedResult.length);
 console.log(`Printing ${itemsToPrint} items:`);
-console.log(result.slice(0, itemsToPrint));
+console.log(sortedResult.slice(0, itemsToPrint));
 
 // Write the specified number of permutations to a file
 const permutationsToGenerate = config.generatePermutations;
 const outputFile = config.exportFileName;
 
-fs.writeFileSync(outputFile, result.slice(0, permutationsToGenerate).join("\n"));
+// Sort combinations alphabetically before writing to the file
+const sortedCombinations = result.sort();
+fs.writeFileSync(outputFile, sortedCombinations.slice(0, permutationsToGenerate).join("\n"));
 console.log(`Combinations written to ${outputFile}`);
