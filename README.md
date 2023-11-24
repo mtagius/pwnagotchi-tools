@@ -38,6 +38,7 @@ In order to create it I started by refactoring different repos that are no longe
 * [Additional Configuration Steps](#additional-configuration-steps)
 	* [Wordlists](#wordlists)
 		* [Personal Wordlist](#personal-wordlist)
+		* [Custom Wordlists](#custom-wordlists)
 		* [Standalone Wordlists](#standalone-wordlists)
 		* [Standalone Dictionaries](#standalone-dictionaries)
 		* [Misc Wordlists](#misc-wordlists)
