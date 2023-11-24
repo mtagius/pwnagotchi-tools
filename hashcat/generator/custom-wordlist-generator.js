@@ -13,8 +13,8 @@ function generateCombinations(words) {
 		}
 
 		for (let i = 0; i < words.length; i++) {
-			// Avoid combining the same word with itself
-			if (currentCombination !== words[i]) {
+			// Avoid combining the same word with itself or repeating within the combination
+			if (currentCombination !== words[i] && !currentCombination.includes(words[i])) {
 				generate(currentCombination + words[i], remainingWords - 1);
 			}
 		}
