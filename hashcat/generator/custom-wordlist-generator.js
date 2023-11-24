@@ -1,46 +1,37 @@
 const fs = require("fs");
 const config = require("../../config");
 
-// Function to generate permutations of a given array of words
-function generatePermutations(words, maxWordsUsed) {
-	const permutations = [];
+// Function to generate combinations of a given array of words
+function generateCombinations(words) {
+	const combinationsSet = new Set();
 
-	// Helper function to swap elements in an array
-	function swap(arr, i, j) {
-		const temp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = temp;
-	}
-
-	// Helper function to generate permutations using backtracking
-	function generate(index, k) {
-		if (index === k - 1) {
-			// Add the current permutation to the result
-			permutations.push(words.slice(0, k).join(''));
+	// Recursive function to generate combinations
+	function generate(currentCombination, remainingWords) {
+		if (remainingWords === 0) {
+			combinationsSet.add(currentCombination);
 			return;
 		}
 
-		for (let i = index; i < words.length; i++) {
-			// Swap elements to create a new permutation
-			swap(words, index, i);
-			// Recursively generate permutations for the remaining elements
-			generate(index + 1, k);
-			// Swap back to backtrack
-			swap(words, index, i);
+		for (let i = 0; i < words.length; i++) {
+			// Avoid combining the same word with itself
+			if (currentCombination !== words[i]) {
+				generate(currentCombination + words[i], remainingWords - 1);
+			}
 		}
 	}
 
-	// Generate permutations for different values of k up to maxWordsUsed
-	for (let k = 1; k <= Math.min(maxWordsUsed, words.length); k++) {
-		generate(0, k);
+	for (let k = 1; k <= config.MAX_WORDS_USED; k++) {
+		for (let i = 0; i < words.length; i++) {
+			generate(words[i], k - 1);
+		}
 	}
 
-	return permutations;
+	return Array.from(combinationsSet);
 }
 
 // Example usage with the provided list
 const initialWords = config.WORD_LIST;
-const result = generatePermutations(initialWords, config.MAX_WORDS_USED);
+const result = generateCombinations(initialWords);
 
 // Custom sorting function based on config variables
 const customSort = (a, b) => {
@@ -53,28 +44,28 @@ const customSort = (a, b) => {
 	return config.SORT_ALPHABETICALLY ? a.localeCompare(b) : 0;
 };
 
-// Sort permutations using the custom sorting function
+// Sort combinations using the custom sorting function
 const sortedResult = result.sort(customSort);
 
-// Filter permutations based on config variables for min/max length
-const filteredResult = sortedResult.filter((perm) => {
-	const length = perm.length;
+// Filter combinations based on config variables for min/max length
+const filteredResult = sortedResult.filter((combo) => {
+	const length = combo.length;
 	return (!config.MIN_LENGTH || length >= config.MIN_LENGTH) && (!config.MAX_LENGTH || length <= config.MAX_LENGTH);
 });
 
-// Print count of unique permutations generated in the terminal
-console.log(`Generated ${filteredResult.length} unique permutations.`);
+// Print count of unique combinations generated in the terminal
+console.log(`Generated ${filteredResult.length} unique combinations.`);
 
 // Print specified number of items in the terminal
 const itemsToPrint = Math.min(config.PRINT_ITEMS, filteredResult.length);
 console.log(`Printing ${itemsToPrint} items:`);
 console.log(filteredResult.slice(0, itemsToPrint));
 
-// Write the specified number of permutations to a file
-const permutationsToGenerate = config.GENERATE_PERMUTATIONS;
+// Write the specified number of combinations to a file
+const combinationsToGenerate = config.GENERATE_COMBINATIONS;
 const outputFile = config.EXPORT_FILE_NAME;
 
-// Sort permutations alphabetically before writing to the file
-const sortedPermutations = filteredResult.sort(customSort);
-fs.writeFileSync(outputFile, sortedPermutations.slice(0, permutationsToGenerate).join("\n"));
-console.log(`Permutations written to ${outputFile}`);
+// Sort combinations alphabetically before writing to the file
+const sortedCombinations = filteredResult.sort(customSort);
+fs.writeFileSync(outputFile, sortedCombinations.slice(0, combinationsToGenerate).join("\n"));
+console.log(`Combinations written to ${outputFile}`);
