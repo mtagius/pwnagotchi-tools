@@ -110,10 +110,13 @@ In order to create it I started by refactoring different repos that are no longe
 2. Set the details for your `Pwnagotchi`:
 	```javascript
 	...
-	HOST_IP: "",
-	USERNAME: "",
-	PASSWORD: "",
-	WINDOWS: false,
+	// Pwnagotchi SSH configuration
+	PWNAGOTCHI_SSH: {
+		HOST_ADDRESS: "", // Pwnagotchi SSH host address
+		USERNAME: "", // Pwnagotchi SSH username
+		PASSWORD: "", // Pwnagotchi SSH password
+		PORT: 22 // Pwnagotchi SSH port
+	},
 	...
 	```
 
@@ -122,11 +125,16 @@ In order to create it I started by refactoring different repos that are no longe
 2. Set the details for your `Pwnagotchi`:
 	```javascript
 	...
-	HOST_IP: "",
-	USERNAME: "",
-	PASSWORD: "",
-	WINDOWS: true,
-	HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6",
+	// Pwnagotchi SSH configuration
+	PWNAGOTCHI_SSH: {
+		HOST_ADDRESS: "", // Pwnagotchi SSH host address
+		USERNAME: "", // Pwnagotchi SSH username
+		PASSWORD: "", // Pwnagotchi SSH password
+		PORT: 22 // Pwnagotchi SSH port
+	},
+	// Windows configuration
+	WINDOWS: false, // Flag to indicate if running on Windows
+	HASHCAT_PATH: "C:\\[PATH]\\hashcat-6.2.6", // Path to Hashcat on Windows
 	...
 	```
 # Additional Configuration Steps
@@ -159,6 +167,28 @@ WORDLISTS: [
 * You can add your own known or suspected passwords by cloning the example wordlist and/or dictionary file and editing it.
 	1. `cp ./hashcat/known-passwords.example.txt ./hashcat/wordlists/known-passwords.txt`
 	2. `cp ./hashcat/known-passwords.example.dic ./hashcat/dictionaries/known-passwords.dic`
+
+### Custom Wordlists
+You can generate a list of possible passwords based on a couple of clues that could be used to build the password.
+```javascript
+...
+// General configurations
+PRINT_ITEMS: 10, // Number of items to print in the terminal
+GENERATE_PERMUTATIONS: 2000, // Number of permutations to generate and add to the .txt file
+EXPORT_FILE_NAME: "./hashcat/wordlists/generated-passwords.txt", // Name of the exported file
+WORD_LIST: [], // List of words for generation
+MAX_WORDS_USED: 2, // Max number of words that can be combined to form a given string
+...
+```
+1. Edit the `config.js` file and add your clue to the `WORD_LIST: []` array.
+	- `WORD_LIST: [A, B, C, D, E]`
+2. Set the `WORD_LIST` variable to config how many words will be contained in the final results:
+	* 1 => `[A, B, C, D, E]` - 5 results
+	* 2 => `[A, B, C, D, E, AB, AC, AD, AE, BA, BC, BD, BE, CA, CB, CD, CE, DA, DB, DC, DE, EA, EB, EC, ED]` - 25 results
+3. Then run `npm run passwords` to generate a list of possible passwords.
+	* `["A", "AB", "AC", "AD", "AE", "B", "BA", "BC", "BD", "BE", "C", "CA", "CB", "CD", "CE", "D", "DA", "DB", "DC", "DE", "E", "EA", "EB", "EC", "ED"]`
+4. It will export the list to a `.txt` file at the specificed location, `EXPORT_FILE_NAME`, by default:
+	* `./hashcat/wordlists/generated-passwords.txt`
 
 ### Standalone Wordlists
 * [netgear-spectrum.txt](https://raw.githubusercontent.com/soxrok2212/PSKracker/master/dicts/netgear-spectrum/netgear-spectrum.txt)
