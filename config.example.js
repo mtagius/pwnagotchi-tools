@@ -54,11 +54,11 @@ module.exports = {
 	MAX_WORDS_USED: 6, // Max number of words that can be combined to form a given string
 
 	// Sorting configurations
-	SORT_BY_LENGTH: true, // Whether to sort permutations by length
-	SORT_LENGTH_ASCENDING: true, // If sorting by length, whether to sort in ascending order
+	SORT_BY_LENGTH: false, // Whether to sort permutations by length
+	SORT_LENGTH_ASCENDING: false, // If sorting by length, whether to sort in ascending order
 	SORT_ALPHABETICALLY: true, // Whether to sort alphabetically
 
 	// Length constraints for generated strings
 	MIN_LENGTH: 8, // Minimum length of generated strings
-	MAX_LENGTH: 35 // Maximum length of generated strings
+	MAX_LENGTH: 25 // Maximum length of generated strings
 };
