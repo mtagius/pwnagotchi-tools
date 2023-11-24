@@ -42,22 +42,39 @@ function generatePermutations(words, maxWordsUsed) {
 const initialWords = config.wordList;
 const result = generatePermutations(initialWords, config.maxWordsUsed);
 
-// Print count of unique permutations generated in the terminal
-console.log(`Generated ${result.length} unique permutations.`);
+// Custom sorting function based on config variables
+const customSort = (a, b) => {
+	if (config.sortByLength) {
+		if (a.length !== b.length) {
+			return config.sortLengthAscending ? a.length - b.length : b.length - a.length;
+		}
+	}
 
-// Sort permutations alphabetically
-const sortedResult = result.sort();
+	return config.sortAlphabetically ? a.localeCompare(b) : 0;
+};
+
+// Sort permutations using the custom sorting function
+const sortedResult = result.sort(customSort);
+
+// Filter permutations based on config variables for min/max length
+const filteredResult = sortedResult.filter((perm) => {
+	const length = perm.length;
+	return (!config.minLength || length >= config.minLength) && (!config.maxLength || length <= config.maxLength);
+});
+
+// Print count of unique permutations generated in the terminal
+console.log(`Generated ${filteredResult.length} unique permutations.`);
 
 // Print specified number of items in the terminal
-const itemsToPrint = Math.min(config.printItems, sortedResult.length);
+const itemsToPrint = Math.min(config.printItems, filteredResult.length);
 console.log(`Printing ${itemsToPrint} items:`);
-console.log(sortedResult.slice(0, itemsToPrint));
+console.log(filteredResult.slice(0, itemsToPrint));
 
 // Write the specified number of permutations to a file
 const permutationsToGenerate = config.generatePermutations;
 const outputFile = config.exportFileName;
 
 // Sort permutations alphabetically before writing to the file
-const sortedPermutations = result.sort();
+const sortedPermutations = filteredResult.sort(customSort);
 fs.writeFileSync(outputFile, sortedPermutations.slice(0, permutationsToGenerate).join("\n"));
 console.log(`Permutations written to ${outputFile}`);
