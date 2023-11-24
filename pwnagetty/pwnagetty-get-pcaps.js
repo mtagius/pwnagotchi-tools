@@ -26,19 +26,19 @@ logo = () => {
 }
 
 const sshConfig = {
-	host: config.HOST_ADDRESS,
-	username: config.USERNAME,
-	password: config.PASSWORD,
-	port: config.PORT,
+	host: config.PWNAGOTCHI_SSH.HOST_ADDRESS,
+	username: config.PWNAGOTCHI_SSH.USERNAME,
+	password: config.PWNAGOTCHI_SSH.PASSWORD,
+	port: config.PWNAGOTCHI_SSH.PORT,
 	localDir: config.LOCAL_PCAP_DIRECTORY,
 	handshakeDir: config.HANDSHAKE_DIRECTORY
 }
 
 const sftpConfig = {
-	host: config.HOST_ADDRESS,
-	username: config.USERNAME,
-	password: config.PASSWORD,
-	port: config.PORT
+	host: config.PWNAGOTCHI_SSH.HOST_ADDRESS,
+	username: config.PWNAGOTCHI_SSH.USERNAME,
+	password: config.PWNAGOTCHI_SSH.PASSWORD,
+	port: config.PWNAGOTCHI_SSH.PORT
 }
 
 //=================================================================

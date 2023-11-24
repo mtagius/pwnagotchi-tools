@@ -1,5 +1,5 @@
 const fs = require("fs");
-const config = require("./config");
+const config = require("../../config");
 
 // Function to generate permutations of a given array of words
 function generatePermutations(words, maxWordsUsed) {
@@ -39,18 +39,18 @@ function generatePermutations(words, maxWordsUsed) {
 }
 
 // Example usage with the provided list
-const initialWords = config.wordList;
-const result = generatePermutations(initialWords, config.maxWordsUsed);
+const initialWords = config.WORD_LIST;
+const result = generatePermutations(initialWords, config.MAX_WORDS_USED);
 
 // Custom sorting function based on config variables
 const customSort = (a, b) => {
-	if (config.sortByLength) {
+	if (config.SORT_BY_LENGTH) {
 		if (a.length !== b.length) {
-			return config.sortLengthAscending ? a.length - b.length : b.length - a.length;
+			return config.SORT_LENGTH_ASCENDING ? a.length - b.length : b.length - a.length;
 		}
 	}
 
-	return config.sortAlphabetically ? a.localeCompare(b) : 0;
+	return config.SORT_ALPHABETICALLY ? a.localeCompare(b) : 0;
 };
 
 // Sort permutations using the custom sorting function
@@ -59,20 +59,20 @@ const sortedResult = result.sort(customSort);
 // Filter permutations based on config variables for min/max length
 const filteredResult = sortedResult.filter((perm) => {
 	const length = perm.length;
-	return (!config.minLength || length >= config.minLength) && (!config.maxLength || length <= config.maxLength);
+	return (!config.MIN_LENGTH || length >= config.MIN_LENGTH) && (!config.MAX_LENGTH || length <= config.MAX_LENGTH);
 });
 
 // Print count of unique permutations generated in the terminal
 console.log(`Generated ${filteredResult.length} unique permutations.`);
 
 // Print specified number of items in the terminal
-const itemsToPrint = Math.min(config.printItems, filteredResult.length);
+const itemsToPrint = Math.min(config.PRINT_ITEMS, filteredResult.length);
 console.log(`Printing ${itemsToPrint} items:`);
 console.log(filteredResult.slice(0, itemsToPrint));
 
 // Write the specified number of permutations to a file
-const permutationsToGenerate = config.generatePermutations;
-const outputFile = config.exportFileName;
+const permutationsToGenerate = config.GENERATE_PERMUTATIONS;
+const outputFile = config.EXPORT_FILE_NAME;
 
 // Sort permutations alphabetically before writing to the file
 const sortedPermutations = filteredResult.sort(customSort);
